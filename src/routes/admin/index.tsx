@@ -56,7 +56,7 @@ function AdminDashboard() {
 
   if (loading || !authenticated) return <div className="admin-loading">Carregando...</div>;
 
-  const NAV: { key: typeof tab; label: string; icon: JSX.Element }[] = [
+  const NAV: { key: typeof tab; label: string; icon: React.ReactNode }[] = [
     { key: "promos", label: "Promoções", icon: <GiftIcon /> },
     { key: "entries", label: "Inscritos", icon: <UsersIcon /> },
     { key: "news", label: "Notícias", icon: <NewsIcon /> },
