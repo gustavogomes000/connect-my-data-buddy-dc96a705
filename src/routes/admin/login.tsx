@@ -1,16 +1,15 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { adminLogin } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
-    meta: [{ title: "Login - Painel Admin TOP100 FM" }],
+    meta: [{ title: "Entrar — Painel TOP100 FM" }],
   }),
   component: AdminLoginPage,
 });
 
 function AdminLoginPage() {
-  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,14 +24,10 @@ function AdminLoginPage() {
       if (result.success) {
         window.location.href = "/admin";
       } else {
-        setError(result.error || "Erro ao fazer login");
+        setError(result.error || "Não foi possível entrar.");
       }
     } catch (err) {
-      if (err instanceof Error && err.message) {
-        setError(err.message);
-      } else {
-        setError("Erro ao conectar ao servidor");
-      }
+      setError(err instanceof Error ? err.message : "Erro de conexão.");
     } finally {
       setLoading(false);
     }
@@ -42,8 +37,9 @@ function AdminLoginPage() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <div className="admin-login-header">
-          <h1>🔒 Painel Admin</h1>
-          <p>Rádio TOP100 FM</p>
+          <div className="admin-login-logo">T</div>
+          <h1>Entrar no Painel</h1>
+          <p>Rádio TOP100 FM · Administração</p>
         </div>
         <form onSubmit={handleSubmit} className="admin-login-form">
           {error && <div className="admin-error">{error}</div>}
@@ -54,8 +50,9 @@ function AdminLoginPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Digite seu usuário"
+              placeholder="Seu usuário"
               autoComplete="username"
+              autoFocus
               required
             />
           </div>
@@ -66,15 +63,16 @@ function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
+              placeholder="••••••••"
               autoComplete="current-password"
               required
             />
           </div>
           <button type="submit" className="admin-login-btn" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? "Entrando…" : "Entrar"}
           </button>
         </form>
+        <div className="admin-login-hint">Acesso restrito à equipe TOP100 FM</div>
       </div>
     </div>
   );
