@@ -39,6 +39,8 @@ export const Route = createRootRoute({
       { name: "twitter:site", content: "@top100fm" },
       { name: "twitter:title", content: "Rádio TOP100 FM" },
       { name: "twitter:description", content: "Rádio TOP100 FM - A melhor programação musical" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2e943593-07e2-44ff-ad54-17cd1ea201ff/id-preview-c5cd9ec5--77a47e7d-3898-45c7-a7b6-1b32959d4461.lovable.app-1776448753297.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2e943593-07e2-44ff-ad54-17cd1ea201ff/id-preview-c5cd9ec5--77a47e7d-3898-45c7-a7b6-1b32959d4461.lovable.app-1776448753297.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://server29.srvsh.com.br:7618", crossOrigin: "anonymous" },
