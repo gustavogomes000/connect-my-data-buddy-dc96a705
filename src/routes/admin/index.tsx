@@ -56,35 +56,35 @@ function AdminDashboard() {
 
   if (loading || !authenticated) return <div className="admin-loading">Carregando...</div>;
 
+  const NAV: { key: typeof tab; label: string; icon: React.ReactNode }[] = [
+    { key: "promos", label: "Promoções", icon: <GiftIcon /> },
+    { key: "entries", label: "Inscritos", icon: <UsersIcon /> },
+    { key: "news", label: "Notícias", icon: <NewsIcon /> },
+    { key: "programacao", label: "Programação", icon: <CalendarIcon /> },
+    { key: "podcasts", label: "Podcasts", icon: <MicIcon /> },
+    { key: "users", label: "Administradores", icon: <ShieldIcon /> },
+  ];
+
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">
-          <h2>📻 TOP100 FM</h2>
-          <span>Painel Admin</span>
+          <div className="admin-sidebar-logo">T</div>
+          <div>
+            <h2>TOP100 FM</h2>
+            <span>Painel administrativo</span>
+          </div>
         </div>
         <nav className="admin-nav">
-          <button className={tab === "promos" ? "active" : ""} onClick={() => setTab("promos")}>
-            🎉 Promoções
-          </button>
-          <button className={tab === "entries" ? "active" : ""} onClick={() => setTab("entries")}>
-            📝 Inscritos
-          </button>
-          <button className={tab === "news" ? "active" : ""} onClick={() => setTab("news")}>
-            📰 Notícias
-          </button>
-          <button className={tab === "programacao" ? "active" : ""} onClick={() => setTab("programacao")}>
-            🗓️ Programação
-          </button>
-          <button className={tab === "podcasts" ? "active" : ""} onClick={() => setTab("podcasts")}>
-            🎧 Podcasts
-          </button>
-          <button className={tab === "users" ? "active" : ""} onClick={() => setTab("users")}>
-            👤 Usuários Admin
-          </button>
+          {NAV.map((n) => (
+            <button key={n.key} className={tab === n.key ? "active" : ""} onClick={() => setTab(n.key)}>
+              <span className="admin-nav-icon">{n.icon}</span>
+              {n.label}
+            </button>
+          ))}
         </nav>
         <div className="admin-sidebar-footer">
-          <Link to="/" className="admin-nav-link">🌐 Ver Site</Link>
+          <Link to="/" className="admin-nav-link">↗ Ver site público</Link>
           <button onClick={handleLogout} className="admin-logout-btn">Sair</button>
         </div>
       </aside>
@@ -99,6 +99,19 @@ function AdminDashboard() {
     </div>
   );
 }
+
+// ── Inline SVG icons (Material-style, 18x18) ──
+const Svg = ({ d }: { d: string }) => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={d} />
+  </svg>
+);
+const GiftIcon = () => <Svg d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />;
+const UsersIcon = () => <Svg d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />;
+const NewsIcon = () => <Svg d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2M18 14h-8M15 18h-5M10 6h8v4h-8z" />;
+const CalendarIcon = () => <Svg d="M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM16 2v4M8 2v4M3 10h18" />;
+const MicIcon = () => <Svg d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" />;
+const ShieldIcon = () => <Svg d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />;
 
 // ── Image Upload Helper ──
 function ImageUploader({ onUploaded }: { onUploaded: (url: string) => void }) {
