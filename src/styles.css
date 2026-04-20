@@ -836,7 +836,7 @@
   text-transform: none; letter-spacing: 0; font-weight: 500;
 }
 .admin-login-btn {
-  background: var(--ad-brand); color: #fff; border: 0;
+  background: var(--ad-brand); color: var(--ad-brand-fg); border: 0;
   padding: 13px; border-radius: 8px; font-size: 14px;
   font-weight: 700; cursor: pointer; letter-spacing: .3px;
   transition: background 120ms, box-shadow 120ms, transform 120ms;
@@ -900,7 +900,7 @@
 }
 .admin-nav button:hover { background: var(--ad-brand-soft); }
 .admin-nav button.active {
-  background: var(--ad-brand); color: #fff; font-weight: 600;
+  background: var(--ad-brand); color: var(--ad-brand-fg); font-weight: 600;
 }
 .admin-nav button.active .admin-nav-icon { color: var(--ad-gold); }
 .admin-nav-icon {
@@ -945,7 +945,7 @@
 }
 
 .admin-btn-primary {
-  background: var(--ad-brand); color: #fff; border: 0;
+  background: var(--ad-brand); color: var(--ad-brand-fg); border: 0;
   padding: 10px 20px; border-radius: 8px;
   font-size: 14px; font-weight: 600; cursor: pointer;
   font-family: inherit;
