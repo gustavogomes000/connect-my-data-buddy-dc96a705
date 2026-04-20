@@ -24,9 +24,9 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.4 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, bounce: 0.4 } }
 };
 
 export function PodcastsSection() {
