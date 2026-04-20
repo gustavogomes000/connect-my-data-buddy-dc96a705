@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, type ChangeEvent } from "react";
 import { Link, useLoaderData } from "@tanstack/react-router";
+import { motion, AnimatePresence } from "framer-motion";
 import topLogo from "@/assets/top100-logo.png";
 import { radioAudio } from "@/lib/radio-audio";
 import { AudioVisualizer } from "@/components/AudioVisualizer";
@@ -46,40 +47,77 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="site-header">
+    <motion.header 
+      className="site-header"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+    >
       <div className="site-header-inner">
         {/* Logo (left) */}
         <Link to="/" className="header-logo-wrap" aria-label={`${settings?.radio_name || "TOP100 FM"} Home`}>
-          <img src={settings?.logo_url || topLogo} alt={settings?.radio_name || "TOP100 FM"} className="site-header-logo-img" />
+          <motion.img 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            src={settings?.logo_url || topLogo} 
+            alt={settings?.radio_name || "TOP100 FM"} 
+            className="site-header-logo-img" 
+          />
         </Link>
 
         {/* Centered nav (desktop) */}
         <nav className="header-nav-desktop" aria-label="Principal">
-          <Link to="/" className="header-nav-link" activeProps={{ className: "header-nav-link active" }} activeOptions={{ exact: true }}>HOME</Link>
-          <Link to="/noticias" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>NOTÍCIAS</Link>
-          <Link to="/programacao" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>PROGRAMAÇÃO</Link>
-          <Link to="/promocoes" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>PROMOÇÃO</Link>
-          <Link to="/contato" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>CONTATO</Link>
+          <Link to="/" className="header-nav-link" activeProps={{ className: "header-nav-link active" }} activeOptions={{ exact: true }}>
+            <motion.span whileHover={{ y: -2 }}>HOME</motion.span>
+          </Link>
+          <Link to="/noticias" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
+            <motion.span whileHover={{ y: -2 }}>NOTÍCIAS</motion.span>
+          </Link>
+          <Link to="/programacao" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
+            <motion.span whileHover={{ y: -2 }}>PROGRAMAÇÃO</motion.span>
+          </Link>
+          <Link to="/promocoes" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
+            <motion.span whileHover={{ y: -2 }}>PROMOÇÃO</motion.span>
+          </Link>
+          <Link to="/contato" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
+            <motion.span whileHover={{ y: -2 }}>CONTATO</motion.span>
+          </Link>
         </nav>
 
         {/* Player original (right) */}
         <div className={`header-player ${isPlaying ? "is-playing" : ""}`}>
-          <button
+          <motion.button
             onClick={togglePlay}
             className="header-play-btn"
             aria-label={isPlaying ? "Pausar" : "Tocar"}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            {isPlaying ? (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="6" y="4" width="4" height="16" rx="1" />
-                <rect x="14" y="4" width="4" height="16" rx="1" />
-              </svg>
-            ) : (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </button>
+            <AnimatePresence mode="popLayout">
+              {isPlaying ? (
+                <motion.svg 
+                  key="pause"
+                  initial={{ opacity: 0, scale: 0.5, rotate: -90 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.5, rotate: 90 }}
+                  width="22" height="22" viewBox="0 0 24 24" fill="currentColor"
+                >
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </motion.svg>
+              ) : (
+                <motion.svg 
+                  key="play"
+                  initial={{ opacity: 0, scale: 0.5, rotate: 90 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.5, rotate: -90 }}
+                  width="22" height="22" viewBox="0 0 24 24" fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </motion.svg>
+              )}
+            </AnimatePresence>
+          </motion.button>
           <span className="viz-desktop"><AudioVisualizer active={isPlaying} bars={6} intensity={volume} /></span>
           <span className="viz-mobile"><AudioVisualizer active={isPlaying} bars={28} intensity={volume} /></span>
           <input
@@ -93,7 +131,11 @@ export function SiteHeader() {
             aria-label="Volume"
           />
           <div className="header-live">
-            <span className="header-live-dot" />
+            <motion.span 
+              className="header-live-dot" 
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            />
             <span className="header-live-label">AO VIVO</span>
           </div>
         </div>
@@ -107,6 +149,6 @@ export function SiteHeader() {
         <Link to="/promocoes" className="header-pill" activeProps={{ className: "header-pill active" }}>Promoção</Link>
         <Link to="/contato" className="header-pill" activeProps={{ className: "header-pill active" }}>Contato</Link>
       </nav>
-    </header>
+    </motion.header>
   );
 }

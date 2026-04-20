@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getActivePodcasts, type PodcastItem } from "@/lib/public-api";
+import { motion } from "framer-motion";
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null;
@@ -12,6 +13,21 @@ function getYoutubeId(url: string): string | null {
   }
   return null;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.4 } }
+};
 
 export function PodcastsSection() {
   const [items, setItems] = useState<PodcastItem[]>([]);
@@ -26,19 +42,35 @@ export function PodcastsSection() {
   return (
     <section className="podcasts-section">
       <div className="podcasts-container">
-        <div className="podcasts-header">
+        <motion.div 
+          className="podcasts-header"
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <span className="podcasts-icon" aria-hidden>🎧</span>
           <h2>Podcasts</h2>
-        </div>
+        </motion.div>
 
-        <div className="podcasts-grid">
+        <motion.div 
+          className="podcasts-grid"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {items.map((p) => {
             const ytId = getYoutubeId(p.youtube_url);
             const isPlaying = playing === p.id;
             const thumb = p.thumbnail_url || (ytId ? `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg` : "");
 
             return (
-              <article key={p.id} className="podcast-card">
+              <motion.article 
+                key={p.id} 
+                className="podcast-card"
+                variants={itemVariants}
+                whileHover={{ y: -6, boxShadow: "0 12px 32px rgba(12,38,81,0.15)" }}
+              >
                 <div className="podcast-media">
                   {isPlaying && ytId ? (
                     <iframe
@@ -56,11 +88,15 @@ export function PodcastsSection() {
                       style={thumb ? { backgroundImage: `url(${thumb})` } : undefined}
                       aria-label={`Reproduzir ${p.title}`}
                     >
-                      <span className="podcast-play">
+                      <motion.span 
+                        className="podcast-play"
+                        whileHover={{ scale: 1.15 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
                         <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden>
                           <path d="M8 5v14l11-7z" />
                         </svg>
-                      </span>
+                      </motion.span>
                     </button>
                   )}
                 </div>
@@ -69,27 +105,34 @@ export function PodcastsSection() {
                   {p.description && <p className="podcast-desc">{p.description}</p>}
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: 'auto' }}>
                     {!isPlaying && (
-                      <button className="podcast-cta" onClick={() => setPlaying(p.id)}>
+                      <motion.button 
+                        className="podcast-cta" 
+                        onClick={() => setPlaying(p.id)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
                         ▶ Escutar no site
-                      </button>
+                      </motion.button>
                     )}
                     {p.youtube_url && (
-                      <a 
+                      <motion.a 
                         className="podcast-cta podcast-cta-yt" 
                         href={p.youtube_url} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         style={{ background: '#c8102e', color: '#fff', textDecoration: 'none' }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         📺 Ver no YouTube
-                      </a>
+                      </motion.a>
                     )}
                   </div>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
-        </div>
+        </motion.div>
       </div>
 
       <style>{`
@@ -128,13 +171,9 @@ export function PodcastsSection() {
           border-radius: 16px;
           overflow: hidden;
           box-shadow: 0 4px 20px rgba(12,38,81,0.08);
-          transition: transform .2s ease, box-shadow .2s ease;
+          transition: border-radius .2s ease;
           display: flex;
           flex-direction: column;
-        }
-        .podcast-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 32px rgba(12,38,81,0.15);
         }
         .podcast-media {
           position: relative;
@@ -182,9 +221,7 @@ export function PodcastsSection() {
           align-items: center;
           justify-content: center;
           box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-          transition: transform .2s;
         }
-        .podcast-thumb:hover .podcast-play { transform: scale(1.1); }
         .podcast-info {
           padding: 18px 20px 20px;
           flex: 1;
@@ -220,11 +257,11 @@ export function PodcastsSection() {
           font-weight: 700;
           font-size: 14px;
           cursor: pointer;
-          transition: background .2s, transform .1s;
+          transition: background .2s;
         }
         .podcast-cta:hover { background: #163a7a; }
-        .podcast-cta:active { transform: scale(0.97); }
       `}</style>
     </section>
   );
 }
+
