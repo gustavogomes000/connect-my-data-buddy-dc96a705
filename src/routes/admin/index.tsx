@@ -1,5 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { adminLogout, checkAdminSession } from "@/lib/admin-auth";
 import { AdminSidebar, type AdminTab } from "@/components/admin/AdminSidebar";
 import { PromotionsManager } from "@/components/admin/PromotionsManager";
@@ -13,33 +13,31 @@ export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [{ title: "Painel · TOP100 FM" }],
   }),
+  beforeLoad: async () => {
+    try {
+      const r = await checkAdminSession();
+      if (!r.authenticated) {
+        throw redirect({ to: "/admin/login" });
+      }
+    } catch (e) {
+      // Re-throw redirect, otherwise force redirect on error
+      if (e && typeof e === "object" && "isRedirect" in e) throw e;
+      throw redirect({ to: "/admin/login" });
+    }
+  },
   component: AdminDashboard,
 });
 
 function AdminDashboard() {
   const navigate = useNavigate();
-  const [authed, setAuthed] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<AdminTab>("promos");
 
-  useEffect(() => {
-    checkAdminSession()
-      .then((r) => {
-        if (!r.authenticated) navigate({ to: "/admin/login" });
-        else {
-          setAuthed(true);
-          setLoading(false);
-        }
-      })
-      .catch(() => navigate({ to: "/admin/login" }));
-  }, [navigate]);
-
   const logout = async () => {
-    await adminLogout();
-    navigate({ to: "/admin/login" });
+    try {
+      await adminLogout();
+    } catch {}
+    window.location.href = "/admin/login";
   };
-
-  if (loading || !authed) return <div className="admin-loading">Carregando…</div>;
 
   return (
     <div className="admin-layout">
