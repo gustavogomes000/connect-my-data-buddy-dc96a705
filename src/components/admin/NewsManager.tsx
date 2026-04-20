@@ -10,7 +10,6 @@ const EMPTY = {
   summary: "",
   image_url: "",
   podcast_link: "",
-  display_order: 0,
 };
 
 export function NewsManager() {
@@ -58,7 +57,6 @@ export function NewsManager() {
       summary: n.summary || "",
       image_url: n.image_url || "",
       podcast_link: n.podcast_link || "",
-      display_order: n.display_order ?? 0,
     });
     setEditing(n);
     setShowForm(true);
@@ -161,14 +159,6 @@ export function NewsManager() {
               placeholder="https://podcast..."
             />
           </div>
-          <div className="admin-field">
-            <label>Ordem de exibição</label>
-            <input
-              type="number"
-              value={form.display_order}
-              onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })}
-            />
-          </div>
           <div className="admin-form-actions">
             <button className="admin-btn-primary" onClick={save} disabled={saving}>
               {saving ? "Salvando..." : editing ? "Salvar alterações" : "Criar notícia"}
@@ -188,13 +178,12 @@ export function NewsManager() {
             <div className="admin-list-info">
               <h4>{n.title}</h4>
               <p>{n.summary || n.content?.slice(0, 140) || "—"}</p>
-              <div className="admin-list-tags">
-                <span className={`admin-tag ${n.is_published ? "tag-success" : "tag-muted"}`}>
-                  {n.is_published ? "Publicada" : "Rascunho"}
-                </span>
-                {n.is_pinned && <span className="admin-tag tag-warning">Fixada</span>}
-                {n.podcast_link && <span className="admin-tag">Podcast</span>}
-              </div>
+              {(n.is_pinned || !n.is_published) && (
+                <div className="admin-list-tags">
+                  {!n.is_published && <span className="admin-tag tag-muted">Rascunho</span>}
+                  {n.is_pinned && <span className="admin-tag tag-warning">Fixada</span>}
+                </div>
+              )}
             </div>
             <div className="admin-list-actions">
               <button onClick={() => togglePub(n)} title={n.is_published ? "Despublicar" : "Publicar"}>
