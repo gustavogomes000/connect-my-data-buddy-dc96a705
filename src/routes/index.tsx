@@ -62,6 +62,15 @@ type PromoItem = {
   link: string | null;
 };
 
+type Sponsor = {
+  id: string;
+  name: string;
+  logo_url: string;
+  link?: string;
+  display_order?: number;
+  is_active?: boolean;
+};
+
 const MOCK_PODCASTS: PodcastItem[] = [
   {
     id: "mock-pc-1",
