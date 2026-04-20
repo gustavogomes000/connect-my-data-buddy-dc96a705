@@ -18,8 +18,10 @@ const EMPTY = {
 };
 
 function getYtId(url: string): string | null {
-  const m = url?.match(
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+  if (!url) return null;
+  // Suporta watch?v=, youtu.be/, embed/, shorts/, live/ e v/
+  const m = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
   );
   return m ? m[1] : null;
 }

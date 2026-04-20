@@ -45,7 +45,7 @@ export const createPromotion = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     requireAdmin();
     const supabase = getAdminSupabase();
-    const { data: result, error } = await supabase.from("promotions").insert(data).select().single();
+    const { data: result, error } = await supabase.from("promotions").insert({ ...data, is_active: true }).select().single();
     if (error) throw new Error(error.message);
     return result;
   });
@@ -129,7 +129,7 @@ export const createProgramacao = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     requireAdmin();
     const supabase = getAdminSupabase();
-    const { data: result, error } = await (supabase as any).from("programacao").insert(data).select().single();
+    const { data: result, error } = await (supabase as any).from("programacao").insert({ ...data, is_active: true }).select().single();
     if (error) throw new Error(error.message);
     return result;
   });
@@ -173,7 +173,7 @@ export const createPodcast = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     requireAdmin();
     const supabase = getAdminSupabase();
-    const { data: result, error } = await (supabase as any).from("podcasts").insert(data).select().single();
+    const { data: result, error } = await (supabase as any).from("podcasts").insert({ ...data, is_active: true }).select().single();
     if (error) throw new Error(error.message);
     return result;
   });

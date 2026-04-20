@@ -31,7 +31,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 function AdminDashboard() {
-  const [tab, setTab] = useState<AdminTab>("settings");
+  const [tab, setTab] = useState<AdminTab>("promos");
 
   const handleLogout = async () => {
     await adminLogout();
