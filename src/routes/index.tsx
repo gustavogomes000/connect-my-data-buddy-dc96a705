@@ -94,12 +94,24 @@ function IndexPage() {
       <main className="bg-background">
         {/* HERO + NOTÍCIAS DESTAQUE */}
         <section className="mx-auto max-w-7xl px-4 pt-8 pb-12">
-          <div className="flex items-end justify-between mb-6 border-b-2 border-[#c8102e] pb-3">
-            <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] uppercase tracking-tight">
-              Últimas Notícias
-            </h2>
-            <Link to="/noticias" className="text-sm font-bold text-[#c8102e] hover:underline">
-              Ver todas →
+          <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c8102e]">
+                  Em alta
+                </p>
+                <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none">
+                  Últimas Notícias
+                </h2>
+              </div>
+            </div>
+            <Link
+              to="/noticias"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-[#c8102e]/20 bg-white px-4 py-2 text-sm font-bold text-[#c8102e] shadow-sm transition hover:bg-[#c8102e] hover:text-white hover:shadow-md"
+            >
+              Ver todas
+              <span className="transition group-hover:translate-x-0.5">→</span>
             </Link>
           </div>
 
