@@ -1,11 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  adminLogin,
-  checkAdminSession,
-  ADMIN_SESSION_KEY,
-  ADMIN_SESSION_TOKEN,
-} from "@/lib/admin-auth";
+import { adminLogin, checkAdminSession, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -22,7 +17,6 @@ function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
     const formData = new FormData(e.currentTarget);
     const username = String(formData.get("username") ?? "").trim();
     const password = String(formData.get("password") ?? "");
@@ -39,7 +33,7 @@ function AdminLoginPage() {
         try {
           sessionStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
           localStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
-        } catch {}
+        } catch { }
 
         const session = await checkAdminSession();
         if (session?.authenticated) {

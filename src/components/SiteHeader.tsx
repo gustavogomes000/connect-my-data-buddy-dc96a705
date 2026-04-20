@@ -1,14 +1,18 @@
 import { useState, useEffect, useCallback, type ChangeEvent } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import topLogo from "@/assets/top100-logo.png";
 import { radioAudio } from "@/lib/radio-audio";
 import { AudioVisualizer } from "@/components/AudioVisualizer";
 
 export function SiteHeader() {
+  const { settings } = useLoaderData({ from: "__root__" }) as { settings?: Record<string, any> };
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
 
   useEffect(() => {
+    if (settings?.stream_url) {
+      radioAudio.setStreamUrl(settings.stream_url);
+    }
     const sync = () => {
       const s = radioAudio.getState();
       setIsPlaying(s.isPlaying);
@@ -45,8 +49,8 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="site-header-inner">
         {/* Logo (left) */}
-        <Link to="/" className="header-logo-wrap" aria-label="TOP100 FM Home">
-          <img src={topLogo} alt="TOP100 FM" className="site-header-logo-img" />
+        <Link to="/" className="header-logo-wrap" aria-label={`${settings?.radio_name || "TOP100 FM"} Home`}>
+          <img src={settings?.logo_url || topLogo} alt={settings?.radio_name || "TOP100 FM"} className="site-header-logo-img" />
         </Link>
 
         {/* Centered nav (desktop) */}

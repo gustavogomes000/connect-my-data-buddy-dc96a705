@@ -96,3 +96,20 @@ export const getActivePodcasts = createServerFn({ method: "GET" }).handler(async
     .order("created_at", { ascending: false });
   return (data || []) as PodcastItem[];
 });
+
+// ── Site Settings (Public) ──
+
+export const getPublicSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
+  const supabase = await getPublicSupabase();
+  const { data } = await supabase.from("site_settings").select("*");
+  
+  const settings: Record<string, any> = {};
+  data?.forEach(row => {
+    try {
+      settings[row.setting_key] = JSON.parse(row.setting_value);
+    } catch {
+      settings[row.setting_key] = row.setting_value;
+    }
+  });
+  return settings;
+});

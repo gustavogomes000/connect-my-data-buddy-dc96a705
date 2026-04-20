@@ -17,15 +17,17 @@ export type AdminTab =
   | "news"
   | "programacao"
   | "podcasts"
+  | "settings"
   | "users";
 
 const NAV: { key: AdminTab; label: string; icon: ComponentType }[] = [
+  { key: "settings", label: "Configurações Gerais", icon: ShieldIcon },
   { key: "promos", label: "Promoções", icon: GiftIcon },
-  { key: "entries", label: "Inscritos", icon: UsersIcon },
+  { key: "entries", label: "Base de Inscritos", icon: UsersIcon },
   { key: "news", label: "Notícias", icon: NewsIcon },
   { key: "programacao", label: "Programação", icon: CalendarIcon },
   { key: "podcasts", label: "Podcasts", icon: MicIcon },
-  { key: "users", label: "Administradores", icon: ShieldIcon },
+  { key: "users", label: "Administradores", icon: ShieldIcon }
 ];
 
 export function AdminSidebar({

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PromotionPopup } from "@/components/PromotionPopup";
@@ -21,6 +21,8 @@ export const Route = createFileRoute("/")({
 });
 
 function IndexPage() {
+  const { settings } = useLoaderData({ from: "__root__" }) as { settings?: Record<string, any> };
+  
   return (
     <div style={{ width: "100%", fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", margin: 0 }}>
       <SiteHeader />
@@ -28,8 +30,8 @@ function IndexPage() {
       <AudioActivationOverlay />
       <div style={{ overflow: "hidden", height: "calc(100vh - 84px)" }}>
         <iframe
-          src="https://cms.aparecidaetop.com.br/"
-          title="TOP100 FM Conteúdo"
+          src={settings?.home_iframe_url || "https://cms.aparecidaetop.com.br/"}
+          title={settings?.radio_name || "TOP100 FM Conteúdo"}
           style={{
             display: "block",
             width: "100%",

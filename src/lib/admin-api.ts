@@ -251,3 +251,41 @@ export const getUploadUrl = createServerFn({ method: "POST" })
     const publicUrl = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
     return { signedUrl: result.signedUrl, token: result.token, path, publicUrl };
   });
+
+// ── Site Settings ──
+
+export const getSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
+  requireAdmin();
+  const supabase = getAdminSupabase();
+  const { data, error } = await supabase.from("site_settings").select("*");
+  if (error) throw new Error(error.message);
+  
+  const settings: Record<string, any> = {};
+  data?.forEach(row => {
+    try {
+      settings[row.setting_key] = JSON.parse(row.setting_value);
+    } catch {
+      settings[row.setting_key] = row.setting_value;
+    }
+  });
+  return settings;
+});
+
+export const updateSiteSettings = createServerFn({ method: "POST" })
+  .inputValidator((input: { key: string; value: any }) => input)
+  .handler(async ({ data }) => {
+    requireAdmin();
+    const supabase = getAdminSupabase();
+    
+    let stringValue = typeof data.value === 'object' ? JSON.stringify(data.value) : String(data.value);
+    
+    // UPSERT behavior
+    const { error } = await supabase.from("site_settings").upsert({
+      setting_key: data.key,
+      setting_value: stringValue,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'setting_key' });
+    
+    if (error) throw new Error(error.message);
+    return { success: true };
+  });

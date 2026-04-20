@@ -1,4 +1,18 @@
-const STREAM_URL = "https://server29.srvsh.com.br:7618/;";
+let STREAM_URL = "https://server29.srvsh.com.br:7618/;";
+export const setStreamUrl = (url: string) => {
+  if (url && url !== STREAM_URL) {
+    STREAM_URL = url;
+    if (typeof window !== "undefined" && window.__top100Radio) {
+      const radio = window.__top100Radio;
+      if (radio.status === "playing" || radio.wantsToPlay) {
+        radio.el.src = STREAM_URL;
+        radio.el.play().catch(() => {});
+      } else {
+        radio.el.src = STREAM_URL;
+      }
+    }
+  }
+};
 const INTENT_KEY = "top100_radio_intent";
 
 type PlaybackStatus = "idle" | "connecting" | "playing" | "paused" | "blocked" | "error";
@@ -388,4 +402,5 @@ export const radioAudio = {
     ensureSource(radio, false);
     await startPlayback(radio, { forceReload: false });
   },
+  setStreamUrl,
 };

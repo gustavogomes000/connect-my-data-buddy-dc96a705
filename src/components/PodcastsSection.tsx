@@ -67,11 +67,24 @@ export function PodcastsSection() {
                 <div className="podcast-info">
                   <h3 className="podcast-title">{p.title}</h3>
                   {p.description && <p className="podcast-desc">{p.description}</p>}
-                  {!isPlaying && (
-                    <button className="podcast-cta" onClick={() => setPlaying(p.id)}>
-                      ▶ Escutar episódio
-                    </button>
-                  )}
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: 'auto' }}>
+                    {!isPlaying && (
+                      <button className="podcast-cta" onClick={() => setPlaying(p.id)}>
+                        ▶ Escutar no site
+                      </button>
+                    )}
+                    {p.youtube_url && (
+                      <a 
+                        className="podcast-cta podcast-cta-yt" 
+                        href={p.youtube_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ background: '#c8102e', color: '#fff', textDecoration: 'none' }}
+                      >
+                        📺 Ver no YouTube
+                      </a>
+                    )}
+                  </div>
                 </div>
               </article>
             );
