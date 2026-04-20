@@ -87,77 +87,82 @@ function ContatoPage() {
       </section>
 
       <main className="mx-auto max-w-5xl px-4 py-12 md:py-16">
-        {/* CARD WHATSAPP — destaque principal */}
-        <a
-          href={WHATSAPP.href}
-          target="_blank"
-          rel="noopener"
-          className="group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-[#25d366] via-[#1ebe5d] to-[#128c7e] p-[1.5px] shadow-[0_20px_50px_-20px_rgba(37,211,102,0.6)] hover:shadow-[0_25px_60px_-20px_rgba(37,211,102,0.8)] transition-all hover:-translate-y-1"
-        >
-          <div className="relative rounded-[calc(1.5rem-1.5px)] bg-gradient-to-br from-[#25d366] to-[#128c7e] p-7 md:p-10 overflow-hidden">
-            {/* pattern */}
+        {/* CANAIS DIRETOS — grid uniforme */}
+        <div className="grid gap-4 md:gap-5 md:grid-cols-3">
+          {/* WhatsApp (destaque verde) */}
+          <a
+            href={WHATSAPP.href}
+            target="_blank"
+            rel="noopener"
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#25d366] to-[#128c7e] p-6 shadow-[0_12px_32px_-12px_rgba(37,211,102,0.55)] hover:shadow-[0_18px_40px_-12px_rgba(37,211,102,0.75)] hover:-translate-y-1 transition-all duration-300 md:col-span-1"
+          >
             <div
               className="absolute inset-0 opacity-10"
               style={{
                 backgroundImage:
-                  "radial-gradient(circle at 25% 25%, white 1.5px, transparent 1.5px)",
-                backgroundSize: "28px 28px",
+                  "radial-gradient(circle at 25% 25%, white 1.2px, transparent 1.2px)",
+                backgroundSize: "22px 22px",
               }}
             />
-            <div className="relative flex items-center gap-5 md:gap-7">
-              <div className="flex-shrink-0 h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                <MessageCircle className="h-8 w-8 md:h-10 md:w-10 text-white" strokeWidth={2.5} />
+            <div className="relative flex items-start justify-between mb-4">
+              <div className="h-11 w-11 rounded-xl bg-white/20 backdrop-blur-sm border border-white/25 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                <MessageCircle className="h-5 w-5 text-white" strokeWidth={2.5} />
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-white/80 mb-1">
-                  Fale agora pelo WhatsApp
-                </div>
-                <div className="text-2xl md:text-4xl font-black text-white font-mono tabular-nums leading-tight">
-                  {WHATSAPP.display}
-                </div>
-                <div className="mt-2 text-sm text-white/85">
-                  Resposta rápida · 24h
-                </div>
-              </div>
-              <ArrowUpRight className="hidden sm:block h-7 w-7 text-white/80 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+              <ArrowUpRight className="h-5 w-5 text-white/80 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
             </div>
-          </div>
-        </a>
-
-        {/* SECUNDÁRIOS — e-mail + endereço */}
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <a
-            href={`mailto:${EMAIL}`}
-            className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 hover:border-[#0a1f44]/30 hover:shadow-lg hover:-translate-y-0.5 transition-all"
-          >
-            <div className="flex items-start gap-4">
-              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#0a1f44] to-[#1a3a7a] flex items-center justify-center text-white">
-                <Mail className="h-5 w-5" />
+            <div className="relative">
+              <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/80 mb-1.5">
+                WhatsApp
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                  E-mail
-                </div>
-                <div className="mt-1 text-base md:text-lg font-bold text-[#0a1f44] truncate group-hover:text-[#c8102e] transition">
-                  {EMAIL}
-                </div>
+              <div className="text-lg md:text-xl font-black text-white font-mono tabular-nums leading-tight">
+                {WHATSAPP.display}
               </div>
-              <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-[#c8102e] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              <div className="mt-1.5 text-xs text-white/85">
+                Resposta rápida
+              </div>
             </div>
           </a>
 
+          {/* E-mail */}
+          <a
+            href={`mailto:${EMAIL}`}
+            className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 hover:border-[#0a1f44]/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#0a1f44] to-[#1a3a7a] flex items-center justify-center text-white">
+                <Mail className="h-5 w-5" />
+              </div>
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-[#c8102e] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground mb-1.5">
+                E-mail
+              </div>
+              <div className="text-sm md:text-base font-black text-[#0a1f44] truncate group-hover:text-[#c8102e] transition leading-tight">
+                {EMAIL}
+              </div>
+              <div className="mt-1.5 text-xs text-muted-foreground">
+                Para imprensa & parcerias
+              </div>
+            </div>
+          </a>
+
+          {/* Endereço */}
           <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start justify-between mb-4">
               <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#c8102e] to-[#a00d24] flex items-center justify-center text-white">
                 <MapPin className="h-5 w-5" />
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                  Estúdio
-                </div>
-                <div className="mt-1 text-base md:text-lg font-bold text-[#0a1f44]">
-                  {ENDERECO}
-                </div>
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground mb-1.5">
+                Estúdio
+              </div>
+              <div className="text-sm md:text-base font-black text-[#0a1f44] leading-tight">
+                {ENDERECO}
+              </div>
+              <div className="mt-1.5 text-xs text-muted-foreground">
+                Visite nosso estúdio
               </div>
             </div>
           </div>
