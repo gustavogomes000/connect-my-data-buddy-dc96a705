@@ -2,8 +2,8 @@ import { useState } from "react";
 import { getUploadUrl } from "@/lib/admin-api";
 import { ImageIcon } from "./icons";
 
-const MAX_DIM = 1600;
-const TARGET_QUALITY = 0.82;
+const MAX_DIM = 2400;
+const TARGET_QUALITY = 0.85;
 
 async function compressImage(file: File): Promise<Blob> {
   // SVG ou GIF: não comprime (mantém como está)
@@ -44,9 +44,9 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Limite generoso ANTES de comprimir (50 MB)
-    if (file.size > 50 * 1024 * 1024) {
-      alert("Imagem muito grande (máx. 50 MB)");
+    // Limite generoso ANTES de comprimir (200 MB)
+    if (file.size > 200 * 1024 * 1024) {
+      alert("Imagem muito grande (máx. 200 MB)");
       return;
     }
     setUploading(true);
