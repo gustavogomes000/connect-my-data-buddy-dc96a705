@@ -3,12 +3,18 @@ import { getCookie, getRequestHeader } from "@tanstack/react-start/server";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL =
-  import.meta.env.VITE_SUPABASE_URL ||
-  (typeof process !== "undefined" ? process.env?.SUPABASE_URL : undefined);
+  (typeof process !== "undefined"
+    ? process.env?.MY_SUPABASE_URL || process.env?.SUPABASE_URL
+    : undefined) || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY =
-  (typeof process !== "undefined" ? process.env?.SUPABASE_SERVICE_ROLE_KEY : undefined) ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  (typeof process !== "undefined" ? process.env?.SUPABASE_PUBLISHABLE_KEY : undefined);
+  (typeof process !== "undefined"
+    ? process.env?.MY_SUPABASE_SERVICE_ROLE_KEY ||
+      process.env?.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env?.MY_SUPABASE_PUBLISHABLE_KEY ||
+      process.env?.SUPABASE_PUBLISHABLE_KEY
+    : undefined) ||
+  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 // Cliente único reutilizado entre invocações
 const adminClient: SupabaseClient | null =
