@@ -3,9 +3,25 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PromotionPopup } from "@/components/PromotionPopup";
 import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
-import { PodcastsSection } from "@/components/PodcastsSection";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+
+function getYoutubeId(url: string): string | null {
+  if (!url) return null;
+  const m = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  );
+  return m ? m[1] : null;
+}
+
+type PodcastItem = {
+  id: string;
+  title: string;
+  description: string | null;
+  youtube_url: string;
+  thumbnail_url: string | null;
+};
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -97,6 +113,8 @@ function IndexPage() {
   const [prog, setProg] = useState<ProgItem[]>([]);
   const [promos, setPromos] = useState<PromoItem[]>([]);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [podcasts, setPodcasts] = useState<PodcastItem[]>([]);
+  const [playingPodcast, setPlayingPodcast] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
