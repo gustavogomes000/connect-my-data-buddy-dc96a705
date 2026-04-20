@@ -31,6 +31,7 @@ export const getProgramacao = createServerFn({ method: "GET" }).handler(async ()
     .from("programacao")
     .select("*")
     .eq("is_active", true)
+    .neq("program_name", "__probe__")
     .order("day_of_week")
     .order("start_time");
   return (data || []) as ProgramacaoItem[];

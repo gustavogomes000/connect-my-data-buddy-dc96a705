@@ -222,25 +222,36 @@ function IndexPage() {
         </section>
 
         {/* PROGRAMAÇÃO DO DIA */}
-        <section className="bg-[#0c2651] text-white py-12">
+        <section className="bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
           <div className="mx-auto max-w-7xl px-4">
-            <div className="flex items-end justify-between mb-6 border-b-2 border-[#c8102e] pb-3">
-              <div>
-                <p className="text-xs uppercase tracking-widest text-[#c8102e] font-bold">Hoje · {DAYS[today]}</p>
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight">Programação do Dia</h2>
+            <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <span className="h-8 w-1.5 rounded-full bg-[#c8102e]" />
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c8102e]">
+                    Hoje · {DAYS[today]}
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-none text-white">
+                    Programação do Dia
+                  </h2>
+                </div>
               </div>
-              <Link to="/programacao" className="text-sm font-bold text-white hover:text-[#c8102e]">
-                Ver semana →
+              <Link
+                to="/programacao"
+                className="group inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur px-4 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-[#0c2651]"
+              >
+                Ver semana
+                <span className="transition group-hover:translate-x-0.5">→</span>
               </Link>
             </div>
 
-            {prog.length === 0 ? (
+            {prog.filter((p) => p.program_name !== "__probe__").length === 0 ? (
               <div className="rounded-xl bg-white/5 p-8 text-center text-white/70">
                 Nenhum programa cadastrado para hoje.
               </div>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {prog.map((p) => {
+                {prog.filter((p) => p.program_name !== "__probe__").map((p) => {
                   const isLive = nowHHMM >= p.start_time.slice(0, 5) && nowHHMM < p.end_time.slice(0, 5);
                   return (
                     <div
