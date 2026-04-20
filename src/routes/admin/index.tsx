@@ -7,6 +7,7 @@ import { EntriesManager } from "@/components/admin/EntriesManager";
 import { NewsManager } from "@/components/admin/NewsManager";
 import { ProgramacaoManager } from "@/components/admin/ProgramacaoManager";
 import { PodcastsManager } from "@/components/admin/PodcastsManager";
+import { SponsorsManager } from "@/components/admin/SponsorsManager";
 import { UsersManager } from "@/components/admin/UsersManager";
 import { SiteSettingsProvider } from "@/lib/site-settings-context";
 import { SiteSettingsPage } from "./-site-settings";
