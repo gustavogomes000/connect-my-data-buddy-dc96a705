@@ -37,7 +37,7 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
   });
 
   const update = async (key: string, value: any) => {
-    await mutation.mutateAsync({ key, value });
+    await mutation.mutateAsync({ data: { key, value } } as any);
   };
 
   return (
