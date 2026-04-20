@@ -1,5 +1,5 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useState } from "react";
 import { adminLogout, checkAdminSession } from "@/lib/admin-auth";
 import { AdminSidebar, type AdminTab } from "@/components/admin/AdminSidebar";
 import { PromotionsManager } from "@/components/admin/PromotionsManager";
@@ -8,7 +8,6 @@ import { NewsManager } from "@/components/admin/NewsManager";
 import { ProgramacaoManager } from "@/components/admin/ProgramacaoManager";
 import { PodcastsManager } from "@/components/admin/PodcastsManager";
 import { UsersManager } from "@/components/admin/UsersManager";
-import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { SiteSettingsProvider } from "@/lib/site-settings-context";
 import { SiteSettingsPage } from "./-site-settings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -31,34 +30,16 @@ export const Route = createFileRoute("/admin/")({
 });
 
 function AdminDashboard() {
-  const navigate = useNavigate();
-  const { isAuthenticated, isLoading, logout } = useAuth();
   const [tab, setTab] = useState<AdminTab>("settings");
 
-  // Caso a sessão expire enquanto o usuário está no painel, redireciona.
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate({ to: "/admin/login", replace: true });
-    }
-  }, [isLoading, isAuthenticated, navigate]);
-
-  if (isLoading || !isAuthenticated) {
-    return (
-      <div className="admin-layout">
-        <main className="admin-main">
-          <section className="admin-section">
-            <div className="admin-form-card">
-              <h1>Validando sessão...</h1>
-            </div>
-          </section>
-        </main>
-      </div>
-    );
-  }
+  const handleLogout = async () => {
+    await adminLogout();
+    window.location.replace("/admin/login");
+  };
 
   return (
     <div className="admin-layout">
-      <AdminSidebar tab={tab} onChange={setTab} onLogout={logout} />
+      <AdminSidebar tab={tab} onChange={setTab} onLogout={handleLogout} />
       <main className="admin-main">
         {tab === "settings" && <SiteSettingsPage />}
         {tab === "promos" && <PromotionsManager />}
@@ -75,11 +56,9 @@ function AdminDashboard() {
 function WrappedAdminDashboard() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <SiteSettingsProvider>
-          <AdminDashboard />
-        </SiteSettingsProvider>
-      </AuthProvider>
+      <SiteSettingsProvider>
+        <AdminDashboard />
+      </SiteSettingsProvider>
     </QueryClientProvider>
   );
 }
