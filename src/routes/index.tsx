@@ -38,6 +38,38 @@ type ProgItem = {
   end_time: string;
 };
 
+type PromoItem = {
+  id: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  link: string | null;
+};
+
+const MOCK_PROMOS: PromoItem[] = [
+  {
+    id: "mock-1",
+    title: "Ganhe um Smart TV 50''",
+    description: "Cadastre-se e concorra ao grande prêmio do mês. Sorteio ao vivo na TOP100 FM.",
+    image_url: null,
+    link: "/promocoes",
+  },
+  {
+    id: "mock-2",
+    title: "Par de ingressos para o show",
+    description: "Promoção exclusiva para ouvintes. Mostre que você é TOP e leve seu acompanhante.",
+    image_url: null,
+    link: "/promocoes",
+  },
+  {
+    id: "mock-3",
+    title: "Vale-compras de R$ 500",
+    description: "Participe agora e concorra a fazer aquela compra dos sonhos por nossa conta.",
+    image_url: null,
+    link: "/promocoes",
+  },
+];
+
 const DAYS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
 function fmtDate(d: string | null) {
@@ -54,6 +86,7 @@ function IndexPage() {
   useLoaderData({ from: "__root__" });
   const [news, setNews] = useState<NewsItem[]>([]);
   const [prog, setProg] = useState<ProgItem[]>([]);
+  const [promos, setPromos] = useState<PromoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
@@ -74,9 +107,17 @@ function IndexPage() {
         .eq("day_of_week", today)
         .neq("program_name", "__probe__")
         .order("start_time", { ascending: true }),
-    ]).then(([n, p]) => {
+      supabase
+        .from("promotions")
+        .select("id,title,description,image_url,link")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true })
+        .limit(3),
+    ]).then(([n, p, pr]) => {
       setNews((n.data as any) || []);
       setProg((p.data as any) || []);
+      const promoData = ((pr.data as any) || []) as PromoItem[];
+      setPromos(promoData.length > 0 ? promoData : MOCK_PROMOS);
       setLoading(false);
     });
   }, [today]);
