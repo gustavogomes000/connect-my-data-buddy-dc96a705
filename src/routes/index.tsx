@@ -262,6 +262,94 @@ function IndexPage() {
           )}
         </section>
 
+        {/* PROMOÇÕES EM DESTAQUE */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#fff8f0] via-white to-[#fff0f3] py-14 border-y border-[#c8102e]/10">
+          <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#c8102e]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#0c2651]/10 blur-3xl" />
+
+          <div className="relative mx-auto max-w-7xl px-4">
+            <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#ff5470]" />
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e] flex items-center gap-1.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c8102e] opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#c8102e]" />
+                    </span>
+                    Promoções no ar
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none mt-1">
+                    Participe e concorra
+                  </h2>
+                </div>
+              </div>
+              <Link
+                to="/promocoes"
+                className="group inline-flex items-center gap-1.5 rounded-full bg-[#c8102e] px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_24px_-8px_rgba(200,16,46,0.6)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_rgba(200,16,46,0.7)]"
+              >
+                Ver todas
+                <span className="transition group-hover:translate-x-0.5">→</span>
+              </Link>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-3">
+              {promos.slice(0, 3).map((p, i) => (
+                <Link
+                  key={p.id}
+                  to="/promocoes"
+                  className="group relative overflow-hidden rounded-2xl bg-white border border-gray-200 hover:border-[#c8102e]/40 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                >
+                  {/* badge nº */}
+                  <div className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c8102e] shadow-sm border border-[#c8102e]/20">
+                    🎁 Promo #{i + 1}
+                  </div>
+
+                  {/* imagem ou gradiente */}
+                  <div className="aspect-[16/10] overflow-hidden bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] relative">
+                    {p.image_url ? (
+                      <img
+                        src={p.image_url}
+                        alt={p.title}
+                        className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <>
+                        <div
+                          className="absolute inset-0 opacity-20"
+                          style={{
+                            backgroundImage:
+                              "radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 70%, white 1px, transparent 1px)",
+                            backgroundSize: "24px 24px",
+                          }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-white/90 text-6xl drop-shadow-lg">🎉</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="font-black text-lg text-[#0c2651] leading-tight group-hover:text-[#c8102e] transition line-clamp-2">
+                      {p.title}
+                    </h3>
+                    {p.description && (
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
+                        {p.description}
+                      </p>
+                    )}
+                    <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[#c8102e] group-hover:gap-2.5 transition-all">
+                      Quero participar
+                      <span>→</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* PROGRAMAÇÃO DO DIA */}
         <section className="bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
           <div className="mx-auto max-w-7xl px-4">
