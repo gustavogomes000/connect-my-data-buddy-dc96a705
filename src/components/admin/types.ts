@@ -25,6 +25,9 @@ export type NewsItem = {
   display_order: number | null;
   created_at: string | null;
   updated_at: string | null;
+  source_url?: string | null;
+  source_name?: string | null;
+  auto_generated?: boolean | null;
 };
 
 export type ProgItem = {
