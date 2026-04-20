@@ -82,7 +82,12 @@ export const deletePromotion = createServerFn({ method: "POST" })
 export const getNews = createServerFn({ method: "GET" }).handler(async () => {
   requireAdmin();
   const supabase = getAdminSupabase();
-  const { data } = await supabase.from("news").select("*").order("display_order");
+  const { data } = await (supabase as any)
+    .from("news")
+    .select("*")
+    .order("is_pinned", { ascending: false })
+    .order("pinned_at", { ascending: false, nullsFirst: false })
+    .order("updated_at", { ascending: false });
   return data || [];
 });
 
