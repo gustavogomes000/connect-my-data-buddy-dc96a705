@@ -70,16 +70,14 @@ const MOCK_PROMOS: PromoItem[] = [
   },
 ];
 
-type Sponsor = { name: string; category?: string; href?: string; logo_url?: string };
-
-const SPONSORS: Sponsor[] = [
-  { name: "Supermercados Bom Preço", category: "Varejo", href: "#" },
-  { name: "Auto Posto Avenida", category: "Combustíveis", href: "#" },
-  { name: "Farmácia Vida", category: "Saúde", href: "#" },
-  { name: "Construtora Horizonte", category: "Construção", href: "#" },
-  { name: "Restaurante Sabor & Cia", category: "Gastronomia", href: "#" },
-  { name: "Loja TopStyle", category: "Moda", href: "#" },
-];
+type Sponsor = {
+  id: string;
+  name: string;
+  logo_url: string;
+  link?: string;
+  display_order?: number;
+  is_active?: boolean;
+};
 
 const DAYS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
