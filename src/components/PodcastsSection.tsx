@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getActivePodcasts, type PodcastItem } from "@/lib/public-api";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null;
