@@ -9,8 +9,20 @@ export const adminLogin = createServerFn({ method: "POST" })
     const { setCookie } = await import("@tanstack/react-start/server");
     const { createClient } = await import("@supabase/supabase-js");
 
-    const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-    const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const readEnv = async (k: string): Promise<string | undefined> => {
+      if (typeof process !== "undefined" && process.env?.[k]) return process.env[k];
+      try {
+        const cf: any = await import(/* @vite-ignore */ "cloudflare:workers");
+        const v = cf?.env?.[k];
+        if (typeof v === "string" && v) return v;
+      } catch {}
+      return undefined;
+    };
+
+    const url = (await readEnv("SUPABASE_URL")) || (await readEnv("VITE_SUPABASE_URL"));
+    const key =
+      (await readEnv("SUPABASE_PUBLISHABLE_KEY")) ||
+      (await readEnv("VITE_SUPABASE_PUBLISHABLE_KEY"));
 
     if (!url || !key) {
       return { success: false, error: "Configuração do servidor incompleta" };

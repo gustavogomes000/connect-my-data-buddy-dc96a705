@@ -8,10 +8,23 @@ async function requireAdmin() {
   }
 }
 
+async function readEnv(key: string): Promise<string | undefined> {
+  if (typeof process !== "undefined" && process.env?.[key]) return process.env[key];
+  try {
+    const cf: any = await import(/* @vite-ignore */ "cloudflare:workers");
+    const v = cf?.env?.[key];
+    if (typeof v === "string" && v) return v;
+  } catch {}
+  return undefined;
+}
+
 async function getAdminSupabase() {
   const { createClient } = await import("@supabase/supabase-js");
-  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const url = (await readEnv("SUPABASE_URL")) || (await readEnv("VITE_SUPABASE_URL"));
+  const key =
+    (await readEnv("SUPABASE_SERVICE_ROLE_KEY")) ||
+    (await readEnv("SUPABASE_PUBLISHABLE_KEY")) ||
+    (await readEnv("VITE_SUPABASE_PUBLISHABLE_KEY"));
   if (!url || !key) throw new Error("Configuração do servidor incompleta");
   return createClient(url, key);
 }
