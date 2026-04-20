@@ -107,43 +107,15 @@ export function SponsorsManager() {
       )
     )
       return;
+    const svgLogo = (label: string, bg: string) =>
+      `data:image/svg+xml;utf8,${encodeURIComponent(
+        `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 120'><rect width='300' height='120' rx='12' fill='${bg}'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='28' font-weight='bold' fill='white'>${label}</text></svg>`,
+      )}`;
     const mocks: Sponsor[] = [
-      {
-        id: uid(),
-        name: "Supermercado Bom Preço",
-        logo_url:
-          "https://dummyimage.com/300x120/0c2651/ffffff.png&text=BOM+PRE%C3%87O",
-        link: "",
-        display_order: 1,
-        is_active: true,
-      },
-      {
-        id: uid(),
-        name: "Auto Posto Avenida",
-        logo_url:
-          "https://dummyimage.com/300x120/c8102e/ffffff.png&text=POSTO+AVENIDA",
-        link: "",
-        display_order: 2,
-        is_active: true,
-      },
-      {
-        id: uid(),
-        name: "Construtora Horizonte",
-        logo_url:
-          "https://dummyimage.com/300x120/1a3a7a/ffffff.png&text=HORIZONTE",
-        link: "",
-        display_order: 3,
-        is_active: true,
-      },
-      {
-        id: uid(),
-        name: "Farmácia Vida",
-        logo_url:
-          "https://dummyimage.com/300x120/16a34a/ffffff.png&text=FARM%C3%81CIA+VIDA",
-        link: "",
-        display_order: 4,
-        is_active: true,
-      },
+      { id: uid(), name: "Supermercado Bom Preço", logo_url: svgLogo("BOM PREÇO", "#0c2651"), link: "", display_order: 1, is_active: true },
+      { id: uid(), name: "Auto Posto Avenida", logo_url: svgLogo("POSTO AVENIDA", "#c8102e"), link: "", display_order: 2, is_active: true },
+      { id: uid(), name: "Construtora Horizonte", logo_url: svgLogo("HORIZONTE", "#1a3a7a"), link: "", display_order: 3, is_active: true },
+      { id: uid(), name: "Farmácia Vida", logo_url: svgLogo("FARMÁCIA VIDA", "#16a34a"), link: "", display_order: 4, is_active: true },
     ];
     await persist([...items, ...mocks]);
   };
