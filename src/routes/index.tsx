@@ -197,15 +197,15 @@ function IndexPage() {
         const raw = (sp as any)?.data?.setting_value;
         const parsed = raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : [];
         const list = (Array.isArray(parsed) ? parsed : []) as Sponsor[];
-        setSponsors(
-          list
-            .filter((s) => s.is_active !== false && s.logo_url)
-            .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
-        );
+        const filtered = list
+          .filter((s) => s.is_active !== false && s.logo_url)
+          .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+        setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
       } catch {
-        setSponsors([]);
+        setSponsors(MOCK_SPONSORS);
       }
-      setPodcasts(((pc as any)?.data as PodcastItem[]) || []);
+      const pcData = ((pc as any)?.data as PodcastItem[]) || [];
+      setPodcasts(pcData.length > 0 ? pcData : MOCK_PODCASTS);
       setLoading(false);
     });
   }, [today]);
