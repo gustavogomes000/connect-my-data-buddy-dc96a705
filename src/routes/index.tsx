@@ -96,6 +96,7 @@ function IndexPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [prog, setProg] = useState<ProgItem[]>([]);
   const [promos, setPromos] = useState<PromoItem[]>([]);
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
@@ -122,11 +123,28 @@ function IndexPage() {
         .eq("is_active", true)
         .order("display_order", { ascending: true })
         .limit(3),
-    ]).then(([n, p, pr]) => {
+      (supabase as any)
+        .from("site_settings")
+        .select("setting_key,setting_value")
+        .eq("setting_key", "sponsors")
+        .maybeSingle(),
+    ]).then(([n, p, pr, sp]) => {
       setNews((n.data as any) || []);
       setProg((p.data as any) || []);
       const promoData = ((pr.data as any) || []) as PromoItem[];
       setPromos(promoData.length > 0 ? promoData : MOCK_PROMOS);
+      try {
+        const raw = (sp as any)?.data?.setting_value;
+        const parsed = raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : [];
+        const list = (Array.isArray(parsed) ? parsed : []) as Sponsor[];
+        setSponsors(
+          list
+            .filter((s) => s.is_active !== false && s.logo_url)
+            .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
+        );
+      } catch {
+        setSponsors([]);
+      }
       setLoading(false);
     });
   }, [today]);
