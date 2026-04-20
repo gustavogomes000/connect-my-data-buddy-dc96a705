@@ -1,6 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { adminLogin, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
+import {
+  adminLogin,
+  checkAdminSession,
+  ADMIN_SESSION_KEY,
+  ADMIN_SESSION_TOKEN,
+} from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -35,7 +40,13 @@ function AdminLoginPage() {
           sessionStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
           localStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
         } catch {}
-        navigate({ to: "/admin" });
+
+        const session = await checkAdminSession();
+        if (session?.authenticated) {
+          navigate({ to: "/admin", replace: true });
+        } else {
+          setError("Sessão não confirmada. Tente entrar novamente.");
+        }
       } else {
         setError(result.error || "Não foi possível entrar.");
       }
