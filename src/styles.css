@@ -719,17 +719,20 @@
    Brand: deep navy #0c2651 · gold #ffd400 · accent red #e11d48
    ======================================================== */
 :root {
-  --ad-bg: #f4f6fa;
+  --ad-bg: #fffdf5;
   --ad-surface: #ffffff;
-  --ad-border: #e3e7ee;
-  --ad-border-strong: #cdd4e0;
-  --ad-text: #0f1b2d;
-  --ad-text-muted: #5a6478;
-  --ad-brand: #0c2651;
-  --ad-brand-hover: #163a73;
-  --ad-brand-soft: #e8eef7;
+  --ad-border: #f0e7c4;
+  --ad-border-strong: #e6d68a;
+  --ad-text: #1a1a1a;
+  --ad-text-muted: #6b6b6b;
+  --ad-brand: #ffd400;          /* PRIMARY: amarelo TOP100 */
+  --ad-brand-hover: #f5c800;
+  --ad-brand-soft: #fff7c2;
+  --ad-brand-fg: #0c2651;       /* texto sobre amarelo */
   --ad-gold: #ffd400;
-  --ad-danger: #e11d48;
+  --ad-blue: #0c2651;           /* secundária azul */
+  --ad-blue-soft: #e8eef7;
+  --ad-danger: #e11d48;         /* secundária vermelha */
   --ad-danger-soft: #fee2e7;
   --ad-success: #15803d;
   --ad-success-soft: #dcfce7;
