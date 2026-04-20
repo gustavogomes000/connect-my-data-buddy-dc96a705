@@ -1,6 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminLogout, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
+import {
+  adminLogout,
+  checkAdminSession,
+  ADMIN_SESSION_KEY,
+  ADMIN_SESSION_TOKEN,
+} from "@/lib/admin-auth";
 import { AdminSidebar, type AdminTab } from "@/components/admin/AdminSidebar";
 import { PromotionsManager } from "@/components/admin/PromotionsManager";
 import { EntriesManager } from "@/components/admin/EntriesManager";
@@ -32,7 +37,30 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<AdminTab>("promos");
   // Validação síncrona no primeiro render — sem flash de loading
-  const [authed] = useState<boolean>(() => hasAdminToken());
+  const [authed, setAuthed] = useState<boolean>(() => hasAdminToken());
+
+  // Valida o cookie httpOnly no servidor — fonte da verdade
+  useEffect(() => {
+    let cancelled = false;
+    checkAdminSession()
+      .then((res) => {
+        if (cancelled) return;
+        if (!res?.authenticated) {
+          try {
+            sessionStorage.removeItem(ADMIN_SESSION_KEY);
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+          } catch {}
+          setAuthed(false);
+          navigate({ to: "/admin/login", replace: true });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) navigate({ to: "/admin/login", replace: true });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate]);
 
   useEffect(() => {
     if (!authed) navigate({ to: "/admin/login", replace: true });
