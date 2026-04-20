@@ -787,14 +787,11 @@
   border: 1px solid var(--ad-border);
 }
 .admin-login-header { text-align: center; margin-bottom: 28px; }
-.admin-login-logo {
-  width: 64px; height: 64px; margin: 0 auto 18px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--ad-brand) 0%, #1e4ba8 100%);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--ad-gold); font-weight: 800; font-size: 28px;
-  box-shadow: 0 8px 20px rgba(12,38,81,.28), inset 0 1px 0 rgba(255,255,255,.15);
-  letter-spacing: -1px;
+.admin-login-logo-img {
+  display: block;
+  width: 96px; height: auto; margin: 0 auto 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(12,38,81,.18));
 }
 .admin-login-header h1 {
   margin: 0 0 6px;
