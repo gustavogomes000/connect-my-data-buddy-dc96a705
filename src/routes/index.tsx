@@ -411,6 +411,69 @@ function IndexPage() {
           </div>
         </section>
 
+        {/* PATROCINADORES */}
+        <section className="bg-white py-14 border-b border-gray-100">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
+                    Quem apoia
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none mt-0.5">
+                    Nossos Patrocinadores
+                  </h2>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-xs hidden md:block">
+                Marcas que acreditam no rádio e fazem a TOP100 FM acontecer todos os dias.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+              {SPONSORS.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.href || "#"}
+                  target={s.href ? "_blank" : undefined}
+                  rel="noopener"
+                  className="group relative aspect-[3/2] rounded-xl border border-gray-200 bg-white hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center overflow-hidden p-4"
+                >
+                  {s.logo_url ? (
+                    <img
+                      src={s.logo_url}
+                      alt={s.name}
+                      className="max-h-12 max-w-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-base md:text-lg font-black text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight">
+                        {s.name}
+                      </div>
+                      {s.category && (
+                        <div className="text-[9px] uppercase tracking-wider text-muted-foreground mt-1 font-semibold">
+                          {s.category}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </a>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <a
+                href="mailto:contato@top100fm.com.br?subject=Quero%20ser%20patrocinador"
+                className="inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] hover:bg-[#c8102e] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
+              >
+                Quero anunciar na TOP100 FM
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* PODCASTS */}
         <PodcastsSection />
       </main>
