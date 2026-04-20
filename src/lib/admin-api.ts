@@ -91,12 +91,12 @@ export const createNews = createServerFn({ method: "POST" })
   });
 
 export const updateNews = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string; title?: string; content?: string; summary?: string; image_url?: string; podcast_link?: string; is_published?: boolean; display_order?: number }) => input)
+  .inputValidator((input: { id: string; title?: string; content?: string; summary?: string; image_url?: string; podcast_link?: string; is_published?: boolean; is_pinned?: boolean; pinned_at?: string | null; display_order?: number }) => input)
   .handler(async ({ data }) => {
     requireAdmin();
     const supabase = getAdminSupabase();
     const { id, ...updates } = data;
-    const { data: result, error } = await supabase.from("news").update({ ...updates, updated_at: new Date().toISOString() }).eq("id", id).select().single();
+    const { data: result, error } = await (supabase as any).from("news").update({ ...updates, updated_at: new Date().toISOString() }).eq("id", id).select().single();
     if (error) throw new Error(error.message);
     return result;
   });
