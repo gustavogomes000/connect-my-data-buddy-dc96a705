@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminLogin, checkAdminSession, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
+import { adminLogin, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
 import topLogo from "@/assets/top100-logo.png";
 
 const REMEMBER_KEY = "admin_remember";
@@ -13,7 +13,6 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function AdminLoginPage() {
-  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
