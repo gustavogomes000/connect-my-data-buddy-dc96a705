@@ -23,6 +23,8 @@ type NewsItem = {
   summary: string | null;
   image_url: string | null;
   podcast_link: string | null;
+  is_pinned?: boolean | null;
+  pinned_at?: string | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -46,13 +48,14 @@ function NoticiasPage() {
   }, [open]);
 
   useEffect(() => {
-    supabase
+    (supabase as any)
       .from("news")
       .select("*")
       .eq("is_published", true)
-      .order("display_order", { ascending: true })
+      .order("is_pinned", { ascending: false })
+      .order("pinned_at", { ascending: false, nullsFirst: false })
       .order("updated_at", { ascending: false })
-      .then(({ data }) => {
+      .then(({ data }: any) => {
         setNews((data as unknown as NewsItem[]) || []);
         setLoading(false);
       });

@@ -223,11 +223,12 @@ function IndexPage() {
 
   useEffect(() => {
     Promise.all([
-      supabase
+      (supabase as any)
         .from("news")
-        .select("id,title,summary,content,image_url,updated_at,created_at")
+        .select("id,title,summary,content,image_url,updated_at,created_at,is_pinned,pinned_at")
         .eq("is_published", true)
-        .order("display_order", { ascending: true })
+        .order("is_pinned", { ascending: false })
+        .order("pinned_at", { ascending: false, nullsFirst: false })
         .order("updated_at", { ascending: false })
         .limit(7),
       (supabase as any)
