@@ -101,10 +101,10 @@ export const getActivePodcasts = createServerFn({ method: "GET" }).handler(async
 
 export const getPublicSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = await getPublicSupabase();
-  const { data } = await supabase.from("site_settings").select("*");
-  
+  const { data } = await (supabase as any).from("site_settings").select("*");
+
   const settings: Record<string, any> = {};
-  data?.forEach(row => {
+  (data || []).forEach((row: any) => {
     try {
       settings[row.setting_key] = JSON.parse(row.setting_value);
     } catch {

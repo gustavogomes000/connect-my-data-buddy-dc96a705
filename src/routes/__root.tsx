@@ -124,10 +124,9 @@ function RootComponent() {
   const { settings } = Route.useLoaderData();
   
   // Inject CSS variables for colors if configured
-  const inlineStyles: React.CSSProperties = {};
+  const inlineStyles: Record<string, string> = {};
   if (settings?.color_primary) {
     inlineStyles['--primary'] = settings.color_primary;
-    // Calculate an HSL version for Tailwind if needed or specific CSS rules
   }
   if (settings?.color_secondary) {
     inlineStyles['--secondary'] = settings.color_secondary;
