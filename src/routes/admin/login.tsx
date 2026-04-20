@@ -59,12 +59,8 @@ function AdminLoginPage() {
           }
         } catch {}
 
-        const session = await checkAdminSession();
-        if (session?.authenticated) {
-          navigate({ to: "/admin", replace: true });
-        } else {
-          setError("Sessão não confirmada. Tente entrar novamente.");
-        }
+        window.location.replace("/admin");
+        return;
       } else {
         setError(result.error || "Não foi possível entrar.");
       }
