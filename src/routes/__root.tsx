@@ -133,7 +133,7 @@ function RootComponent() {
   }
   
   return (
-    <div style={inlineStyles}>
+    <div style={inlineStyles as React.CSSProperties}>
       <Outlet />
     </div>
   );
