@@ -48,135 +48,214 @@ function ProgramacaoPage() {
     [items, day]
   );
 
+  const liveNowIdx = useMemo(() => {
+    if (day !== today) return -1;
+    return dayItems.findIndex((p) => now >= fmt(p.start_time) && now < fmt(p.end_time));
+  }, [dayItems, day, today, now]);
+
+  const totalPrograms = dayItems.length;
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      {/* HERO */}
-      <section className="bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white">
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="h-8 w-1.5 rounded-full bg-[#c8102e]" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c8102e]">
-              Grade semanal
-            </p>
+      {/* HERO — moderno, com glow e grid sutil */}
+      <section className="relative overflow-hidden bg-[#0a1f44] text-white">
+        {/* glow radial */}
+        <div className="pointer-events-none absolute -top-40 -right-32 h-[420px] w-[420px] rounded-full bg-[#c8102e]/25 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-20 h-[360px] w-[360px] rounded-full bg-[#1a3a7a]/60 blur-3xl" />
+        {/* grid pattern */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+            backgroundSize: "44px 44px",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-6xl px-4 py-12 md:py-20">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 backdrop-blur px-3 py-1.5 mb-5">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c8102e] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#c8102e]" />
+            </span>
+            <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-white/90">
+              Grade semanal · ao vivo
+            </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-none">
-            Nossa Programação
+
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[0.95]">
+            Nossa{" "}
+            <span className="bg-gradient-to-r from-white via-white to-[#ff5470] bg-clip-text text-transparent">
+              Programação
+            </span>
           </h1>
-          <p className="mt-3 text-white/70 max-w-xl">
-            Acompanhe os programas da TOP100 FM ao longo da semana. Toque em um dia para ver a grade completa.
+          <p className="mt-4 text-white/70 max-w-xl text-sm md:text-base leading-relaxed">
+            Acompanhe os programas da TOP100 FM ao longo da semana. Toque em um dia para ver a grade completa em tempo real.
           </p>
+
+          {/* mini stats */}
+          <div className="mt-8 flex flex-wrap gap-2 md:gap-3">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs">
+              <span className="text-white/50">Hoje</span>
+              <span className="font-bold capitalize">{DAYS[today].label}</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs">
+              <span className="text-white/50">Agora</span>
+              <span className="font-mono font-bold tabular-nums">{now}</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs">
+              <span className="text-white/50">Programas</span>
+              <span className="font-bold">{totalPrograms}</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 py-10">
-        {/* TABS DE DIAS */}
-        <div className="mb-8 flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap md:justify-center">
-          {DAYS.map((d) => {
-            const active = day === d.idx;
-            const isToday = today === d.idx;
-            return (
-              <button
-                key={d.idx}
-                onClick={() => setDay(d.idx)}
-                className={`group relative px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap transition shadow-sm ${
-                  active
-                    ? "bg-[#c8102e] text-white shadow-lg shadow-red-900/20 scale-105"
-                    : "bg-white text-[#0c2651] border border-gray-200 hover:border-[#c8102e]/40 hover:text-[#c8102e]"
-                }`}
-              >
-                <span className="md:hidden">{d.short}</span>
-                <span className="hidden md:inline">{d.label}</span>
-                {isToday && (
-                  <span
-                    className={`absolute -top-1.5 -right-1.5 text-[9px] font-black px-1.5 py-0.5 rounded-full ${
-                      active ? "bg-white text-[#c8102e]" : "bg-[#c8102e] text-white"
-                    }`}
-                  >
-                    HOJE
-                  </span>
-                )}
-              </button>
-            );
-          })}
+      <main className="mx-auto max-w-6xl px-4 py-10 md:py-14">
+        {/* TABS DE DIAS — pílulas modernas, scroll horizontal mobile */}
+        <div className="mb-10 -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="flex gap-2 md:gap-2.5 overflow-x-auto pb-3 md:flex-wrap md:justify-center scrollbar-thin">
+            {DAYS.map((d) => {
+              const active = day === d.idx;
+              const isToday = today === d.idx;
+              return (
+                <button
+                  key={d.idx}
+                  onClick={() => setDay(d.idx)}
+                  className={`group relative shrink-0 px-4 md:px-5 py-2.5 md:py-3 rounded-full text-xs md:text-sm font-bold whitespace-nowrap transition-all duration-300 ${
+                    active
+                      ? "bg-[#c8102e] text-white shadow-[0_8px_24px_-8px_rgba(200,16,46,0.6)] scale-[1.03]"
+                      : "bg-white text-[#0a1f44] border border-gray-200 hover:border-[#c8102e]/50 hover:text-[#c8102e] hover:-translate-y-0.5"
+                  }`}
+                >
+                  <span className="sm:hidden">{d.short}</span>
+                  <span className="hidden sm:inline">{d.label}</span>
+                  {isToday && (
+                    <span
+                      className={`absolute -top-1.5 -right-1 text-[8px] md:text-[9px] font-black px-1.5 py-0.5 rounded-full leading-none tracking-wider ${
+                        active ? "bg-white text-[#c8102e]" : "bg-[#c8102e] text-white shadow-md"
+                      }`}
+                    >
+                      HOJE
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* LISTA DE PROGRAMAS */}
+        {/* LISTA DE PROGRAMAS — timeline */}
         {dayItems.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
-            <div className="text-5xl mb-3">🎙️</div>
-            <p className="text-lg font-bold text-[#0c2651]">
-              Sem programas cadastrados para {DAYS[day].label.toLowerCase()}
+          <div className="rounded-3xl border border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-white p-10 md:p-16 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#0a1f44] to-[#1a3a7a] text-white text-2xl">
+              🎙️
+            </div>
+            <p className="text-base md:text-lg font-bold text-[#0a1f44]">
+              Sem programas para {DAYS[day].label.toLowerCase()}
             </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              A grade está sendo atualizada. Volte em breve!
+            <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
+              A grade está sendo atualizada. Volte em breve para conferir as novidades.
             </p>
           </div>
         ) : (
-          <div className="grid gap-3">
-            {dayItems.map((p) => {
-              const isLive = day === today && now >= fmt(p.start_time) && now < fmt(p.end_time);
-              return (
-                <article
-                  key={p.id}
-                  className={`group relative overflow-hidden rounded-2xl border bg-white transition hover:shadow-md ${
-                    isLive
-                      ? "border-[#c8102e] shadow-lg shadow-red-900/10 ring-1 ring-[#c8102e]/30"
-                      : "border-gray-200"
-                  }`}
-                >
-                  {/* Barra lateral */}
-                  <div
-                    className={`absolute left-0 top-0 bottom-0 w-1.5 ${
-                      isLive ? "bg-[#c8102e]" : "bg-gradient-to-b from-[#0c2651] to-[#1a3a7a]"
-                    }`}
-                  />
-                  <div className="flex items-center gap-4 md:gap-6 p-5 pl-7">
-                    {/* Horário */}
-                    <div className="text-center min-w-[90px] md:min-w-[110px]">
-                      <div className="text-2xl md:text-3xl font-black text-[#0c2651] leading-none font-mono tabular-nums">
-                        {fmt(p.start_time)}
-                      </div>
-                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
-                        até {fmt(p.end_time)}
-                      </div>
-                    </div>
+          <div className="relative">
+            {/* linha vertical timeline (desktop) */}
+            <div className="hidden md:block absolute left-[88px] top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent" />
 
-                    {/* Linha vertical */}
-                    <div className="h-12 w-px bg-gray-200" />
+            <ul className="space-y-2.5 md:space-y-3">
+              {dayItems.map((p, i) => {
+                const isLive = i === liveNowIdx;
+                const isPast =
+                  day === today && now >= fmt(p.end_time) && !isLive;
 
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <h3 className="font-black text-lg md:text-xl text-[#0c2651] truncate">
-                          {p.program_name}
-                        </h3>
-                        {isLive && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase bg-[#c8102e] text-white px-2 py-0.5 rounded-full">
-                            <span className="h-1.5 w-1.5 bg-white rounded-full animate-pulse" />
-                            No ar
-                          </span>
-                        )}
-                      </div>
-                      {p.presenter && (
-                        <p className="text-sm text-muted-foreground">
-                          <span className="text-[#c8102e] font-semibold">com</span> {p.presenter}
-                        </p>
+                return (
+                  <li key={p.id} className="relative">
+                    <article
+                      className={`group relative overflow-hidden rounded-2xl border bg-white transition-all duration-300 ${
+                        isLive
+                          ? "border-[#c8102e]/60 shadow-[0_12px_32px_-12px_rgba(200,16,46,0.35)] ring-1 ring-[#c8102e]/20"
+                          : "border-gray-200/80 hover:border-[#0a1f44]/30 hover:shadow-lg hover:-translate-y-0.5"
+                      } ${isPast ? "opacity-55" : ""}`}
+                    >
+                      {/* glow no card live */}
+                      {isLive && (
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#c8102e]/[0.04] via-transparent to-transparent" />
                       )}
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+
+                      <div className="relative flex items-stretch">
+                        {/* Coluna horário */}
+                        <div className="flex flex-col items-center justify-center px-4 md:px-5 py-4 md:py-5 min-w-[88px] md:min-w-[112px] border-r border-gray-100">
+                          <div
+                            className={`text-xl md:text-2xl font-black leading-none font-mono tabular-nums ${
+                              isLive ? "text-[#c8102e]" : "text-[#0a1f44]"
+                            }`}
+                          >
+                            {fmt(p.start_time)}
+                          </div>
+                          <div className="text-[9px] md:text-[10px] uppercase tracking-wider text-muted-foreground mt-1.5 font-semibold">
+                            às {fmt(p.end_time)}
+                          </div>
+                        </div>
+
+                        {/* Bolinha timeline (desktop) */}
+                        <div className="hidden md:flex absolute left-[88px] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                          <span
+                            className={`h-2.5 w-2.5 rounded-full ring-4 ring-white ${
+                              isLive
+                                ? "bg-[#c8102e] animate-pulse"
+                                : isPast
+                                ? "bg-gray-300"
+                                : "bg-[#0a1f44]"
+                            }`}
+                          />
+                        </div>
+
+                        {/* Info */}
+                        <div className="flex-1 min-w-0 px-4 md:px-6 py-4 md:py-5 flex flex-col justify-center">
+                          <div className="flex items-start gap-2 flex-wrap mb-1">
+                            <h3
+                              className={`font-black text-base md:text-xl tracking-tight leading-tight ${
+                                isLive ? "text-[#c8102e]" : "text-[#0a1f44]"
+                              }`}
+                            >
+                              {p.program_name}
+                            </h3>
+                            {isLive && (
+                              <span className="inline-flex items-center gap-1.5 text-[9px] md:text-[10px] font-black uppercase bg-[#c8102e] text-white px-2 py-1 rounded-full shadow-sm tracking-wider">
+                                <span className="h-1.5 w-1.5 bg-white rounded-full animate-pulse" />
+                                No ar
+                              </span>
+                            )}
+                            {isPast && (
+                              <span className="inline-flex items-center text-[9px] md:text-[10px] font-bold uppercase bg-gray-100 text-gray-500 px-2 py-1 rounded-full tracking-wider">
+                                Encerrado
+                              </span>
+                            )}
+                          </div>
+                          {p.presenter && (
+                            <p className="text-xs md:text-sm text-muted-foreground">
+                              <span className="text-[#c8102e] font-semibold">com</span>{" "}
+                              <span className="font-medium text-foreground/80">{p.presenter}</span>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
 
         {/* CTA voltar home */}
-        <div className="mt-10 text-center">
+        <div className="mt-12 text-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#c8102e] hover:underline"
+            className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-[#0a1f44] hover:border-[#c8102e]/40 hover:text-[#c8102e] hover:-translate-y-0.5 transition-all shadow-sm"
           >
             ← Voltar para a home
           </Link>
