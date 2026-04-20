@@ -130,16 +130,6 @@ const MOCK_PROMOS: PromoItem[] = [
     link: "/promocoes",
   },
 ];
-
-type Sponsor = {
-  id: string;
-  name: string;
-  logo_url: string;
-  link?: string;
-  display_order?: number;
-  is_active?: boolean;
-};
-
 const DAYS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
 function fmtDate(d: string | null) {
