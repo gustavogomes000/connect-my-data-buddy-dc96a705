@@ -1074,5 +1074,82 @@
   .admin-list-item { flex-direction: column; align-items: stretch; }
   .admin-list-actions { justify-content: flex-end; }
   .admin-row { flex-direction: column; }
-  .admin-login-card { padding: 32px 24px; }
 }
+
+/* ── Polishing extra: tipografia, ícones, agrupamentos ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.admin-section-header h1 {
+  display: flex; align-items: center; gap: 10px;
+}
+.admin-section-header h1 svg { width: 22px; height: 22px; color: var(--ad-blue); }
+
+.admin-btn-primary,
+.admin-btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.admin-btn-primary svg,
+.admin-btn-secondary svg { width: 16px; height: 16px; }
+
+.admin-list-tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;
+}
+.admin-tag.tag-success {
+  background: var(--ad-success-soft); color: var(--ad-success);
+}
+.admin-tag.tag-muted {
+  background: #eef0f4; color: var(--ad-text-muted);
+}
+
+.admin-day-group { margin-bottom: 18px; }
+.admin-day-title {
+  margin: 14px 0 10px; font-size: 13px; font-weight: 700;
+  color: var(--ad-blue); text-transform: uppercase; letter-spacing: .8px;
+  padding-bottom: 6px; border-bottom: 2px solid var(--ad-brand);
+  display: inline-block;
+}
+
+.admin-hint {
+  display: block; font-size: 12px; color: var(--ad-text-muted);
+  margin-top: 6px; line-height: 1.5;
+}
+
+.admin-filter-bar {
+  flex-direction: row !important; align-items: center; gap: 12px;
+}
+.admin-filter-bar label {
+  font-weight: 600; font-size: 13px; color: var(--ad-text);
+  text-transform: none; letter-spacing: 0;
+}
+.admin-filter-bar select {
+  padding: 9px 12px; border: 1px solid var(--ad-border-strong);
+  border-radius: 8px; font-family: inherit; font-size: 14px;
+  background: var(--ad-surface); color: var(--ad-text);
+}
+.admin-counter {
+  margin-left: auto; color: var(--ad-text-muted); font-size: 13px;
+  font-weight: 500;
+}
+
+/* Sidebar nav: spans + ícones */
+.admin-nav button > span:not(.admin-nav-icon) { flex: 1; }
+.admin-nav-link svg, .admin-logout-btn svg {
+  width: 14px; height: 14px;
+}
+.admin-nav-link, .admin-logout-btn {
+  display: flex; align-items: center; gap: 8px;
+}
+.admin-logout-btn { justify-content: center; }
+
+/* Lista: ícones nos botões de ação */
+.admin-list-actions button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 36px; padding: 7px 10px;
+}
+.admin-list-actions button svg { width: 15px; height: 15px; }
+
+.admin-uploader .admin-upload-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.admin-uploader .admin-upload-btn svg { width: 14px; height: 14px; }
+
