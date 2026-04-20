@@ -12,27 +12,23 @@ async function requireAdmin() {
   }
 }
 
-async function readEnv(key: string): Promise<string | undefined> {
-  if (key === "VITE_SUPABASE_URL" && FALLBACK_SUPABASE_URL) return FALLBACK_SUPABASE_URL;
-  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" && FALLBACK_SUPABASE_PUBLISHABLE_KEY) {
-    return FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+function readEnv(key: string): string | undefined {
+  if (key === "VITE_SUPABASE_URL" || key === "SUPABASE_URL") {
+    return FALLBACK_SUPABASE_URL || (typeof process !== "undefined" ? process.env?.[key] : undefined);
   }
-  if (typeof process !== "undefined" && process.env?.[key]) return process.env[key];
-  try {
-    const cf: any = await import(/* @vite-ignore */ "cloudflare:workers");
-    const v = cf?.env?.[key];
-    if (typeof v === "string" && v) return v;
-  } catch {}
-  return undefined;
+  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" || key === "SUPABASE_PUBLISHABLE_KEY") {
+    return FALLBACK_SUPABASE_PUBLISHABLE_KEY || (typeof process !== "undefined" ? process.env?.[key] : undefined);
+  }
+  return typeof process !== "undefined" ? process.env?.[key] : undefined;
 }
 
 async function getAdminSupabase() {
   const { createClient } = await import("@supabase/supabase-js");
-  const url = (await readEnv("SUPABASE_URL")) || (await readEnv("VITE_SUPABASE_URL"));
+  const url = readEnv("SUPABASE_URL") || readEnv("VITE_SUPABASE_URL");
   const key =
-    (await readEnv("SUPABASE_SERVICE_ROLE_KEY")) ||
-    (await readEnv("SUPABASE_PUBLISHABLE_KEY")) ||
-    (await readEnv("VITE_SUPABASE_PUBLISHABLE_KEY"));
+    readEnv("SUPABASE_SERVICE_ROLE_KEY") ||
+    readEnv("SUPABASE_PUBLISHABLE_KEY") ||
+    readEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
   if (!url || !key) throw new Error("Configuração do servidor incompleta");
   return createClient(url, key);
 }
