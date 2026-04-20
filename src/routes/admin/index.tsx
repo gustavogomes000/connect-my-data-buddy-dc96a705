@@ -48,6 +48,7 @@ function AdminDashboard() {
         {tab === "news" && <NewsManager />}
         {tab === "programacao" && <ProgramacaoManager />}
         {tab === "podcasts" && <PodcastsManager />}
+        {tab === "sponsors" && <SponsorsManager />}
         {tab === "users" && <UsersManager />}
       </main>
     </div>
