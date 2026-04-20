@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { ComponentType } from "react";
 import {
   CalendarIcon,
   ExternalLinkIcon,
@@ -18,7 +19,7 @@ export type AdminTab =
   | "podcasts"
   | "users";
 
-const NAV: { key: AdminTab; label: string; icon: () => JSX.Element }[] = [
+const NAV: { key: AdminTab; label: string; icon: ComponentType }[] = [
   { key: "promos", label: "Promoções", icon: GiftIcon },
   { key: "entries", label: "Inscritos", icon: UsersIcon },
   { key: "news", label: "Notícias", icon: NewsIcon },
