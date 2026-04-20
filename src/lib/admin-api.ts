@@ -263,6 +263,9 @@ export const getUploadUrl = createServerFn({ method: "POST" })
     return { signedUrl: result.signedUrl, token: result.token, path, publicUrl };
   });
 
+// ── Auto News ──
+export { triggerAutoNewsManual } from "./news-auto";
+
 // ── Site Settings ──
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
