@@ -22,7 +22,6 @@ export type AdminTab =
   | "users";
 
 const NAV: { key: AdminTab; label: string; icon: ComponentType }[] = [
-  { key: "settings", label: "Configurações Gerais", icon: ShieldIcon },
   { key: "promos", label: "Promoções", icon: GiftIcon },
   { key: "entries", label: "Base de Inscritos", icon: UsersIcon },
   { key: "news", label: "Notícias", icon: NewsIcon },
