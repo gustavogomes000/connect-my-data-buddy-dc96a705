@@ -36,35 +36,42 @@ function hasAdminToken() {
 function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<AdminTab>("promos");
-  // Validação síncrona no primeiro render — sem flash de loading
   const [authed, setAuthed] = useState<boolean>(() => hasAdminToken());
+  const [status, setStatus] = useState<"checking" | "ready" | "blocked">("checking");
 
-  // Valida o cookie httpOnly no servidor — fonte da verdade
   useEffect(() => {
     let cancelled = false;
-    checkAdminSession()
-      .then((res) => {
+
+    const validateSession = async () => {
+      try {
+        const res = await checkAdminSession();
         if (cancelled) return;
-        if (!res?.authenticated) {
-          try {
-            sessionStorage.removeItem(ADMIN_SESSION_KEY);
-            localStorage.removeItem(ADMIN_SESSION_KEY);
-          } catch {}
-          setAuthed(false);
-          navigate({ to: "/admin/login", replace: true });
+
+        if (res?.authenticated) {
+          setAuthed(true);
+          setStatus("ready");
+          return;
         }
-      })
-      .catch(() => {
-        if (!cancelled) navigate({ to: "/admin/login", replace: true });
-      });
+      } catch {}
+
+      try {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        localStorage.removeItem(ADMIN_SESSION_KEY);
+      } catch {}
+
+      if (!cancelled) {
+        setAuthed(false);
+        setStatus("blocked");
+        navigate({ to: "/admin/login", replace: true });
+      }
+    };
+
+    validateSession();
+
     return () => {
       cancelled = true;
     };
   }, [navigate]);
-
-  useEffect(() => {
-    if (!authed) navigate({ to: "/admin/login", replace: true });
-  }, [authed, navigate]);
 
   const logout = async () => {
     try {
@@ -74,8 +81,25 @@ function AdminDashboard() {
       sessionStorage.removeItem(ADMIN_SESSION_KEY);
       localStorage.removeItem(ADMIN_SESSION_KEY);
     } catch {}
+    setAuthed(false);
+    setStatus("blocked");
     navigate({ to: "/admin/login", replace: true });
   };
+
+  if (status === "checking") {
+    return (
+      <div className="admin-layout">
+        <main className="admin-main">
+          <section className="admin-section">
+            <div className="admin-form-card">
+              <h1>Abrindo painel...</h1>
+              <p className="admin-hint">Validando seu acesso com segurança.</p>
+            </div>
+          </section>
+        </main>
+      </div>
+    );
+  }
 
   if (!authed) return null;
 
