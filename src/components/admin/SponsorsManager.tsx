@@ -100,6 +100,54 @@ export function SponsorsManager() {
     await persist(items.map((x) => (x.id === s.id ? { ...x, is_active: !x.is_active } : x)));
   };
 
+  const seedMocks = async () => {
+    if (
+      !confirm(
+        "Adicionar 4 patrocinadores de demonstração? Você pode excluí-los depois pelo botão da lixeira."
+      )
+    )
+      return;
+    const mocks: Sponsor[] = [
+      {
+        id: uid(),
+        name: "Supermercado Bom Preço",
+        logo_url:
+          "https://dummyimage.com/300x120/0c2651/ffffff.png&text=BOM+PRE%C3%87O",
+        link: "",
+        display_order: 1,
+        is_active: true,
+      },
+      {
+        id: uid(),
+        name: "Auto Posto Avenida",
+        logo_url:
+          "https://dummyimage.com/300x120/c8102e/ffffff.png&text=POSTO+AVENIDA",
+        link: "",
+        display_order: 2,
+        is_active: true,
+      },
+      {
+        id: uid(),
+        name: "Construtora Horizonte",
+        logo_url:
+          "https://dummyimage.com/300x120/1a3a7a/ffffff.png&text=HORIZONTE",
+        link: "",
+        display_order: 3,
+        is_active: true,
+      },
+      {
+        id: uid(),
+        name: "Farmácia Vida",
+        logo_url:
+          "https://dummyimage.com/300x120/16a34a/ffffff.png&text=FARM%C3%81CIA+VIDA",
+        link: "",
+        display_order: 4,
+        is_active: true,
+      },
+    ];
+    await persist([...items, ...mocks]);
+  };
+
   return (
     <section className="admin-section">
       <header className="admin-section-header">
@@ -108,15 +156,20 @@ export function SponsorsManager() {
             <span style={{ fontSize: 22 }}>🤝</span> Patrocinadores
           </span>
         </h1>
-        <button
-          className="admin-btn-primary"
-          onClick={() => {
-            reset();
-            setShowForm(true);
-          }}
-        >
-          <PlusIcon /> Novo patrocinador
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button className="admin-btn-secondary" onClick={seedMocks}>
+            ✨ Carregar mocks (demo)
+          </button>
+          <button
+            className="admin-btn-primary"
+            onClick={() => {
+              reset();
+              setShowForm(true);
+            }}
+          >
+            <PlusIcon /> Novo patrocinador
+          </button>
+        </div>
       </header>
 
       <p className="admin-hint" style={{ marginBottom: 16 }}>
