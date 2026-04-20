@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { getNews, createNews, updateNews, deleteNews } from "@/lib/admin-api";
+import {
+  getNews,
+  createNews,
+  updateNews,
+  deleteNews,
+  getSiteSettings,
+  updateSiteSettings,
+  triggerAutoNewsManual,
+} from "@/lib/admin-api";
 import { ImageUploader } from "./ImageUploader";
 import { NewsIcon, PencilIcon, PinIcon, PlusIcon, PowerIcon, TrashIcon } from "./icons";
 import type { NewsItem } from "./types";
@@ -18,15 +26,39 @@ export function NewsManager() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [autoEnabled, setAutoEnabled] = useState(false);
+  const [autoBusy, setAutoBusy] = useState(false);
+  const [autoMsg, setAutoMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const data = await getNews();
+    const [data, settings] = await Promise.all([getNews(), getSiteSettings()]);
     setNews(data as NewsItem[]);
+    setAutoEnabled(settings?.auto_news_enabled === true || settings?.auto_news_enabled === "true");
   }, []);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  const toggleAuto = async () => {
+    const next = !autoEnabled;
+    setAutoEnabled(next);
+    await updateSiteSettings({ data: { key: "auto_news_enabled", value: String(next) } });
+  };
+
+  const runNow = async () => {
+    setAutoBusy(true);
+    setAutoMsg(null);
+    try {
+      const r = await triggerAutoNewsManual();
+      setAutoMsg(`✓ ${r.inserted} novas, ${r.skipped} já existentes (de ${r.total} encontradas)`);
+      load();
+    } catch (e) {
+      setAutoMsg(`Erro: ${e instanceof Error ? e.message : "falhou"}`);
+    } finally {
+      setAutoBusy(false);
+    }
+  };
 
   const reset = () => {
     setForm(EMPTY);
