@@ -95,16 +95,83 @@ const MOCK_PODCASTS: PodcastItem[] = [
   },
 ];
 
-const SVG_LOGO = (label: string, color: string) =>
-  `data:image/svg+xml;utf8,${encodeURIComponent(
-    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'><rect width='200' height='100' rx='12' fill='${color}'/><text x='100' y='58' font-family='Arial,sans-serif' font-size='28' font-weight='900' fill='white' text-anchor='middle'>${label}</text></svg>`,
-  )}`;
+const svgLogo = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
 const MOCK_SPONSORS: Sponsor[] = [
-  { id: "mock-sp-1", name: "Supermercado Boa Compra", logo_url: SVG_LOGO("BOA COMPRA", "#c8102e"), display_order: 1, is_active: true },
-  { id: "mock-sp-2", name: "Auto Posto Estrada", logo_url: SVG_LOGO("ESTRADA", "#0c2651"), display_order: 2, is_active: true },
-  { id: "mock-sp-3", name: "Farmácia Vida", logo_url: SVG_LOGO("VIDA", "#16a34a"), display_order: 3, is_active: true },
-  { id: "mock-sp-4", name: "Construtora Lar Bom", logo_url: SVG_LOGO("LAR BOM", "#f59e0b"), display_order: 4, is_active: true },
+  {
+    id: "mock-sp-1",
+    name: "Supermercado Boa Compra",
+    logo_url: svgLogo(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 100'>
+        <rect width='240' height='100' rx='14' fill='#c8102e'/>
+        <g transform='translate(18,28)'>
+          <path d='M6 8h32l-3 22a4 4 0 0 1-4 3H13a4 4 0 0 1-4-3L6 8z' fill='none' stroke='#fff' stroke-width='3' stroke-linejoin='round'/>
+          <circle cx='15' cy='42' r='3.5' fill='#fff'/>
+          <circle cx='32' cy='42' r='3.5' fill='#fff'/>
+          <path d='M2 2h6l2 6' fill='none' stroke='#fff' stroke-width='3' stroke-linecap='round'/>
+        </g>
+        <text x='70' y='48' font-family='Arial,sans-serif' font-size='22' font-weight='900' fill='#fff'>BOA COMPRA</text>
+        <text x='70' y='70' font-family='Arial,sans-serif' font-size='11' font-weight='700' fill='#ffd6dc' letter-spacing='2'>SUPERMERCADO</text>
+      </svg>`,
+    ),
+    display_order: 1,
+    is_active: true,
+  },
+  {
+    id: "mock-sp-2",
+    name: "Auto Posto Estrada",
+    logo_url: svgLogo(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 100'>
+        <rect width='240' height='100' rx='14' fill='#0c2651'/>
+        <g transform='translate(20,26)'>
+          <rect x='2' y='10' width='28' height='38' rx='3' fill='none' stroke='#ffc107' stroke-width='3'/>
+          <rect x='6' y='14' width='20' height='12' fill='#ffc107'/>
+          <path d='M30 22h6v22a4 4 0 0 1-4 4h-2' fill='none' stroke='#ffc107' stroke-width='3' stroke-linecap='round'/>
+          <circle cx='38' cy='20' r='3' fill='#ffc107'/>
+        </g>
+        <text x='75' y='48' font-family='Arial,sans-serif' font-size='22' font-weight='900' fill='#fff'>ESTRADA</text>
+        <text x='75' y='70' font-family='Arial,sans-serif' font-size='11' font-weight='700' fill='#ffc107' letter-spacing='2'>AUTO POSTO</text>
+      </svg>`,
+    ),
+    display_order: 2,
+    is_active: true,
+  },
+  {
+    id: "mock-sp-3",
+    name: "Farmácia Vida",
+    logo_url: svgLogo(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 100'>
+        <rect width='240' height='100' rx='14' fill='#16a34a'/>
+        <g transform='translate(28,28)'>
+          <rect x='14' y='2' width='12' height='40' rx='2' fill='#fff'/>
+          <rect x='2' y='14' width='36' height='12' rx='2' fill='#fff'/>
+        </g>
+        <text x='80' y='48' font-family='Arial,sans-serif' font-size='24' font-weight='900' fill='#fff'>VIDA</text>
+        <text x='80' y='70' font-family='Arial,sans-serif' font-size='11' font-weight='700' fill='#bbf7d0' letter-spacing='2'>FARMÁCIA</text>
+      </svg>`,
+    ),
+    display_order: 3,
+    is_active: true,
+  },
+  {
+    id: "mock-sp-4",
+    name: "Construtora Lar Bom",
+    logo_url: svgLogo(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 100'>
+        <rect width='240' height='100' rx='14' fill='#f59e0b'/>
+        <g transform='translate(20,24)'>
+          <path d='M4 28 L24 8 L44 28 V50 H4 Z' fill='none' stroke='#fff' stroke-width='3' stroke-linejoin='round'/>
+          <rect x='18' y='34' width='12' height='16' fill='#fff'/>
+          <rect x='10' y='32' width='6' height='6' fill='#fff'/>
+          <rect x='32' y='32' width='6' height='6' fill='#fff'/>
+        </g>
+        <text x='80' y='48' font-family='Arial,sans-serif' font-size='22' font-weight='900' fill='#fff'>LAR BOM</text>
+        <text x='80' y='70' font-family='Arial,sans-serif' font-size='11' font-weight='700' fill='#fff7d6' letter-spacing='2'>CONSTRUTORA</text>
+      </svg>`,
+    ),
+    display_order: 4,
+    is_active: true,
+  },
 ];
 
 const MOCK_PROMOS: PromoItem[] = [
@@ -540,7 +607,7 @@ function IndexPage() {
                         <img
                           src={s.logo_url}
                           alt={s.name}
-                          className="max-h-16 max-w-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                          className="max-h-16 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
                       <div className="text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
