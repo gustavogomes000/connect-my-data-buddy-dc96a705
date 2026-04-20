@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminLogout, checkAdminSession } from "@/lib/admin-auth";
+import { adminLogout, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
 import { AdminSidebar, type AdminTab } from "@/components/admin/AdminSidebar";
 import { PromotionsManager } from "@/components/admin/PromotionsManager";
 import { EntriesManager } from "@/components/admin/EntriesManager";
@@ -22,32 +22,26 @@ function AdminDashboard() {
   const [status, setStatus] = useState<"checking" | "ready" | "blocked">("checking");
 
   useEffect(() => {
-    let active = true;
-
-    const verify = async () => {
-      try {
-        const result = await checkAdminSession();
-        if (!active) return;
-        if (result.authenticated) {
-          setStatus("ready");
-          return;
-        }
-      } catch {}
-
-      if (!active) return;
+    const has =
+      (typeof sessionStorage !== "undefined" &&
+        sessionStorage.getItem(ADMIN_SESSION_KEY) === ADMIN_SESSION_TOKEN) ||
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem(ADMIN_SESSION_KEY) === ADMIN_SESSION_TOKEN);
+    if (has) {
+      setStatus("ready");
+    } else {
       setStatus("blocked");
-      navigate({ to: "/admin/login" });
-    };
-
-    verify();
-    return () => {
-      active = false;
-    };
+      window.location.href = "/admin/login";
+    }
   }, [navigate]);
 
   const logout = async () => {
     try {
       await adminLogout();
+    } catch {}
+    try {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      localStorage.removeItem(ADMIN_SESSION_KEY);
     } catch {}
     window.location.href = "/admin/login";
   };

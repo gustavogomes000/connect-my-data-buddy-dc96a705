@@ -2,6 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 
 const ADMIN_COOKIE = "admin_session";
 const SESSION_DURATION = 60 * 60 * 24; // 24h
+const SESSION_TOKEN_VALUE = "authenticated";
+export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
+export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
 
 const FALLBACK_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FALLBACK_SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -54,7 +57,7 @@ export const adminLogin = createServerFn({ method: "POST" })
       path: "/",
     });
 
-    return { success: true };
+    return { success: true, token: SESSION_TOKEN_VALUE };
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {

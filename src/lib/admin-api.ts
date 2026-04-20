@@ -4,9 +4,10 @@ const FALLBACK_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FALLBACK_SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 async function requireAdmin() {
-  const { getCookie } = await import("@tanstack/react-start/server");
+  const { getCookie, getRequestHeader } = await import("@tanstack/react-start/server");
   const cookie = getCookie("admin_session");
-  if (cookie !== "authenticated") {
+  const header = getRequestHeader("x-admin-token");
+  if (cookie !== "authenticated" && header !== "authenticated") {
     throw new Error("Não autorizado");
   }
 }
