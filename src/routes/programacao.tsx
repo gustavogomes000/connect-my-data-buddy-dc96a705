@@ -116,7 +116,7 @@ function ProgramacaoPage() {
       <main className="mx-auto max-w-6xl px-4 py-10 md:py-14">
         {/* TABS DE DIAS — pílulas modernas, scroll horizontal mobile */}
         <div className="mb-10 -mx-4 px-4 md:mx-0 md:px-0">
-          <div className="flex gap-2 md:gap-2.5 overflow-x-auto pb-3 md:flex-wrap md:justify-center scrollbar-thin">
+          <div className="flex gap-2 md:gap-2.5 overflow-x-auto overflow-y-visible pt-3 pb-3 md:flex-wrap md:justify-center scrollbar-thin">
             {DAYS.map((d) => {
               const active = day === d.idx;
               const isToday = today === d.idx;
