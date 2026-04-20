@@ -902,7 +902,7 @@
 .admin-nav button.active {
   background: var(--ad-brand); color: var(--ad-brand-fg); font-weight: 600;
 }
-.admin-nav button.active .admin-nav-icon { color: var(--ad-gold); }
+.admin-nav button.active .admin-nav-icon { color: var(--ad-blue); }
 .admin-nav-icon {
   width: 18px; height: 18px; flex-shrink: 0;
   color: var(--ad-text-muted);
