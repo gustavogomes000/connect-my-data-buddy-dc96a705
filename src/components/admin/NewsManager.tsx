@@ -10,7 +10,6 @@ const EMPTY = {
   summary: "",
   image_url: "",
   podcast_link: "",
-  display_order: 0,
 };
 
 export function NewsManager() {
@@ -58,7 +57,6 @@ export function NewsManager() {
       summary: n.summary || "",
       image_url: n.image_url || "",
       podcast_link: n.podcast_link || "",
-      display_order: n.display_order ?? 0,
     });
     setEditing(n);
     setShowForm(true);
