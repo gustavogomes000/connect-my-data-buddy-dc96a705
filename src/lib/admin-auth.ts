@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { setCookie, deleteCookie, getCookie } from "@tanstack/react-start/server";
+import { createClient } from "@supabase/supabase-js";
 
 const ADMIN_COOKIE = "admin_session";
 const SESSION_DURATION = 60 * 60 * 24; // 24h
@@ -6,37 +8,29 @@ const SESSION_TOKEN_VALUE = "authenticated";
 export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
 export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
 
-const FALLBACK_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const FALLBACK_SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL ||
+  (typeof process !== "undefined" ? process.env?.SUPABASE_URL : undefined);
+const SUPABASE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" ? process.env?.SUPABASE_PUBLISHABLE_KEY : undefined);
 
-function readAdminEnv(key: string): string | undefined {
-  if (key === "VITE_SUPABASE_URL" || key === "SUPABASE_URL") {
-    return FALLBACK_SUPABASE_URL || (typeof process !== "undefined" ? process.env?.[key] : undefined);
-  }
-  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" || key === "SUPABASE_PUBLISHABLE_KEY") {
-    return FALLBACK_SUPABASE_PUBLISHABLE_KEY || (typeof process !== "undefined" ? process.env?.[key] : undefined);
-  }
-  return typeof process !== "undefined" ? process.env?.[key] : undefined;
-}
+// Cliente único reutilizado entre invocações
+const adminAuthClient =
+  SUPABASE_URL && SUPABASE_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+    : null;
 
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((input: { username: string; password: string }) => input)
   .handler(async ({ data }) => {
-    const { setCookie } = await import("@tanstack/react-start/server");
-    const { createClient } = await import("@supabase/supabase-js");
-
-    const url = readAdminEnv("SUPABASE_URL") || readAdminEnv("VITE_SUPABASE_URL");
-    const key =
-      readAdminEnv("SUPABASE_PUBLISHABLE_KEY") ||
-      readAdminEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
-
-    if (!url || !key) {
+    if (!adminAuthClient) {
       return { success: false, error: "Configuração do servidor incompleta" };
     }
 
-    const supabase = createClient(url, key);
-
-    const { data: users, error } = await supabase.rpc("admin_check_password", {
+    const { data: users, error } = await adminAuthClient.rpc("admin_check_password", {
       p_username: data.username,
       p_password: data.password,
     });
@@ -57,13 +51,11 @@ export const adminLogin = createServerFn({ method: "POST" })
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
-  const { deleteCookie } = await import("@tanstack/react-start/server");
   deleteCookie(ADMIN_COOKIE);
   return { success: true };
 });
 
 export const checkAdminSession = createServerFn({ method: "GET" }).handler(async () => {
-  const { getCookie } = await import("@tanstack/react-start/server");
   const cookie = getCookie(ADMIN_COOKIE);
   return { authenticated: cookie === "authenticated" };
 });
