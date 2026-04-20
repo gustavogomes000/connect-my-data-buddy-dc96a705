@@ -607,7 +607,7 @@ function IndexPage() {
                         <img
                           src={s.logo_url}
                           alt={s.name}
-                          className="max-h-16 max-w-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                          className="max-h-16 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
                       <div className="text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
