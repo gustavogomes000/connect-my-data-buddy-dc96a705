@@ -879,6 +879,7 @@
 }
 .admin-remember input { width: 16px; height: 16px; accent-color: var(--ad-brand); cursor: pointer; }
 
+/* ── Layout ── */
 .admin-layout { display: flex; min-height: 100vh; background: var(--ad-bg); }
 .admin-sidebar {
   width: 248px;
