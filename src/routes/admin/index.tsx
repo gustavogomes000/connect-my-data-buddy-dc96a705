@@ -16,24 +16,27 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
+function hasAdminToken() {
+  if (typeof window === "undefined") return false;
+  try {
+    return (
+      sessionStorage.getItem(ADMIN_SESSION_KEY) === ADMIN_SESSION_TOKEN ||
+      localStorage.getItem(ADMIN_SESSION_KEY) === ADMIN_SESSION_TOKEN
+    );
+  } catch {
+    return false;
+  }
+}
+
 function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<AdminTab>("promos");
-  const [status, setStatus] = useState<"checking" | "ready" | "blocked">("checking");
+  // Validação síncrona no primeiro render — sem flash de loading
+  const [authed] = useState<boolean>(() => hasAdminToken());
 
   useEffect(() => {
-    const has =
-      (typeof sessionStorage !== "undefined" &&
-        sessionStorage.getItem(ADMIN_SESSION_KEY) === ADMIN_SESSION_TOKEN) ||
-      (typeof localStorage !== "undefined" &&
-        localStorage.getItem(ADMIN_SESSION_KEY) === ADMIN_SESSION_TOKEN);
-    if (has) {
-      setStatus("ready");
-    } else {
-      setStatus("blocked");
-      window.location.href = "/admin/login";
-    }
-  }, [navigate]);
+    if (!authed) navigate({ to: "/admin/login", replace: true });
+  }, [authed, navigate]);
 
   const logout = async () => {
     try {
@@ -43,27 +46,10 @@ function AdminDashboard() {
       sessionStorage.removeItem(ADMIN_SESSION_KEY);
       localStorage.removeItem(ADMIN_SESSION_KEY);
     } catch {}
-    window.location.href = "/admin/login";
+    navigate({ to: "/admin/login", replace: true });
   };
 
-  if (status !== "ready") {
-    return (
-      <div className="admin-layout">
-        <main className="admin-main">
-          <section className="admin-section">
-            <div className="admin-form-card">
-              <h1>{status === "checking" ? "Abrindo painel..." : "Redirecionando..."}</h1>
-              <p className="admin-hint">
-                {status === "checking"
-                  ? "Validando sua sessão para entrar no painel administrativo."
-                  : "Sua sessão não foi encontrada."}
-              </p>
-            </div>
-          </section>
-        </main>
-      </div>
-    );
-  }
+  if (!authed) return null;
 
   return (
     <div className="admin-layout">
