@@ -142,6 +142,25 @@ export function NewsManager() {
         </button>
       </header>
 
+      <div className="admin-form-card" style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <strong>Auto-alimentação (G1 + UOL)</strong>
+          <p style={{ margin: "4px 0 0", fontSize: 13, opacity: 0.75 }}>
+            Quando ligado, o cron busca e publica notícias novas automaticamente.
+          </p>
+          {autoMsg && <p style={{ margin: "6px 0 0", fontSize: 13 }}>{autoMsg}</p>}
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <label style={{ display: "flex", gap: 8, alignItems: "center", cursor: "pointer" }}>
+            <input type="checkbox" checked={autoEnabled} onChange={toggleAuto} />
+            <span>{autoEnabled ? "Ativada" : "Desativada"}</span>
+          </label>
+          <button className="admin-btn-secondary" onClick={runNow} disabled={autoBusy}>
+            {autoBusy ? "Buscando..." : "Buscar agora"}
+          </button>
+        </div>
+      </div>
+
       {showForm && (
         <div className="admin-form-card">
           <h3>{editing ? "Editar notícia" : "Nova notícia"}</h3>
@@ -210,10 +229,13 @@ export function NewsManager() {
             <div className="admin-list-info">
               <h4>{n.title}</h4>
               <p>{n.summary || n.content?.slice(0, 140) || "—"}</p>
-              {(n.is_pinned || !n.is_published) && (
+              {(n.is_pinned || !n.is_published || n.auto_generated) && (
                 <div className="admin-list-tags">
                   {!n.is_published && <span className="admin-tag tag-muted">Rascunho</span>}
                   {n.is_pinned && <span className="admin-tag tag-warning">Fixada</span>}
+                  {n.auto_generated && (
+                    <span className="admin-tag tag-muted">Auto · {n.source_name || "RSS"}</span>
+                  )}
                 </div>
               )}
             </div>
