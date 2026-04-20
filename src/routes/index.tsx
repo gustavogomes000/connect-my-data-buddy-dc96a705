@@ -146,7 +146,14 @@ function IndexPage() {
         .select("setting_key,setting_value")
         .eq("setting_key", "sponsors")
         .maybeSingle(),
-    ]).then(([n, p, pr, sp]) => {
+      (supabase as any)
+        .from("podcasts")
+        .select("id,title,description,youtube_url,thumbnail_url")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true })
+        .order("created_at", { ascending: false })
+        .limit(6),
+    ]).then(([n, p, pr, sp, pc]) => {
       setNews((n.data as any) || []);
       setProg((p.data as any) || []);
       const promoData = ((pr.data as any) || []) as PromoItem[];
