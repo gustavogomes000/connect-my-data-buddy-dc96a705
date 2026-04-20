@@ -49,6 +49,7 @@ function NoticiasPage() {
     supabase
       .from("news")
       .select("*")
+      .eq("is_published", true)
       .order("display_order", { ascending: true })
       .order("updated_at", { ascending: false })
       .then(({ data }) => {
