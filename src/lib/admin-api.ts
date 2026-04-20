@@ -1,10 +1,24 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getCookie, getRequestHeader } from "@tanstack/react-start/server";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const FALLBACK_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const FALLBACK_SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL ||
+  (typeof process !== "undefined" ? process.env?.SUPABASE_URL : undefined);
+const SUPABASE_KEY =
+  (typeof process !== "undefined" ? process.env?.SUPABASE_SERVICE_ROLE_KEY : undefined) ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" ? process.env?.SUPABASE_PUBLISHABLE_KEY : undefined);
 
-async function requireAdmin() {
-  const { getCookie, getRequestHeader } = await import("@tanstack/react-start/server");
+// Cliente único reutilizado entre invocações
+const adminClient: SupabaseClient | null =
+  SUPABASE_URL && SUPABASE_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+    : null;
+
+function requireAdmin() {
   const cookie = getCookie("admin_session");
   const header = getRequestHeader("x-admin-token");
   if (cookie !== "authenticated" && header !== "authenticated") {
@@ -12,25 +26,9 @@ async function requireAdmin() {
   }
 }
 
-function readEnv(key: string): string | undefined {
-  if (key === "VITE_SUPABASE_URL" || key === "SUPABASE_URL") {
-    return FALLBACK_SUPABASE_URL || (typeof process !== "undefined" ? process.env?.[key] : undefined);
-  }
-  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" || key === "SUPABASE_PUBLISHABLE_KEY") {
-    return FALLBACK_SUPABASE_PUBLISHABLE_KEY || (typeof process !== "undefined" ? process.env?.[key] : undefined);
-  }
-  return typeof process !== "undefined" ? process.env?.[key] : undefined;
-}
-
-async function getAdminSupabase() {
-  const { createClient } = await import("@supabase/supabase-js");
-  const url = readEnv("SUPABASE_URL") || readEnv("VITE_SUPABASE_URL");
-  const key =
-    readEnv("SUPABASE_SERVICE_ROLE_KEY") ||
-    readEnv("SUPABASE_PUBLISHABLE_KEY") ||
-    readEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
-  if (!url || !key) throw new Error("Configuração do servidor incompleta");
-  return createClient(url, key);
+function getAdminSupabase(): SupabaseClient {
+  if (!adminClient) throw new Error("Configuração do servidor incompleta");
+  return adminClient;
 }
 
 // ── Promotions ──
