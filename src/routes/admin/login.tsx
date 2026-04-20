@@ -37,7 +37,7 @@ function AdminLoginPage() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <div className="admin-login-header">
-          <div className="admin-login-logo">T</div>
+          <div className="admin-login-logo">100</div>
           <h1>Entrar no Painel</h1>
           <p>Rádio TOP100 FM · Administração</p>
         </div>

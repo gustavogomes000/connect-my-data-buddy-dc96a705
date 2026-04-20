@@ -69,7 +69,7 @@ function AdminDashboard() {
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">
-          <div className="admin-sidebar-logo">T</div>
+          <div className="admin-sidebar-logo">100</div>
           <div>
             <h2>TOP100 FM</h2>
             <span>Painel administrativo</span>
