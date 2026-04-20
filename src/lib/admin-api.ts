@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 
+const FALLBACK_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const FALLBACK_SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
 async function requireAdmin() {
   const { getCookie } = await import("@tanstack/react-start/server");
   const cookie = getCookie("admin_session");
@@ -9,6 +12,10 @@ async function requireAdmin() {
 }
 
 async function readEnv(key: string): Promise<string | undefined> {
+  if (key === "VITE_SUPABASE_URL" && FALLBACK_SUPABASE_URL) return FALLBACK_SUPABASE_URL;
+  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" && FALLBACK_SUPABASE_PUBLISHABLE_KEY) {
+    return FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+  }
   if (typeof process !== "undefined" && process.env?.[key]) return process.env[key];
   try {
     const cf: any = await import(/* @vite-ignore */ "cloudflare:workers");
