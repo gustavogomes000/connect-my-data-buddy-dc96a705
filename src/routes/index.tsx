@@ -70,16 +70,14 @@ const MOCK_PROMOS: PromoItem[] = [
   },
 ];
 
-type Sponsor = { name: string; category?: string; href?: string; logo_url?: string };
-
-const SPONSORS: Sponsor[] = [
-  { name: "Supermercados Bom Preço", category: "Varejo", href: "#" },
-  { name: "Auto Posto Avenida", category: "Combustíveis", href: "#" },
-  { name: "Farmácia Vida", category: "Saúde", href: "#" },
-  { name: "Construtora Horizonte", category: "Construção", href: "#" },
-  { name: "Restaurante Sabor & Cia", category: "Gastronomia", href: "#" },
-  { name: "Loja TopStyle", category: "Moda", href: "#" },
-];
+type Sponsor = {
+  id: string;
+  name: string;
+  logo_url: string;
+  link?: string;
+  display_order?: number;
+  is_active?: boolean;
+};
 
 const DAYS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
@@ -98,6 +96,7 @@ function IndexPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [prog, setProg] = useState<ProgItem[]>([]);
   const [promos, setPromos] = useState<PromoItem[]>([]);
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
@@ -124,11 +123,28 @@ function IndexPage() {
         .eq("is_active", true)
         .order("display_order", { ascending: true })
         .limit(3),
-    ]).then(([n, p, pr]) => {
+      (supabase as any)
+        .from("site_settings")
+        .select("setting_key,setting_value")
+        .eq("setting_key", "sponsors")
+        .maybeSingle(),
+    ]).then(([n, p, pr, sp]) => {
       setNews((n.data as any) || []);
       setProg((p.data as any) || []);
       const promoData = ((pr.data as any) || []) as PromoItem[];
       setPromos(promoData.length > 0 ? promoData : MOCK_PROMOS);
+      try {
+        const raw = (sp as any)?.data?.setting_value;
+        const parsed = raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : [];
+        const list = (Array.isArray(parsed) ? parsed : []) as Sponsor[];
+        setSponsors(
+          list
+            .filter((s) => s.is_active !== false && s.logo_url)
+            .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
+        );
+      } catch {
+        setSponsors([]);
+      }
       setLoading(false);
     });
   }, [today]);
@@ -423,67 +439,69 @@ function IndexPage() {
         </section>
 
         {/* PATROCINADORES */}
-        <section className="bg-white py-14 border-b border-gray-100">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
-              <div className="flex items-center gap-3">
-                <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
-                    Quem apoia
-                  </p>
-                  <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none mt-0.5">
-                    Nossos Patrocinadores
-                  </h2>
+        {sponsors.length > 0 && (
+          <section className="bg-white py-14 border-b border-gray-100">
+            <div className="mx-auto max-w-7xl px-4">
+              <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
+                      Quem apoia
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none mt-0.5">
+                      Nossos Patrocinadores
+                    </h2>
+                  </div>
                 </div>
+                <p className="text-sm text-muted-foreground max-w-xs hidden md:block">
+                  Marcas que acreditam no rádio e fazem a TOP100 FM acontecer todos os dias.
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground max-w-xs hidden md:block">
-                Marcas que acreditam no rádio e fazem a TOP100 FM acontecer todos os dias.
-              </p>
-            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-              {SPONSORS.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.href || "#"}
-                  target={s.href ? "_blank" : undefined}
-                  rel="noopener"
-                  className="group relative aspect-[3/2] rounded-xl border border-gray-200 bg-white hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center overflow-hidden p-4"
-                >
-                  {s.logo_url ? (
-                    <img
-                      src={s.logo_url}
-                      alt={s.name}
-                      className="max-h-12 max-w-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
-                    />
-                  ) : (
-                    <div className="text-center">
-                      <div className="text-base md:text-lg font-black text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                {sponsors.map((s) => {
+                  const Wrapper: any = s.link ? "a" : "div";
+                  const wrapperProps = s.link
+                    ? { href: s.link, target: "_blank", rel: "noopener" }
+                    : {};
+                  return (
+                    <Wrapper
+                      key={s.id}
+                      {...wrapperProps}
+                      className={`group relative rounded-2xl border border-gray-200 bg-white ${
+                        s.link
+                          ? "hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1"
+                          : ""
+                      } transition-all duration-300 flex flex-col items-center justify-center text-center p-5 gap-3 min-h-[160px]`}
+                    >
+                      <div className="flex items-center justify-center h-16 w-full">
+                        <img
+                          src={s.logo_url}
+                          alt={s.name}
+                          className="max-h-16 max-w-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                        />
+                      </div>
+                      <div className="text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
                         {s.name}
                       </div>
-                      {s.category && (
-                        <div className="text-[9px] uppercase tracking-wider text-muted-foreground mt-1 font-semibold">
-                          {s.category}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </a>
-              ))}
-            </div>
+                    </Wrapper>
+                  );
+                })}
+              </div>
 
-            <div className="mt-8 text-center">
-              <a
-                href="mailto:contato@top100fm.com.br?subject=Quero%20ser%20patrocinador"
-                className="inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] hover:bg-[#c8102e] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
-              >
-                Quero anunciar na TOP100 FM
-                <span>→</span>
-              </a>
+              <div className="mt-8 text-center">
+                <a
+                  href="mailto:contato@top100fm.com.br?subject=Quero%20ser%20patrocinador"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] hover:bg-[#c8102e] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
+                >
+                  Quero anunciar na TOP100 FM
+                  <span>→</span>
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* PODCASTS */}
         <PodcastsSection />

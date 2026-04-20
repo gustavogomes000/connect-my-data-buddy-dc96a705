@@ -17,6 +17,7 @@ export type AdminTab =
   | "news"
   | "programacao"
   | "podcasts"
+  | "sponsors"
   | "settings"
   | "users";
 
@@ -27,6 +28,7 @@ const NAV: { key: AdminTab; label: string; icon: ComponentType }[] = [
   { key: "news", label: "Notícias", icon: NewsIcon },
   { key: "programacao", label: "Programação", icon: CalendarIcon },
   { key: "podcasts", label: "Podcasts", icon: MicIcon },
+  { key: "sponsors", label: "Patrocinadores", icon: GiftIcon },
   { key: "users", label: "Administradores", icon: ShieldIcon }
 ];
 
