@@ -10,14 +10,22 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function AdminLoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+
+    const formData = new FormData(e.currentTarget);
+    const username = String(formData.get("username") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+
+    if (!username || !password) {
+      setError("Preencha usuário e senha.");
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await adminLogin({ data: { username, password } });
@@ -41,31 +49,29 @@ function AdminLoginPage() {
           <h1>Entrar no Painel</h1>
           <p>Rádio TOP100 FM · Administração</p>
         </div>
-        <form onSubmit={handleSubmit} className="admin-login-form">
+        <form onSubmit={handleSubmit} className="admin-login-form" noValidate>
           {error && <div className="admin-error">{error}</div>}
           <div className="admin-field">
             <label htmlFor="username">Usuário</label>
             <input
               id="username"
+              name="username"
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
               placeholder="Seu usuário"
               autoComplete="username"
               autoFocus
-              required
+              defaultValue=""
             />
           </div>
           <div className="admin-field">
             <label htmlFor="password">Senha</label>
             <input
               id="password"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               autoComplete="current-password"
-              required
+              defaultValue=""
             />
           </div>
           <button type="submit" className="admin-login-btn" disabled={loading}>
