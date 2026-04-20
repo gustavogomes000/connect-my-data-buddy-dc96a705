@@ -9,18 +9,14 @@ export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
 const FALLBACK_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FALLBACK_SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-async function readAdminEnv(key: string): Promise<string | undefined> {
-  if (key === "VITE_SUPABASE_URL" && FALLBACK_SUPABASE_URL) return FALLBACK_SUPABASE_URL;
-  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" && FALLBACK_SUPABASE_PUBLISHABLE_KEY) {
-    return FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+function readAdminEnv(key: string): string | undefined {
+  if (key === "VITE_SUPABASE_URL" || key === "SUPABASE_URL") {
+    return FALLBACK_SUPABASE_URL || (typeof process !== "undefined" ? process.env?.[key] : undefined);
   }
-  if (typeof process !== "undefined" && process.env?.[key]) return process.env[key];
-  try {
-    const cf: any = await import(/* @vite-ignore */ "cloudflare:workers");
-    const v = cf?.env?.[key];
-    if (typeof v === "string" && v) return v;
-  } catch {}
-  return undefined;
+  if (key === "VITE_SUPABASE_PUBLISHABLE_KEY" || key === "SUPABASE_PUBLISHABLE_KEY") {
+    return FALLBACK_SUPABASE_PUBLISHABLE_KEY || (typeof process !== "undefined" ? process.env?.[key] : undefined);
+  }
+  return typeof process !== "undefined" ? process.env?.[key] : undefined;
 }
 
 export const adminLogin = createServerFn({ method: "POST" })
@@ -29,10 +25,10 @@ export const adminLogin = createServerFn({ method: "POST" })
     const { setCookie } = await import("@tanstack/react-start/server");
     const { createClient } = await import("@supabase/supabase-js");
 
-    const url = (await readAdminEnv("SUPABASE_URL")) || (await readAdminEnv("VITE_SUPABASE_URL"));
+    const url = readAdminEnv("SUPABASE_URL") || readAdminEnv("VITE_SUPABASE_URL");
     const key =
-      (await readAdminEnv("SUPABASE_PUBLISHABLE_KEY")) ||
-      (await readAdminEnv("VITE_SUPABASE_PUBLISHABLE_KEY"));
+      readAdminEnv("SUPABASE_PUBLISHABLE_KEY") ||
+      readAdminEnv("VITE_SUPABASE_PUBLISHABLE_KEY");
 
     if (!url || !key) {
       return { success: false, error: "Configuração do servidor incompleta" };
