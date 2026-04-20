@@ -17,9 +17,11 @@ export const getActivePromotions = createServerFn({ method: "GET" }).handler(asy
 
 export const getPublishedNews = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = await getPublicSupabase();
-  const { data } = await supabase
+  const { data } = await (supabase as any)
     .from("news")
     .select("*")
+    .order("is_pinned", { ascending: false })
+    .order("pinned_at", { ascending: false, nullsFirst: false })
     .order("display_order", { ascending: true })
     .order("updated_at", { ascending: false });
   return data || [];

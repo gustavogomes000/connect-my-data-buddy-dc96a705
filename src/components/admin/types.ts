@@ -20,6 +20,8 @@ export type NewsItem = {
   image_url: string | null;
   podcast_link: string | null;
   is_published: boolean | null;
+  is_pinned: boolean | null;
+  pinned_at: string | null;
   display_order: number | null;
   created_at: string | null;
   updated_at: string | null;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { getNews, createNews, updateNews, deleteNews } from "@/lib/admin-api";
 import { ImageUploader } from "./ImageUploader";
-import { NewsIcon, PencilIcon, PlusIcon, PowerIcon, TrashIcon } from "./icons";
+import { NewsIcon, PencilIcon, PinIcon, PlusIcon, PowerIcon, TrashIcon } from "./icons";
 import type { NewsItem } from "./types";
 
 const EMPTY = {
@@ -72,6 +72,26 @@ export function NewsManager() {
 
   const togglePub = async (n: NewsItem) => {
     await updateNews({ data: { id: n.id, is_published: !n.is_published } });
+    load();
+  };
+
+  const PIN_LIMIT = 3;
+  const togglePin = async (n: NewsItem) => {
+    const isPinned = !!n.is_pinned;
+    if (!isPinned) {
+      const pinnedCount = news.filter((x) => x.is_pinned).length;
+      if (pinnedCount >= PIN_LIMIT) {
+        alert(`Você já fixou ${PIN_LIMIT} notícias. Desafixe uma antes de fixar outra.`);
+        return;
+      }
+    }
+    await updateNews({
+      data: {
+        id: n.id,
+        is_pinned: !isPinned,
+        pinned_at: !isPinned ? new Date().toISOString() : null,
+      },
+    });
     load();
   };
 
@@ -172,12 +192,20 @@ export function NewsManager() {
                 <span className={`admin-tag ${n.is_published ? "tag-success" : "tag-muted"}`}>
                   {n.is_published ? "Publicada" : "Rascunho"}
                 </span>
+                {n.is_pinned && <span className="admin-tag tag-warning">Fixada</span>}
                 {n.podcast_link && <span className="admin-tag">Podcast</span>}
               </div>
             </div>
             <div className="admin-list-actions">
               <button onClick={() => togglePub(n)} title={n.is_published ? "Despublicar" : "Publicar"}>
                 <PowerIcon />
+              </button>
+              <button
+                onClick={() => togglePin(n)}
+                title={n.is_pinned ? "Desafixar" : "Fixar (máx. 3)"}
+                className={n.is_pinned ? "active" : ""}
+              >
+                <PinIcon />
               </button>
               <button onClick={() => startEdit(n)} title="Editar">
                 <PencilIcon />

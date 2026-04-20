@@ -54,3 +54,6 @@ export const LogoutIcon = () => (
 export const ImageIcon = () => (
   <Svg d="M3 3h18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM21 15l-5-5L5 21" />
 );
+export const PinIcon = () => (
+  <Svg d="M12 17v5M9 10.76V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4.76a2 2 0 0 0 .55 1.38l1.45 1.51a1 1 0 0 1 .27.69V15a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-.66a1 1 0 0 1 .27-.69l1.45-1.51A2 2 0 0 0 9 10.76z" />
+);
