@@ -62,6 +62,51 @@ type PromoItem = {
   link: string | null;
 };
 
+type Sponsor = {
+  id: string;
+  name: string;
+  logo_url: string;
+  link?: string;
+  display_order?: number;
+  is_active?: boolean;
+};
+
+const MOCK_PODCASTS: PodcastItem[] = [
+  {
+    id: "mock-pc-1",
+    title: "TOP100 Entrevista — Bastidores do rádio",
+    description: "Conversa exclusiva com nomes que fazem o rádio acontecer no Brasil.",
+    youtube_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    thumbnail_url: null,
+  },
+  {
+    id: "mock-pc-2",
+    title: "Manhã TOP — Resenha da semana",
+    description: "Os melhores momentos do programa matinal em formato podcast.",
+    youtube_url: "https://www.youtube.com/watch?v=9bZkp7q19f0",
+    thumbnail_url: null,
+  },
+  {
+    id: "mock-pc-3",
+    title: "Esporte TOP100 — Análise da rodada",
+    description: "Tudo sobre futebol, com comentários quentes do nosso time.",
+    youtube_url: "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
+    thumbnail_url: null,
+  },
+];
+
+const SVG_LOGO = (label: string, color: string) =>
+  `data:image/svg+xml;utf8,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'><rect width='200' height='100' rx='12' fill='${color}'/><text x='100' y='58' font-family='Arial,sans-serif' font-size='28' font-weight='900' fill='white' text-anchor='middle'>${label}</text></svg>`,
+  )}`;
+
+const MOCK_SPONSORS: Sponsor[] = [
+  { id: "mock-sp-1", name: "Supermercado Boa Compra", logo_url: SVG_LOGO("BOA COMPRA", "#c8102e"), display_order: 1, is_active: true },
+  { id: "mock-sp-2", name: "Auto Posto Estrada", logo_url: SVG_LOGO("ESTRADA", "#0c2651"), display_order: 2, is_active: true },
+  { id: "mock-sp-3", name: "Farmácia Vida", logo_url: SVG_LOGO("VIDA", "#16a34a"), display_order: 3, is_active: true },
+  { id: "mock-sp-4", name: "Construtora Lar Bom", logo_url: SVG_LOGO("LAR BOM", "#f59e0b"), display_order: 4, is_active: true },
+];
+
 const MOCK_PROMOS: PromoItem[] = [
   {
     id: "mock-1",
@@ -85,16 +130,6 @@ const MOCK_PROMOS: PromoItem[] = [
     link: "/promocoes",
   },
 ];
-
-type Sponsor = {
-  id: string;
-  name: string;
-  logo_url: string;
-  link?: string;
-  display_order?: number;
-  is_active?: boolean;
-};
-
 const DAYS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
 function fmtDate(d: string | null) {
@@ -162,15 +197,15 @@ function IndexPage() {
         const raw = (sp as any)?.data?.setting_value;
         const parsed = raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : [];
         const list = (Array.isArray(parsed) ? parsed : []) as Sponsor[];
-        setSponsors(
-          list
-            .filter((s) => s.is_active !== false && s.logo_url)
-            .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
-        );
+        const filtered = list
+          .filter((s) => s.is_active !== false && s.logo_url)
+          .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+        setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
       } catch {
-        setSponsors([]);
+        setSponsors(MOCK_SPONSORS);
       }
-      setPodcasts(((pc as any)?.data as PodcastItem[]) || []);
+      const pcData = ((pc as any)?.data as PodcastItem[]) || [];
+      setPodcasts(pcData.length > 0 ? pcData : MOCK_PODCASTS);
       setLoading(false);
     });
   }, [today]);
