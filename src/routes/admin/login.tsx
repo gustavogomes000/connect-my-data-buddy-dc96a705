@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { adminLogin, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
 
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function AdminLoginPage() {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +35,7 @@ function AdminLoginPage() {
           sessionStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
           localStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
         } catch {}
-        window.location.href = "/admin";
+        navigate({ to: "/admin" });
       } else {
         setError(result.error || "Não foi possível entrar.");
       }
