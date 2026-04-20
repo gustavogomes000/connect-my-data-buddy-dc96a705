@@ -3,10 +3,13 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-type ServerEnvKey = 'SUPABASE_URL' | 'SUPABASE_SERVICE_ROLE_KEY';
+type ServerEnvKey =
+  | 'SUPABASE_URL'
+  | 'SUPABASE_SERVICE_ROLE_KEY'
+  | 'MY_SUPABASE_URL'
+  | 'MY_SUPABASE_SERVICE_ROLE_KEY';
 
 function getServerEnv(key: ServerEnvKey): string | undefined {
-  // Fallback to process.env (works in dev and in Cloudflare Workers with nodejs_compat)
   if (typeof process !== 'undefined' && process.env) {
     const val = process.env[key];
     if (typeof val === 'string' && val.length > 0) return val;
@@ -30,8 +33,11 @@ async function getServerEnvWithCF(key: ServerEnvKey): Promise<string | undefined
 type SupabaseAdminClient = ReturnType<typeof createClient<Database>>;
 
 async function createSupabaseAdminClientAsync(): Promise<SupabaseAdminClient> {
-  const SUPABASE_URL = await getServerEnvWithCF('SUPABASE_URL');
-  const SUPABASE_SERVICE_ROLE_KEY = await getServerEnvWithCF('SUPABASE_SERVICE_ROLE_KEY');
+  const SUPABASE_URL =
+    (await getServerEnvWithCF('MY_SUPABASE_URL')) || (await getServerEnvWithCF('SUPABASE_URL'));
+  const SUPABASE_SERVICE_ROLE_KEY =
+    (await getServerEnvWithCF('MY_SUPABASE_SERVICE_ROLE_KEY')) ||
+    (await getServerEnvWithCF('SUPABASE_SERVICE_ROLE_KEY'));
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error(
@@ -61,8 +67,9 @@ export function getSupabaseAdmin(): Promise<SupabaseAdminClient> {
 
 // Legacy export for backwards compatibility - creates sync client using process.env only
 function createSupabaseAdminClientSync(): SupabaseAdminClient {
-  const SUPABASE_URL = getServerEnv('SUPABASE_URL');
-  const SUPABASE_SERVICE_ROLE_KEY = getServerEnv('SUPABASE_SERVICE_ROLE_KEY');
+  const SUPABASE_URL = getServerEnv('MY_SUPABASE_URL') || getServerEnv('SUPABASE_URL');
+  const SUPABASE_SERVICE_ROLE_KEY =
+    getServerEnv('MY_SUPABASE_SERVICE_ROLE_KEY') || getServerEnv('SUPABASE_SERVICE_ROLE_KEY');
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error(
