@@ -337,6 +337,7 @@ export const getUploadUrl = createAdminServerFn("POST")
 
 export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async () => {
   try {
+    const { runManualNewsIngest } = await import("./news-auto.server");
     const result = await runManualNewsIngest();
     return result ?? { inserted: 0, skipped: 0, total: 0 };
   } catch (e) {
