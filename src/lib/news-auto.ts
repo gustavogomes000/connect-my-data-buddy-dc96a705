@@ -1,25 +1,4 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-
-const SUPABASE_URL =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_URL || process.env?.SUPABASE_URL
-    : undefined) || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.MY_SUPABASE_PUBLISHABLE_KEY ||
-      process.env?.SUPABASE_PUBLISHABLE_KEY
-    : undefined) ||
-  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-const adminClient: SupabaseClient | null =
-  SUPABASE_URL && SUPABASE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-    : null;
+import { getSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const FEEDS = [
   { name: "Câmara dos Deputados", url: "https://www.camara.leg.br/noticias/rss" },
