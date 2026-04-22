@@ -4,7 +4,7 @@ import { useSession } from "@tanstack/react-start/server";
 const ADMIN_COOKIE = "admin_session";
 const SESSION_DURATION = 60 * 60 * 24;
 
-function getAdminSessionConfig() {
+export function getAdminSessionConfig() {
   const password =
     process.env.MY_ADMIN_SESSION_SECRET ||
     process.env.ADMIN_SESSION_SECRET ||
