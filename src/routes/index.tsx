@@ -295,6 +295,73 @@ function IndexPage() {
       <AudioActivationOverlay />
 
       <main className="bg-background">
+        {/* HERO IMERSIVO COM MASCOTE */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#0c2651] via-[#142d5e] to-[#c8102e] text-white">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 15% 25%, white 1.5px, transparent 1.5px), radial-gradient(circle at 75% 65%, white 1.5px, transparent 1.5px), radial-gradient(circle at 45% 85%, white 1px, transparent 1px)",
+              backgroundSize: "60px 60px, 80px 80px, 40px 40px",
+            }}
+          />
+          <div className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-[#ffc107]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-[#c8102e]/30 blur-3xl" />
+
+          <div className="relative mx-auto max-w-7xl px-4 py-12 md:py-16 grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur border border-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] mb-4">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffc107] opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffc107]" />
+                </span>
+                No ar agora · 24h
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight">
+                A trilha sonora<br />
+                da sua <span className="text-[#ffc107]">vida</span>.
+              </h1>
+              <p className="mt-4 text-base md:text-lg text-white/80 max-w-md leading-relaxed">
+                Notícias, programação, podcasts e as promoções mais quentes — tudo no ritmo da TOP100 FM.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  to="/programacao"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#ffc107] px-6 py-3 text-[#0c2651] font-black text-sm shadow-lg hover:-translate-y-0.5 transition"
+                >
+                  📅 Ver programação
+                </Link>
+                <Link
+                  to="/noticias"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur px-6 py-3 text-white font-bold text-sm hover:bg-white hover:text-[#0c2651] transition"
+                >
+                  📰 Últimas notícias
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative flex items-center justify-center min-h-[320px] md:min-h-[420px]">
+              <div className="absolute inset-0 m-auto h-64 w-64 md:h-80 md:w-80">
+                <div className="pulse-ring" style={{ borderColor: "rgba(255,193,7,0.4)" }} />
+                <div className="pulse-ring" style={{ borderColor: "rgba(255,255,255,0.3)", animationDelay: "0.8s" }} />
+                <div className="pulse-ring" style={{ borderColor: "rgba(200,16,46,0.5)", animationDelay: "1.6s" }} />
+              </div>
+              <div className="absolute h-72 w-72 md:h-96 md:w-96 rounded-full bg-gradient-to-br from-[#ffc107]/30 to-[#c8102e]/20 blur-2xl" />
+              <div className="note-float text-[#ffc107] text-3xl" style={{ left: "15%", top: "55%", ["--tx" as any]: "-30px" }}>♪</div>
+              <div className="note-float text-white text-2xl" style={{ left: "75%", top: "60%", animationDelay: "1.2s", ["--tx" as any]: "20px" }}>♫</div>
+              <div className="note-float text-[#ffc107] text-2xl" style={{ left: "85%", top: "30%", animationDelay: "2.4s", ["--tx" as any]: "10px" }}>♩</div>
+              <div className="note-float text-white text-xl" style={{ left: "10%", top: "20%", animationDelay: "0.6s", ["--tx" as any]: "-15px" }}>♬</div>
+              <img
+                src={heroGirl}
+                alt="Ouvinte da TOP100 FM curtindo música"
+                className="relative z-10 h-72 md:h-96 w-auto anim-float drop-shadow-2xl"
+                width={384}
+                height={384}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* PROMOÇÕES EM DESTAQUE — TOPO */}
         <section className="relative overflow-hidden bg-gradient-to-br from-[#fff8f0] via-white to-[#fff0f3] py-14 border-b border-[#c8102e]/10">
           <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#c8102e]/10 blur-3xl" />
