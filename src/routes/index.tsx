@@ -334,8 +334,8 @@ function IndexPage() {
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-20 lg:pt-16 lg:pb-24">
-            <div className="grid items-center gap-8 lg:gap-6 lg:grid-cols-[1fr_0.65fr_0.85fr]">
+          <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 lg:pt-20 lg:pb-24">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
               {/* Texto */}
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
