@@ -490,7 +490,7 @@ function IndexPage() {
         </section>
 
         {/* HERO + NOTÍCIAS DESTAQUE */}
-        <section className="mx-auto max-w-7xl px-4 pt-8 pb-12">
+        <section className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 sm:pt-8 pb-10 sm:pb-12">
           <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
@@ -710,7 +710,7 @@ function IndexPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
                 {sponsors.map((s) => {
                   const Wrapper: any = s.link ? "a" : "div";
                   const wrapperProps = s.link
@@ -724,16 +724,16 @@ function IndexPage() {
                         s.link
                           ? "hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1"
                           : ""
-                      } transition-all duration-300 flex flex-col items-center justify-center text-center p-5 gap-3 min-h-[160px]`}
+                      } transition-all duration-300 flex flex-col items-center justify-center text-center p-3 sm:p-5 gap-2 sm:gap-3 min-h-[120px] sm:min-h-[160px]`}
                     >
-                      <div className="flex items-center justify-center h-16 w-full">
+                      <div className="flex items-center justify-center h-12 sm:h-16 w-full">
                         <img
                           src={s.logo_url}
                           alt={s.name}
-                          className="max-h-16 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                          className="max-h-12 sm:max-h-16 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
-                      <div className="text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
+                      <div className="text-[11px] sm:text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
                         {s.name}
                       </div>
                     </Wrapper>
