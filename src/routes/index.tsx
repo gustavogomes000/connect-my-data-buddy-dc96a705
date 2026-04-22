@@ -318,10 +318,13 @@ function IndexPage() {
             src={mascoteTop}
             alt=""
             aria-hidden
-            className="pointer-events-none absolute right-0 top-0 z-0 h-full w-[70%] select-none object-cover object-right opacity-40 sm:w-[60%] sm:opacity-60 lg:w-1/2 lg:opacity-90"
+            className="pointer-events-none absolute top-0 z-0 h-full select-none object-cover opacity-50 sm:opacity-70 lg:opacity-90"
             style={{
-              maskImage: "linear-gradient(to right, transparent 0%, black 45%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 45%, black 100%)",
+              right: "-30%",
+              width: "85%",
+              objectPosition: "left center",
+              maskImage: "linear-gradient(to right, transparent 0%, black 55%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 55%, black 100%)",
             }}
           />
 
