@@ -13,6 +13,7 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function AdminLoginPage() {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
