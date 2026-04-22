@@ -1,40 +1,14 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
+import { getSupabaseAdmin } from "@/integrations/supabase/client.server";
 import { runManualNewsIngest } from "./news-auto";
 
 let adminClient: SupabaseClient | null = null;
 
-async function getServerEnv(name: "MY_SUPABASE_URL" | "SUPABASE_URL" | "MY_SUPABASE_SERVICE_ROLE_KEY" | "SUPABASE_SERVICE_ROLE_KEY") {
-  try {
-    const cfModule = await import(/* @vite-ignore */ "cloudflare:workers");
-    const value = (cfModule as any).env?.[name];
-    if (typeof value === "string" && value.length > 0) return value;
-  } catch {}
-
-  if (typeof process !== "undefined" && process.env) {
-    const value = process.env[name];
-    if (typeof value === "string" && value.length > 0) return value;
-  }
-
-  return undefined;
-}
-
 async function getAdminSupabase(): Promise<SupabaseClient> {
   if (adminClient) return adminClient;
 
-  const supabaseUrl = (await getServerEnv("MY_SUPABASE_URL")) || (await getServerEnv("SUPABASE_URL"));
-  const supabaseKey =
-    (await getServerEnv("MY_SUPABASE_SERVICE_ROLE_KEY")) ||
-    (await getServerEnv("SUPABASE_SERVICE_ROLE_KEY"));
-
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Configuração do servidor incompleta");
-  }
-
-  adminClient = createClient(supabaseUrl, supabaseKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-
+  adminClient = await getSupabaseAdmin();
   return adminClient;
 }
 
