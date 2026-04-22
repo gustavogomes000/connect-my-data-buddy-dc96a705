@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiCronNewsRouteImport } from './routes/api/cron.news'
+import { Route as ApiPublicCronNewsRouteImport } from './routes/api/public/cron.news'
 
 const PromocoesRoute = PromocoesRouteImport.update({
   id: '/promocoes',
@@ -58,6 +59,11 @@ const ApiCronNewsRoute = ApiCronNewsRouteImport.update({
   path: '/api/cron/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCronNewsRoute = ApiPublicCronNewsRouteImport.update({
+  id: '/api/public/cron/news',
+  path: '/api/public/cron/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/api/cron/news': typeof ApiCronNewsRoute
+  '/api/public/cron/news': typeof ApiPublicCronNewsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
   '/api/cron/news': typeof ApiCronNewsRoute
+  '/api/public/cron/news': typeof ApiPublicCronNewsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/api/cron/news': typeof ApiCronNewsRoute
+  '/api/public/cron/news': typeof ApiPublicCronNewsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/'
     | '/api/cron/news'
+    | '/api/public/cron/news'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin'
     | '/api/cron/news'
+    | '/api/public/cron/news'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/'
     | '/api/cron/news'
+    | '/api/public/cron/news'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
   ApiCronNewsRoute: typeof ApiCronNewsRoute
+  ApiPublicCronNewsRoute: typeof ApiPublicCronNewsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCronNewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cron/news': {
+      id: '/api/public/cron/news'
+      path: '/api/public/cron/news'
+      fullPath: '/api/public/cron/news'
+      preLoaderRoute: typeof ApiPublicCronNewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
   ApiCronNewsRoute: ApiCronNewsRoute,
+  ApiPublicCronNewsRoute: ApiPublicCronNewsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
