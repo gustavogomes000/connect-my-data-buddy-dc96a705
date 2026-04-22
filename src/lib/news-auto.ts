@@ -105,6 +105,25 @@ async function fetchAndParse(): Promise<ParsedItem[]> {
   return all;
 }
 
+async function isAutoNewsEnabled(): Promise<boolean> {
+  if (!adminClient) return false;
+
+  const { data, error } = await (adminClient as any)
+    .from("site_settings")
+    .select("*")
+    .or("setting_key.eq.auto_news_enabled,key.eq.auto_news_enabled")
+    .limit(1);
+
+  if (error || !Array.isArray(data) || data.length === 0) return false;
+
+  const row = data[0] as {
+    setting_value?: unknown;
+    value?: unknown;
+  };
+  const raw = row.setting_value ?? row.value;
+  return raw === true || raw === "true" || raw === '"true"';
+}
+
 export async function runAutoNewsIngest(): Promise<{
   inserted: number;
   skipped: number;
@@ -112,13 +131,7 @@ export async function runAutoNewsIngest(): Promise<{
 }> {
   if (!adminClient) throw new Error("Configuração do servidor incompleta");
 
-  // Check toggle
-  const { data: setting } = await adminClient
-    .from("site_settings")
-    .select("setting_value")
-    .eq("setting_key", "auto_news_enabled")
-    .maybeSingle();
-  const enabled = setting?.setting_value === "true" || setting?.setting_value === '"true"';
+  const enabled = await isAutoNewsEnabled();
   if (!enabled) {
     return { inserted: 0, skipped: 0, total: 0 };
   }
@@ -128,7 +141,6 @@ export async function runAutoNewsIngest(): Promise<{
   let skipped = 0;
 
   for (const it of items) {
-    // Dedup by source_url
     const { data: existing } = await (adminClient as any)
       .from("news")
       .select("id")
