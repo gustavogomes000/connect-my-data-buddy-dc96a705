@@ -56,6 +56,16 @@ export const adminLogin = createServerFn({ method: "POST" })
       path: "/",
     });
 
+    // Cookie "marcador" legível pelo cliente para o beforeLoad detectar sessão
+    // sem precisar bater no servidor. O cookie real de auth segue httpOnly.
+    setCookie(ADMIN_PRESENCE_COOKIE, "1", {
+      httpOnly: false,
+      secure: true,
+      sameSite: "lax",
+      maxAge: SESSION_DURATION,
+      path: "/",
+    });
+
     return { success: true, token: SESSION_TOKEN_VALUE };
   });
 
