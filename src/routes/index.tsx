@@ -313,6 +313,17 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
+          {/* Patrícia gigante flutuando no background */}
+          <motion.img
+            src={mascoteTop}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute -right-16 top-1/2 z-0 hidden -translate-y-1/2 select-none rounded-[2rem] opacity-60 mix-blend-screen drop-shadow-[0_40px_80px_rgba(0,0,0,0.6)] lg:block"
+            style={{ width: "min(58vw, 780px)", maskImage: "radial-gradient(ellipse at center, black 55%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 55%, transparent 92%)" }}
+            animate={{ y: ["-52%", "-48%", "-52%"], rotate: [-1.2, 1.2, -1.2] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          />
+
           <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
             <div className="grid items-center gap-8 lg:gap-10 lg:grid-cols-12">
               {/* Coluna 1 — texto */}
@@ -320,7 +331,7 @@ function IndexPage() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="lg:col-span-4"
+                className="relative z-10 lg:col-span-5"
               >
                 <motion.span
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
@@ -361,7 +372,7 @@ function IndexPage() {
 
               {/* Coluna 2 — cards de promoções (foco principal) */}
               <motion.div
-                className="lg:col-span-5 flex flex-col gap-4"
+                className="relative z-10 lg:col-span-7 flex flex-col gap-4"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
@@ -457,22 +468,6 @@ function IndexPage() {
                     </div>
                   </motion.button>
                 ))}
-              </motion.div>
-
-              {/* Coluna 3 — mascote */}
-              <motion.div
-                className="relative hidden lg:flex lg:col-span-3 items-center justify-center"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.img
-                  src={mascoteTop}
-                  alt="Patrícia nas promoções da TOP100 FM"
-                  className="relative z-10 h-auto w-full max-w-[300px] rounded-3xl object-contain drop-shadow-[0_28px_50px_rgba(0,0,0,0.55)]"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                />
               </motion.div>
             </div>
           </div>
