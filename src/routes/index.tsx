@@ -320,7 +320,7 @@ function IndexPage() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="lg:col-span-5"
+                className="lg:col-span-4"
               >
                 <motion.span
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
@@ -342,10 +342,6 @@ function IndexPage() {
                   </span>
                 </h1>
 
-                <p className="mt-5 max-w-md text-base leading-relaxed text-white/75">
-                  A Patrícia chama você para participar e levar brindes, ingressos e experiências exclusivas — direto da nossa rádio.
-                </p>
-
                 <div className="mt-7 flex flex-wrap items-center gap-3">
                   <Link
                     to="/promocoes"
@@ -363,59 +359,126 @@ function IndexPage() {
                 </div>
               </motion.div>
 
-              {/* Coluna 2 — mascote */}
+              {/* Coluna 2 — cards de promoções (foco principal) */}
               <motion.div
-                className="relative hidden lg:flex lg:col-span-3 items-center justify-center"
+                className="lg:col-span-5 flex flex-col gap-4"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.img
-                  src={mascoteTop}
-                  alt="Patrícia nas promoções da TOP100 FM"
-                  className="relative z-10 h-auto w-full max-w-[380px] rounded-3xl object-contain drop-shadow-[0_28px_50px_rgba(0,0,0,0.55)]"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </motion.div>
-
-              {/* Coluna 3 — cards empilhados */}
-              <motion.div
-                className="lg:col-span-4 flex flex-col gap-3"
-                initial={{ opacity: 0, x: 36 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
               >
                 {promos.slice(0, 3).map((p, i) => (
                   <motion.button
                     key={p.id}
                     type="button"
                     onClick={() => setSelectedPromo(p)}
-                    whileHover={{ y: -3, scale: 1.01 }}
-                    className="group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-2.5 text-left backdrop-blur transition hover:border-white/25 hover:bg-white/[0.1]"
+                    whileHover={{ y: -4, scale: 1.015 }}
+                    className="group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
                   >
-                    <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651]">
-                      {p.image_url ? (
-                        <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <img src={illustGift} alt="" className="h-12 w-12 object-contain anim-float drop-shadow-lg" loading="lazy" width={48} height={48} />
-                        </div>
-                      )}
+                    {/* Slot mágico estilo Doctor Strange */}
+                    <div className="relative h-28 w-28 shrink-0">
+                      {/* halo radial */}
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 rounded-full opacity-70 blur-md transition group-hover:opacity-100"
+                        style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.35) 45%, transparent 75%)" }}
+                      />
+                      {/* anel externo girando */}
+                      <motion.div
+                        aria-hidden
+                        className="absolute inset-0 rounded-full border border-dashed border-[#ffd84d]/50"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                      />
+                      {/* anel interno girando ao contrário */}
+                      <motion.div
+                        aria-hidden
+                        className="absolute inset-2 rounded-full border border-[#ff9a3c]/40"
+                        style={{
+                          background:
+                            "conic-gradient(from 0deg, transparent 0deg, rgba(255,154,60,0.35) 60deg, transparent 120deg, rgba(255,216,77,0.35) 200deg, transparent 280deg)",
+                          maskImage: "radial-gradient(circle, transparent 55%, black 56%, black 100%)",
+                          WebkitMaskImage: "radial-gradient(circle, transparent 55%, black 56%, black 100%)",
+                        }}
+                        animate={{ rotate: -360 }}
+                        transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+                      />
+                      {/* terceiro anel pontilhado */}
+                      <motion.div
+                        aria-hidden
+                        className="absolute inset-[14px] rounded-full border-2 border-dotted border-white/25"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+                      />
+                      {/* notas musicais flutuando */}
+                      <motion.span
+                        aria-hidden
+                        className="absolute -top-1 -right-1 text-base text-[#ffd84d] drop-shadow-[0_0_6px_rgba(255,216,77,0.9)]"
+                        animate={{ y: [0, -6, 0], rotate: [-10, 10, -10] }}
+                        transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                      >
+                        ♪
+                      </motion.span>
+                      <motion.span
+                        aria-hidden
+                        className="absolute -bottom-1 -left-1 text-sm text-[#ff9a3c] drop-shadow-[0_0_6px_rgba(255,154,60,0.9)]"
+                        animate={{ y: [0, -5, 0], rotate: [12, -12, 12] }}
+                        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 + i * 0.2 }}
+                      >
+                        ♫
+                      </motion.span>
+                      <motion.span
+                        aria-hidden
+                        className="absolute top-1/2 -right-2 -translate-y-1/2 text-xs text-white/70"
+                        animate={{ x: [0, 4, 0], opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                      >
+                        ✦
+                      </motion.span>
+                      {/* núcleo com a imagem da promoção */}
+                      <motion.div
+                        className="absolute inset-[18px] overflow-hidden rounded-full border-2 border-white/20 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]"
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.25 }}
+                      >
+                        {p.image_url ? (
+                          <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <img src={illustGift} alt="" className="h-10 w-10 object-contain drop-shadow-lg" loading="lazy" width={40} height={40} />
+                          </div>
+                        )}
+                      </motion.div>
                     </div>
+
                     <div className="min-w-0 flex-1 pr-1">
                       <span className="inline-flex items-center gap-1 rounded-full bg-[#ffd84d]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#ffd84d]">
                         Promo {i + 1}
                       </span>
-                      <h3 className="mt-1 text-sm font-black leading-tight text-white line-clamp-2">
+                      <h3 className="mt-1.5 text-base font-black leading-tight text-white line-clamp-2">
                         {p.title}
                       </h3>
-                      <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-bold text-[#ff9a3c] transition-all group-hover:gap-2">
+                      <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-[#ff9a3c] transition-all group-hover:gap-2">
                         Participar <span>→</span>
                       </span>
                     </div>
                   </motion.button>
                 ))}
+              </motion.div>
+
+              {/* Coluna 3 — mascote */}
+              <motion.div
+                className="relative hidden lg:flex lg:col-span-3 items-center justify-center"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <motion.img
+                  src={mascoteTop}
+                  alt="Patrícia nas promoções da TOP100 FM"
+                  className="relative z-10 h-auto w-full max-w-[300px] rounded-3xl object-contain drop-shadow-[0_28px_50px_rgba(0,0,0,0.55)]"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                />
               </motion.div>
             </div>
           </div>
