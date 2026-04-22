@@ -325,11 +325,19 @@ function IndexPage() {
             }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
+          <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-10 lg:pt-16 lg:pb-20">
+            {/* Mobile/tablet: Patrícia inline em cima */}
+            <img
+              src={mascoteTop}
+              alt=""
+              aria-hidden
+              className="mx-auto mb-5 block max-h-[220px] w-auto select-none object-contain sm:max-h-[260px] lg:hidden"
+            />
+
             <div className="grid items-start gap-6 lg:grid-cols-12">
               {/* Coluna única — promoções à esquerda com CTA */}
               <motion.div
-                className="relative z-10 lg:col-span-7"
+                className="relative z-10 lg:col-span-6"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
