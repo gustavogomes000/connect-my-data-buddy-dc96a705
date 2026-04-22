@@ -2,35 +2,23 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
 import { runManualNewsIngest } from "./news-auto";
 
-const SUPABASE_URL =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_URL || process.env?.SUPABASE_URL
-    : undefined) || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.MY_SUPABASE_PUBLISHABLE_KEY ||
-      process.env?.SUPABASE_PUBLISHABLE_KEY
-    : undefined) ||
-  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-const adminClient: SupabaseClient | null =
-  SUPABASE_URL && SUPABASE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-    : null;
+let adminClient: SupabaseClient | null = null;
 
 function getAdminSupabase(): SupabaseClient {
-  if (!adminClient) throw new Error("Configuração do servidor incompleta");
-  return adminClient;
-}
+  if (adminClient) return adminClient;
 
-async function ensureAdmin() {
-  const { requireAdmin } = await import("./admin-guard.server");
-  await await ensureAdmin();
+  const supabaseUrl = process.env.MY_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseKey = process.env.MY_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Configuração do servidor incompleta");
+  }
+
+  adminClient = createClient(supabaseUrl, supabaseKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  return adminClient;
 }
 
 export const getPromotions = createAdminServerFn("GET").handler(async () => {
