@@ -61,7 +61,8 @@ function AdminLoginPage() {
           }
         } catch {}
 
-        navigate({ to: "/admin", replace: true });
+        // Mantém overlay de carregamento ativo durante a navegação
+        await navigate({ to: "/admin", replace: true });
         return;
       } else {
         setError(result.error || "Não foi possível entrar.");
