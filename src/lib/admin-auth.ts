@@ -1,11 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
-import { setCookie, deleteCookie, getCookie } from "@tanstack/react-start/server";
+import { setCookie, deleteCookie, getCookie, useSession } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
+import { getAdminSessionConfig } from "@/lib/admin-serverfn";
 
 const ADMIN_COOKIE = "admin_session";
 const ADMIN_PRESENCE_COOKIE = "admin_present";
 const SESSION_DURATION = 60 * 60 * 24; // 24h
 const SESSION_TOKEN_VALUE = "authenticated";
+const IS_SECURE_COOKIE = process.env.NODE_ENV === "production";
 export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
 export const ADMIN_PRESENCE_KEY = ADMIN_PRESENCE_COOKIE;
 export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
@@ -48,19 +50,14 @@ export const adminLogin = createServerFn({ method: "POST" })
       return { success: false, error: "Credenciais inválidas" };
     }
 
-    setCookie(ADMIN_COOKIE, "authenticated", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: SESSION_DURATION,
-      path: "/",
-    });
+    const session = await useSession<{ authenticated: boolean }>(getAdminSessionConfig());
+    await session.update({ authenticated: true });
 
     // Cookie "marcador" legível pelo cliente para o beforeLoad detectar sessão
     // sem precisar bater no servidor. O cookie real de auth segue httpOnly.
     setCookie(ADMIN_PRESENCE_COOKIE, "1", {
       httpOnly: false,
-      secure: true,
+      secure: IS_SECURE_COOKIE,
       sameSite: "lax",
       maxAge: SESSION_DURATION,
       path: "/",
@@ -70,12 +67,15 @@ export const adminLogin = createServerFn({ method: "POST" })
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
+  const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
+  await session.clear();
   deleteCookie(ADMIN_COOKIE);
   deleteCookie(ADMIN_PRESENCE_COOKIE);
   return { success: true };
 });
 
 export const checkAdminSession = createServerFn({ method: "GET" }).handler(async () => {
-  const cookie = getCookie(ADMIN_COOKIE);
-  return { authenticated: cookie === "authenticated" };
+  const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
+  const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
+  return { authenticated: session.data.authenticated === true || cookie === "1" };
 });
