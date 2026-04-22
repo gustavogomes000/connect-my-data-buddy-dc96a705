@@ -484,6 +484,39 @@ function IndexPage() {
                 ))}
                 </div>
               </motion.div>
+
+              {/* TV ao vivo — ao lado das promoções (desktop) e abaixo (mobile) */}
+              {isLive && (
+                <motion.div
+                  className="relative z-10 lg:col-span-6 lg:col-start-7"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#ff5470]/40 bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#ffd84d] backdrop-blur-md">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff5470] opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff5470]" />
+                    </span>
+                    TV · Ao vivo agora
+                  </div>
+                  <div
+                    className="relative w-full overflow-hidden rounded-[20px] border border-[#ffd84d]/40 bg-black shadow-[0_25px_60px_-20px_rgba(255,84,112,0.55)]"
+                    style={{ aspectRatio: "16 / 9" }}
+                  >
+                    <iframe
+                      src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&playsinline=1&rel=0`}
+                      title={liveTitle || "Transmissão ao vivo TOP100 FM"}
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                  {liveTitle && (
+                    <p className="mt-2 text-sm font-bold text-white/90">{liveTitle}</p>
+                  )}
+                </motion.div>
+              )}
             </div>
           </div>
 
