@@ -358,14 +358,6 @@ function IndexPage() {
                 </p>
 
                 <div className="mt-5 flex flex-col gap-3">
-
-              {/* Coluna 2 — cards de promoções (foco principal) */}
-              <motion.div
-                className="relative z-10 lg:col-span-7 flex flex-col gap-4"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              >
                 {promos.slice(0, 3).map((p, i) => (
                   <motion.button
                     key={p.id}
