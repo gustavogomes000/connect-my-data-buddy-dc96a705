@@ -334,8 +334,8 @@ function IndexPage() {
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-20 lg:pt-16 lg:pb-24">
-            <div className="grid items-center gap-8 lg:gap-6 lg:grid-cols-[1fr_0.65fr_0.85fr]">
+          <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 lg:pt-20 lg:pb-24">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
               {/* Texto */}
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
@@ -409,57 +409,6 @@ function IndexPage() {
                     </motion.div>
                   ))}
                 </div>
-              </motion.div>
-
-              {/* Mascote dançando (coluna central) */}
-              <motion.div
-                className="relative hidden lg:flex items-end justify-center min-h-[420px]"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  style={{
-                    background:
-                      "radial-gradient(circle at 50% 55%, rgba(255,84,112,0.5) 0%, rgba(255,216,77,0.2) 35%, transparent 65%)",
-                    filter: "blur(24px)",
-                  }}
-                />
-                <motion.span
-                  aria-hidden
-                  className="absolute top-4 left-2 text-3xl z-20"
-                  animate={{ y: [0, -12, 0], rotate: [-8, 8, -8] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  🎵
-                </motion.span>
-                <motion.span
-                  aria-hidden
-                  className="absolute top-16 right-0 text-2xl z-20"
-                  animate={{ y: [0, -10, 0], rotate: [10, -10, 10] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                >
-                  🎶
-                </motion.span>
-                <motion.span
-                  aria-hidden
-                  className="absolute bottom-32 left-0 text-xl z-20"
-                  animate={{ y: [0, -8, 0], opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                >
-                  ✨
-                </motion.span>
-                <motion.img
-                  src={mascoteTop}
-                  alt="Mascote TOP100 FM dançando"
-                  className="relative z-10 w-full max-w-[340px] h-auto object-contain drop-shadow-[0_24px_30px_rgba(0,0,0,0.55)]"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                />
               </motion.div>
 
               {/* Card dinâmico: Live YouTube ou Programação ao vivo */}
@@ -570,82 +519,219 @@ function IndexPage() {
           </svg>
         </section>
 
-        {/* GRID DE PROMOÇÕES */}
-        <section className="bg-background py-14">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
-                  Em destaque
-                </p>
-                <h2 className="mt-1 text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none">
-                  Promoções da semana
-                </h2>
-              </div>
-              <Link
-                to="/promocoes"
-                className="group inline-flex items-center gap-1.5 rounded-full border border-[#c8102e]/20 bg-white px-4 py-2 text-sm font-bold text-[#c8102e] shadow-sm transition hover:bg-[#c8102e] hover:text-white hover:shadow-md"
-              >
-                Ver todas
-                <span className="transition group-hover:translate-x-0.5">→</span>
-              </Link>
-            </div>
+        {/* SEÇÃO DE PROMOÇÕES — identidade visual com a Patrícia */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-background via-[#fff5f7] to-background py-16 lg:py-20">
+          {/* ornamentos suaves */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 25% 25%, #c8102e 1.5px, transparent 1.5px)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[#ffd84d]/30 blur-[100px]"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-[#ff5470]/25 blur-[120px]"
+            animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.7, 0.4] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          />
 
-            <div className="grid gap-5 md:grid-cols-3">
-              {promos.slice(0, 3).map((p, i) => (
-                <motion.button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setSelectedPromo(p)}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ y: -6 }}
-                  className="group relative overflow-hidden rounded-2xl bg-white border border-gray-200 hover:border-[#c8102e]/40 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col text-left cursor-pointer"
+          <div className="relative mx-auto max-w-7xl px-4">
+            <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+              {/* Coluna da Patrícia — mascote em destaque */}
+              <motion.div
+                className="relative flex items-end justify-center lg:justify-start min-h-[420px]"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* círculo decorativo atrás dela */}
+                <div
+                  aria-hidden
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[88%] aspect-square rounded-full"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,154,60,0.25) 40%, transparent 70%)",
+                  }}
+                />
+                {/* anel pontilhado */}
+                <motion.div
+                  aria-hidden
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[78%] aspect-square rounded-full border-2 border-dashed border-[#c8102e]/25"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* notas musicais flutuantes */}
+                <motion.div
+                  aria-hidden
+                  className="absolute top-6 left-4 text-3xl"
+                  animate={{ y: [0, -14, 0], rotate: [-8, 8, -8] }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <div className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c8102e] shadow-sm border border-[#c8102e]/20">
-                    🎁 Promo #{i + 1}
-                  </div>
-                  <div className="aspect-[16/10] overflow-hidden bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] relative">
-                    {p.image_url ? (
-                      <img
-                        src={p.image_url}
-                        alt={p.title}
-                        className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
-                      />
-                    ) : (
-                      <>
-                        <div
-                          className="absolute inset-0 opacity-20"
-                          style={{
-                            backgroundImage:
-                              "radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 70%, white 1px, transparent 1px)",
-                            backgroundSize: "24px 24px",
-                          }}
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <img src={illustGift} alt="" className="h-32 w-32 object-contain anim-float drop-shadow-xl" loading="lazy" width={128} height={128} />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col">
-                    <h3 className="font-black text-lg text-[#0c2651] leading-tight group-hover:text-[#c8102e] transition line-clamp-2">
-                      {p.title}
-                    </h3>
-                    {p.description && (
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
-                        {p.description}
-                      </p>
-                    )}
-                    <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[#c8102e] group-hover:gap-2.5 transition-all">
-                      Quero participar
-                      <span>→</span>
+                  🎵
+                </motion.div>
+                <motion.div
+                  aria-hidden
+                  className="absolute top-20 right-6 text-2xl"
+                  animate={{ y: [0, -10, 0], rotate: [10, -10, 10] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                >
+                  🎶
+                </motion.div>
+                <motion.div
+                  aria-hidden
+                  className="absolute bottom-32 right-2 text-2xl"
+                  animate={{ y: [0, -12, 0], opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+                >
+                  🎁
+                </motion.div>
+
+                {/* mascote */}
+                <motion.img
+                  src={mascoteTop}
+                  alt="Patrícia, voz das promoções da TOP100 FM"
+                  className="relative z-10 w-full max-w-[400px] h-auto object-contain drop-shadow-[0_24px_30px_rgba(200,16,46,0.25)]"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+
+                {/* etiqueta flutuante */}
+                <motion.div
+                  className="absolute bottom-6 left-2 lg:left-0 z-20 rounded-2xl bg-white px-4 py-3 shadow-xl border border-[#c8102e]/10"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#c8102e] to-[#ff5470] flex items-center justify-center text-white text-lg">🎙️</div>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#c8102e]">Apresenta</p>
+                      <p className="text-sm font-black text-[#0c2651] leading-tight">Patrícia · TOP Promo</p>
                     </div>
                   </div>
-                </motion.button>
-              ))}
+                </motion.div>
+              </motion.div>
+
+              {/* Coluna dos cards de promoção */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="mb-6"
+                >
+                  <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
+                    Em destaque · Promoções da semana
+                  </p>
+                  <h2 className="mt-2 text-3xl md:text-4xl font-black text-[#0c2651] tracking-tight leading-[1.05]">
+                    Prêmios de verdade,{" "}
+                    <span className="bg-gradient-to-r from-[#c8102e] to-[#ff5470] bg-clip-text text-transparent">
+                      todo mês.
+                    </span>
+                  </h2>
+                  <p className="mt-3 text-base text-muted-foreground max-w-xl leading-relaxed">
+                    Participe das promoções da TOP100 FM com a Patrícia. Ingressos, brindes e experiências exclusivas para quem é ouvinte de verdade.
+                  </p>
+                </motion.div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {promos.slice(0, 3).map((p, i) => {
+                    const isFeatured = i === 0;
+                    return (
+                      <motion.button
+                        key={p.id}
+                        type="button"
+                        onClick={() => setSelectedPromo(p)}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        whileHover={{ y: -4 }}
+                        className={`group relative overflow-hidden rounded-2xl bg-white border border-gray-200/80 hover:border-[#c8102e]/40 shadow-[0_4px_20px_-8px_rgba(12,38,81,0.15)] hover:shadow-[0_20px_40px_-12px_rgba(200,16,46,0.25)] transition-all duration-300 flex flex-col text-left cursor-pointer ${isFeatured ? "sm:col-span-2 sm:flex-row" : ""}`}
+                      >
+                        <div
+                          className={`relative overflow-hidden bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] ${isFeatured ? "sm:w-[44%] aspect-[16/10] sm:aspect-auto" : "aspect-[16/10]"}`}
+                        >
+                          {p.image_url ? (
+                            <img
+                              src={p.image_url}
+                              alt={p.title}
+                              className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                            />
+                          ) : (
+                            <>
+                              <div
+                                className="absolute inset-0 opacity-25"
+                                style={{
+                                  backgroundImage:
+                                    "radial-gradient(circle at 30% 30%, white 1px, transparent 1px)",
+                                  backgroundSize: "20px 20px",
+                                }}
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <img
+                                  src={illustGift}
+                                  alt=""
+                                  className="h-28 w-28 object-contain anim-float drop-shadow-2xl"
+                                  loading="lazy"
+                                  width={112}
+                                  height={112}
+                                />
+                              </div>
+                              {/* brilho diagonal */}
+                              <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-white/0 via-white/10 to-white/0 rotate-12 transition-transform duration-1000 group-hover:translate-x-1/4" />
+                            </>
+                          )}
+                          <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c8102e] shadow-md">
+                            <span className="relative flex h-1.5 w-1.5">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c8102e] opacity-75" />
+                              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#c8102e]" />
+                            </span>
+                            {isFeatured ? "Destaque" : `Promo ${i + 1}`}
+                          </div>
+                        </div>
+                        <div className={`p-5 flex-1 flex flex-col ${isFeatured ? "sm:p-6 sm:justify-center" : ""}`}>
+                          <h3 className={`font-black text-[#0c2651] leading-tight group-hover:text-[#c8102e] transition line-clamp-2 ${isFeatured ? "text-xl md:text-2xl" : "text-base"}`}>
+                            {p.title}
+                          </h3>
+                          {p.description && (
+                            <p className={`mt-2 text-sm text-muted-foreground leading-relaxed flex-1 ${isFeatured ? "line-clamp-3" : "line-clamp-2"}`}>
+                              {p.description}
+                            </p>
+                          )}
+                          <div className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-[#c8102e] group-hover:gap-2.5 transition-all">
+                            Quero participar
+                            <span>→</span>
+                          </div>
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6 flex justify-end">
+                  <Link
+                    to="/promocoes"
+                    className="group inline-flex items-center gap-1.5 rounded-full border border-[#c8102e]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] shadow-sm transition hover:bg-[#c8102e] hover:text-white hover:shadow-md"
+                  >
+                    Ver todas as promoções
+                    <span className="transition group-hover:translate-x-0.5">→</span>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>
