@@ -340,17 +340,17 @@ function IndexPage() {
             }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-12 lg:pt-16 lg:pb-20">
+          <div className="relative mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-8 lg:pt-16 lg:pb-20">
             {/* Mobile/tablet: bloco da Patrícia (sempre visível) */}
-            <div className="relative mb-6 overflow-hidden rounded-[28px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
+            <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
               <img
                 src={mascoteTop}
                 alt="Patrícia nas promoções da TOP100 FM"
-                className="h-[280px] w-full object-cover object-center sm:h-[340px]"
+                className="h-[200px] w-full object-cover object-center sm:h-[300px]"
               />
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/10 to-transparent" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
-              <div className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#ffd84d] backdrop-blur-md">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
+              <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-[#ffd84d] backdrop-blur-md">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ffd84d]" />
