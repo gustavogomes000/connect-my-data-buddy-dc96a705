@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { setCookie, deleteCookie, getCookie, useSession } from "@tanstack/react-start/server";
+import { setCookie, deleteCookie, getCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { adminClientTokenMiddleware, getAdminSecret, getAdminSessionConfig } from "@/lib/admin-serverfn";
 import { createAdminToken, verifyAdminToken } from "@/lib/admin-token";
@@ -86,14 +86,11 @@ export const adminLogout = createServerFn({ method: "POST" }).handler(async () =
 export const checkAdminSession = createServerFn({ method: "GET" })
   .middleware([adminClientTokenMiddleware])
   .handler(async () => {
-  const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
-  const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
-  const secret = getAdminSecret();
-  const token = typeof window === "undefined" ? null : null;
+    const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
+    const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
+    const secret = getAdminSecret();
+    const headerToken = getRequestHeader("x-admin-token");
+    const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
 
-  if (session.data.authenticated === true || cookie === "1") {
-    return { authenticated: true };
-  }
-
-  return { authenticated: false, tokenChecked: !!secret && !!token };
-});
+    return { authenticated: session.data.authenticated === true || cookie === "1" || hasValidHeader };
+  });
