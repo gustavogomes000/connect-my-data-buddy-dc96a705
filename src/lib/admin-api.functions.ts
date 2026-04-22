@@ -8,8 +8,10 @@ let _adminClient: SupabaseClient | null = null;
 type ServerEnvKey =
   | "SUPABASE_URL"
   | "SUPABASE_SERVICE_ROLE_KEY"
+  | "SUPABASE_PUBLISHABLE_KEY"
   | "MY_SUPABASE_URL"
-  | "MY_SUPABASE_SERVICE_ROLE_KEY";
+  | "MY_SUPABASE_SERVICE_ROLE_KEY"
+  | "MY_SUPABASE_PUBLISHABLE_KEY";
 
 function getServerEnv(key: ServerEnvKey): string | undefined {
   if (typeof process !== "undefined" && process.env) {
@@ -19,26 +21,15 @@ function getServerEnv(key: ServerEnvKey): string | undefined {
   return undefined;
 }
 
-async function getServerEnvWithCF(key: ServerEnvKey): Promise<string | undefined> {
-  try {
-    const moduleName = "cloudflare:workers";
-    const cfModule = await import(/* @vite-ignore */ moduleName);
-    const val = (cfModule as any).env?.[key];
-    if (typeof val === "string" && val.length > 0) return val;
-  } catch {
-    // Not running in Workers
-  }
-
-  return getServerEnv(key);
-}
-
 async function getAdminSupabase(): Promise<SupabaseClient> {
   if (_adminClient) return _adminClient;
 
-  const url = (await getServerEnvWithCF("MY_SUPABASE_URL")) || (await getServerEnvWithCF("SUPABASE_URL"));
+  const url = getServerEnv("MY_SUPABASE_URL") || getServerEnv("SUPABASE_URL");
   const key =
-    (await getServerEnvWithCF("MY_SUPABASE_SERVICE_ROLE_KEY")) ||
-    (await getServerEnvWithCF("SUPABASE_SERVICE_ROLE_KEY"));
+    getServerEnv("MY_SUPABASE_SERVICE_ROLE_KEY") ||
+    getServerEnv("SUPABASE_SERVICE_ROLE_KEY") ||
+    getServerEnv("MY_SUPABASE_PUBLISHABLE_KEY") ||
+    getServerEnv("SUPABASE_PUBLISHABLE_KEY");
 
   if (!url || !key) {
     throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
