@@ -59,7 +59,7 @@ function AdminLoginPage() {
           }
         } catch {}
 
-        window.location.replace("/admin");
+        navigate({ to: "/admin", replace: true });
         return;
       } else {
         setError(result.error || "Não foi possível entrar.");
