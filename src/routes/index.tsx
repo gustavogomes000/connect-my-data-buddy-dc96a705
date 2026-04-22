@@ -2,6 +2,7 @@ import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PromotionPopup } from "@/components/PromotionPopup";
+import { PromotionDetailsModal } from "@/components/PromotionDetailsModal";
 import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -217,6 +218,7 @@ function IndexPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [podcasts, setPodcasts] = useState<PodcastItem[]>([]);
   const [playingPodcast, setPlayingPodcast] = useState<string | null>(null);
+  const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
