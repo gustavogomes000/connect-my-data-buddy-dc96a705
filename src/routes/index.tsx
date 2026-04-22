@@ -380,17 +380,17 @@ function IndexPage() {
                   Concorra agora
                 </motion.span>
 
-                <h2 className="mt-3 text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
+                <h2 className="mt-3 text-lg sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
                   Participe e{" "}
                   <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
                     concorra a prêmios incríveis
                   </span>
                 </h2>
-                <p className="mt-1.5 text-xs sm:text-sm text-white/80">
-                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio na TOP100 FM 🎁
+                <p className="mt-1.5 text-[11px] sm:text-sm text-white/80">
+                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio 🎁
                 </p>
 
-                <div className="mt-5 flex flex-col gap-3">
+                <div className="mt-4 flex flex-col gap-2.5">
                 {promos.slice(0, 3).map((p, i) => (
                   <motion.button
                     key={p.id}
