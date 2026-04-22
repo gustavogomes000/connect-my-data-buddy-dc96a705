@@ -1,18 +1,54 @@
-import { type SupabaseClient } from "@supabase/supabase-js";
-import { createServerOnlyFn } from "@tanstack/react-start";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
 
 // Cliente Supabase admin (service role). Criado sob demanda DENTRO dos handlers
 // dos server functions, então só roda no servidor — nunca vai para o bundle do cliente.
 let _adminClient: SupabaseClient | null = null;
 
-const getAdminSupabase = createServerOnlyFn(async (): Promise<SupabaseClient> => {
+type ServerEnvKey =
+  | "SUPABASE_URL"
+  | "SUPABASE_SERVICE_ROLE_KEY"
+  | "MY_SUPABASE_URL"
+  | "MY_SUPABASE_SERVICE_ROLE_KEY";
+
+function getServerEnv(key: ServerEnvKey): string | undefined {
+  if (typeof process !== "undefined" && process.env) {
+    const val = process.env[key];
+    if (typeof val === "string" && val.length > 0) return val;
+  }
+  return undefined;
+}
+
+async function getServerEnvWithCF(key: ServerEnvKey): Promise<string | undefined> {
+  try {
+    const moduleName = "cloudflare:workers";
+    const cfModule = await import(/* @vite-ignore */ moduleName);
+    const val = (cfModule as any).env?.[key];
+    if (typeof val === "string" && val.length > 0) return val;
+  } catch {
+    // Not running in Workers
+  }
+
+  return getServerEnv(key);
+}
+
+async function getAdminSupabase(): Promise<SupabaseClient> {
   if (_adminClient) return _adminClient;
 
-  const { getSupabaseAdmin } = await import("@/integrations/supabase/client.server");
-  _adminClient = await getSupabaseAdmin();
+  const url = (await getServerEnvWithCF("MY_SUPABASE_URL")) || (await getServerEnvWithCF("SUPABASE_URL"));
+  const key =
+    (await getServerEnvWithCF("MY_SUPABASE_SERVICE_ROLE_KEY")) ||
+    (await getServerEnvWithCF("SUPABASE_SERVICE_ROLE_KEY"));
+
+  if (!url || !key) {
+    throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
+  }
+
+  _adminClient = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
   return _adminClient;
-});
+}
 
 export const getPromotions = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
