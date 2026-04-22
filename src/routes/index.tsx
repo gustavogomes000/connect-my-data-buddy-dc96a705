@@ -340,17 +340,17 @@ function IndexPage() {
             }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-12 lg:pt-16 lg:pb-20">
+          <div className="relative mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-8 lg:pt-16 lg:pb-20">
             {/* Mobile/tablet: bloco da Patrícia (sempre visível) */}
-            <div className="relative mb-6 overflow-hidden rounded-[28px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
+            <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
               <img
                 src={mascoteTop}
                 alt="Patrícia nas promoções da TOP100 FM"
-                className="h-[280px] w-full object-cover object-center sm:h-[340px]"
+                className="h-[200px] w-full object-cover object-center sm:h-[300px]"
               />
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/10 to-transparent" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
-              <div className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#ffd84d] backdrop-blur-md">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
+              <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-[#ffd84d] backdrop-blur-md">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ffd84d]" />
@@ -380,37 +380,35 @@ function IndexPage() {
                   Concorra agora
                 </motion.span>
 
-                <h2 className="mt-3 text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
+                <h2 className="mt-3 text-lg sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
                   Participe e{" "}
                   <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
                     concorra a prêmios incríveis
                   </span>
                 </h2>
-                <p className="mt-1.5 text-xs sm:text-sm text-white/80">
-                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio na TOP100 FM 🎁
+                <p className="mt-1.5 text-[11px] sm:text-sm text-white/80">
+                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio 🎁
                 </p>
 
-                <div className="mt-5 flex flex-col gap-3">
+                <div className="mt-4 flex flex-col gap-2.5">
                 {promos.slice(0, 3).map((p, i) => (
                   <motion.button
                     key={p.id}
                     type="button"
                     onClick={() => setSelectedPromo(p)}
                     whileHover={{ y: -4, scale: 1.015 }}
-                    className="group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
+                    className="group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-2.5 sm:p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
                   >
-                    {/* Imagem do prêmio — maior, sem anéis girando */}
-                    <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0">
-                      {/* halo radial suave */}
+                    {/* Imagem do prêmio */}
+                    <div className="relative h-20 w-20 sm:h-32 sm:w-32 shrink-0">
                       <div
                         aria-hidden
                         className="absolute -inset-1 rounded-2xl opacity-60 blur-md transition group-hover:opacity-90"
                         style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.3) 50%, transparent 75%)" }}
                       />
-                      {/* notas musicais flutuando */}
                       <motion.span
                         aria-hidden
-                        className="absolute -top-1 -right-1 z-10 text-lg text-[#ffd84d] drop-shadow-[0_0_6px_rgba(255,216,77,0.9)]"
+                        className="absolute -top-1 -right-1 z-10 text-base sm:text-lg text-[#ffd84d] drop-shadow-[0_0_6px_rgba(255,216,77,0.9)]"
                         animate={{ y: [0, -6, 0], rotate: [-10, 10, -10] }}
                         transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
                       >
@@ -418,19 +416,18 @@ function IndexPage() {
                       </motion.span>
                       <motion.span
                         aria-hidden
-                        className="absolute -bottom-1 -left-1 z-10 text-base text-[#ff9a3c] drop-shadow-[0_0_6px_rgba(255,154,60,0.9)]"
+                        className="absolute -bottom-1 -left-1 z-10 text-sm sm:text-base text-[#ff9a3c] drop-shadow-[0_0_6px_rgba(255,154,60,0.9)]"
                         animate={{ y: [0, -5, 0], rotate: [12, -12, 12] }}
                         transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 + i * 0.2 }}
                       >
                         ♫
                       </motion.span>
-                      {/* núcleo com a imagem da promoção */}
                       <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <img src={illustGift} alt="" className="h-16 w-16 object-contain drop-shadow-lg" loading="lazy" width={64} height={64} />
+                            <img src={illustGift} alt="" className="h-12 w-12 sm:h-16 sm:w-16 object-contain drop-shadow-lg" loading="lazy" width={64} height={64} />
                           </div>
                         )}
                       </div>
@@ -440,10 +437,10 @@ function IndexPage() {
                       <span className="inline-flex items-center gap-1 rounded-full bg-[#ffd84d]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#ffd84d]">
                         Promo {i + 1}
                       </span>
-                      <h3 className="mt-1.5 text-base font-black leading-tight text-white line-clamp-2">
+                      <h3 className="mt-1 text-sm sm:text-base font-black leading-tight text-white line-clamp-2">
                         {p.title}
                       </h3>
-                      <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-[#ff9a3c] transition-all group-hover:gap-2">
+                      <span className="mt-1 inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#ff9a3c] transition-all group-hover:gap-2">
                         Participar <span>→</span>
                       </span>
                     </div>
@@ -493,7 +490,7 @@ function IndexPage() {
         </section>
 
         {/* HERO + NOTÍCIAS DESTAQUE */}
-        <section className="mx-auto max-w-7xl px-4 pt-8 pb-12">
+        <section className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 sm:pt-8 pb-10 sm:pb-12">
           <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
@@ -713,7 +710,7 @@ function IndexPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
                 {sponsors.map((s) => {
                   const Wrapper: any = s.link ? "a" : "div";
                   const wrapperProps = s.link
@@ -727,16 +724,16 @@ function IndexPage() {
                         s.link
                           ? "hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1"
                           : ""
-                      } transition-all duration-300 flex flex-col items-center justify-center text-center p-5 gap-3 min-h-[160px]`}
+                      } transition-all duration-300 flex flex-col items-center justify-center text-center p-3 sm:p-5 gap-2 sm:gap-3 min-h-[120px] sm:min-h-[160px]`}
                     >
-                      <div className="flex items-center justify-center h-16 w-full">
+                      <div className="flex items-center justify-center h-12 sm:h-16 w-full">
                         <img
                           src={s.logo_url}
                           alt={s.name}
-                          className="max-h-16 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                          className="max-h-12 sm:max-h-16 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
-                      <div className="text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
+                      <div className="text-[11px] sm:text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
                         {s.name}
                       </div>
                     </Wrapper>

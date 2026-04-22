@@ -23,7 +23,8 @@ function getServerEnv(key: ServerEnvKey): string | undefined {
 
 async function getCfEnv(key: ServerEnvKey): Promise<string | undefined> {
   try {
-    const mod: any = await import(/* @vite-ignore */ "cloudflare:workers");
+    const modName = "cloudflare:workers";
+    const mod: any = await import(/* @vite-ignore */ /* @rollup-ignore */ modName);
     const val = mod?.env?.[key];
     if (typeof val === "string" && val.length > 0) return val;
   } catch {
