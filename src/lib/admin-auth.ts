@@ -71,6 +71,7 @@ export const adminLogin = createServerFn({ method: "POST" })
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
   deleteCookie(ADMIN_COOKIE);
+  deleteCookie(ADMIN_PRESENCE_COOKIE);
   return { success: true };
 });
 
