@@ -1,4 +1,3 @@
-import { getCookie, getRequestHeader } from "@tanstack/react-start/server";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
 import { runManualNewsIngest } from "./news-auto";
