@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { setCookie, deleteCookie, getCookie, useSession } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { getAdminSessionConfig } from "@/lib/admin-serverfn";
+import { createAdminToken } from "@/lib/admin-token";
 
 const ADMIN_COOKIE = "admin_session";
 const ADMIN_PRESENCE_COOKIE = "admin_present";
@@ -52,6 +53,14 @@ export const adminLogin = createServerFn({ method: "POST" })
 
     const session = await useSession<{ authenticated: boolean }>(getAdminSessionConfig());
     await session.update({ authenticated: true });
+    const secret = getAdminSessionConfig().password;
+    const token = await createAdminToken(
+      {
+        username: data.username,
+        expiresAt: Date.now() + SESSION_DURATION * 1000,
+      },
+      secret,
+    );
 
     // Cookie "marcador" legível pelo cliente para o beforeLoad detectar sessão
     // sem precisar bater no servidor. O cookie real de auth segue httpOnly.
@@ -63,7 +72,7 @@ export const adminLogin = createServerFn({ method: "POST" })
       path: "/",
     });
 
-    return { success: true, token: SESSION_TOKEN_VALUE };
+    return { success: true, token };
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
