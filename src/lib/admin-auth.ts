@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setCookie, deleteCookie, getCookie, useSession } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
-import { getAdminSessionConfig } from "@/lib/admin-serverfn";
-import { createAdminToken } from "@/lib/admin-token";
+import { adminClientTokenMiddleware, getAdminSecret, getAdminSessionConfig } from "@/lib/admin-serverfn";
+import { createAdminToken, verifyAdminToken } from "@/lib/admin-token";
 
 const ADMIN_COOKIE = "admin_session";
 const ADMIN_PRESENCE_COOKIE = "admin_present";
@@ -83,8 +83,17 @@ export const adminLogout = createServerFn({ method: "POST" }).handler(async () =
   return { success: true };
 });
 
-export const checkAdminSession = createServerFn({ method: "GET" }).handler(async () => {
+export const checkAdminSession = createServerFn({ method: "GET" })
+  .middleware([adminClientTokenMiddleware])
+  .handler(async () => {
   const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
   const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
-  return { authenticated: session.data.authenticated === true || cookie === "1" };
+  const secret = getAdminSecret();
+  const token = typeof window === "undefined" ? null : null;
+
+  if (session.data.authenticated === true || cookie === "1") {
+    return { authenticated: true };
+  }
+
+  return { authenticated: false, tokenChecked: !!secret && !!token };
 });
