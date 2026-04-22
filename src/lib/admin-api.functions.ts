@@ -1,6 +1,5 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
-import { getSupabaseAdmin } from "@/integrations/supabase/client.server";
 import { runManualNewsIngest } from "./news-auto";
 
 let adminClient: SupabaseClient | null = null;
@@ -8,7 +7,17 @@ let adminClient: SupabaseClient | null = null;
 async function getAdminSupabase(): Promise<SupabaseClient> {
   if (adminClient) return adminClient;
 
-  adminClient = await getSupabaseAdmin();
+  const supabaseUrl = process.env.MY_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseKey = process.env.MY_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Configuração do servidor incompleta");
+  }
+
+  adminClient = createClient(supabaseUrl, supabaseKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
   return adminClient;
 }
 
