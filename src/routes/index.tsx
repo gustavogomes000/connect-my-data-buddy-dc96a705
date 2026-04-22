@@ -299,6 +299,16 @@ function IndexPage() {
         <section className="relative overflow-hidden bg-gradient-to-br from-[#fff8f0] via-white to-[#fff0f3] py-14 border-b border-[#c8102e]/10">
           <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#c8102e]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#0c2651]/10 blur-3xl" />
+          {/* Mascote decorativa — lateral esquerda */}
+          <img
+            src={heroGirl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            width={420}
+            height={420}
+            className="hidden lg:block pointer-events-none absolute -left-16 -bottom-8 h-[26rem] w-auto object-contain anim-float-slow drop-shadow-2xl opacity-95 z-0"
+          />
 
           <div className="relative mx-auto max-w-7xl px-4">
             <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
