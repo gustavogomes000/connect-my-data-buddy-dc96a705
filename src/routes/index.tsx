@@ -313,15 +313,16 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia gigante flutuando no background */}
-          <motion.img
+          {/* Patrícia full-bleed estática como fundo */}
+          <img
             src={mascoteTop}
             alt=""
             aria-hidden
-            className="pointer-events-none absolute -right-10 top-1/2 z-0 hidden -translate-y-1/2 select-none rounded-[2rem] opacity-95 drop-shadow-[0_40px_80px_rgba(0,0,0,0.6)] lg:block"
-            style={{ width: "min(50vw, 660px)", maskImage: "radial-gradient(ellipse at center, black 70%, transparent 98%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 70%, transparent 98%)" }}
-            animate={{ y: ["-52%", "-48%", "-52%"], rotate: [-1.2, 1.2, -1.2] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+            className="pointer-events-none absolute inset-0 z-0 hidden h-full w-full select-none object-cover object-right opacity-90 lg:block"
+            style={{
+              maskImage: "linear-gradient(to right, transparent 0%, transparent 28%, black 58%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, transparent 28%, black 58%, black 100%)",
+            }}
           />
 
           <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
