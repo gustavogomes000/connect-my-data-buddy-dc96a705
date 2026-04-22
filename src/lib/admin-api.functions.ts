@@ -355,7 +355,7 @@ export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
   if (error) throw new Error(error.message);
 
   const settings: Record<string, any> = {};
-  data?.forEach((row) => {
+  data?.forEach((row: any) => {
     try {
       settings[row.setting_key] = JSON.parse(row.setting_value);
     } catch {
