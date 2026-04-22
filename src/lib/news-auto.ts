@@ -1,25 +1,4 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-
-const SUPABASE_URL =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_URL || process.env?.SUPABASE_URL
-    : undefined) || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.MY_SUPABASE_PUBLISHABLE_KEY ||
-      process.env?.SUPABASE_PUBLISHABLE_KEY
-    : undefined) ||
-  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-const adminClient: SupabaseClient | null =
-  SUPABASE_URL && SUPABASE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-    : null;
+import { getSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const FEEDS = [
   { name: "Câmara dos Deputados", url: "https://www.camara.leg.br/noticias/rss" },
@@ -110,10 +89,8 @@ async function fetchAndParse(): Promise<ParsedItem[]> {
   return all;
 }
 
-async function isAutoNewsEnabled(): Promise<boolean> {
-  if (!adminClient) return false;
-
-  const { data, error } = await (adminClient as any)
+async function isAutoNewsEnabled(adminClient: any): Promise<boolean> {
+  const { data, error } = await adminClient
     .from("site_settings")
     .select("*")
     .or("setting_key.eq.auto_news_enabled,key.eq.auto_news_enabled")
@@ -121,12 +98,40 @@ async function isAutoNewsEnabled(): Promise<boolean> {
 
   if (error || !Array.isArray(data) || data.length === 0) return false;
 
-  const row = data[0] as {
-    setting_value?: unknown;
-    value?: unknown;
-  };
+  const row = data[0] as { setting_value?: unknown; value?: unknown };
   const raw = row.setting_value ?? row.value;
   return raw === true || raw === "true" || raw === '"true"';
+}
+
+async function ingest(adminClient: any) {
+  const items = await fetchAndParse();
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const it of items) {
+    const { data: existing } = await adminClient
+      .from("news")
+      .select("id")
+      .eq("source_url", it.link)
+      .maybeSingle();
+    if (existing) {
+      skipped++;
+      continue;
+    }
+    const { error } = await adminClient.from("news").insert({
+      title: it.title.slice(0, 180),
+      summary: it.summary,
+      content: `${it.summary}\n\nFonte: ${it.source}\n${it.link}`,
+      image_url: it.image || null,
+      source_url: it.link,
+      source_name: it.source,
+      auto_generated: true,
+      is_published: true,
+    });
+    if (!error) inserted++;
+    else console.error("[news-auto] insert error", error);
+  }
+  return { inserted, skipped, total: items.length };
 }
 
 export async function runAutoNewsIngest(): Promise<{
@@ -134,40 +139,10 @@ export async function runAutoNewsIngest(): Promise<{
   skipped: number;
   total: number;
 }> {
-  if (!adminClient) throw new Error("Configuração do servidor incompleta");
-
-  const enabled = await isAutoNewsEnabled();
-  if (!enabled) {
-    return { inserted: 0, skipped: 0, total: 0 };
-  }
-
-  const items = await fetchAndParse();
-  let inserted = 0;
-  let skipped = 0;
-
-  for (const it of items) {
-    const { data: existing } = await (adminClient as any)
-      .from("news")
-      .select("id")
-      .eq("source_url", it.link)
-      .maybeSingle();
-    if (existing) {
-      skipped++;
-      continue;
-    }
-    const { error } = await (adminClient as any).from("news").insert({
-      title: it.title.slice(0, 180),
-      summary: it.summary,
-      content: `${it.summary}\n\nFonte: ${it.source}\n${it.link}`,
-      image_url: it.image || null,
-      source_url: it.link,
-      source_name: it.source,
-      auto_generated: true,
-      is_published: true,
-    });
-    if (!error) inserted++;
-  }
-  return { inserted, skipped, total: items.length };
+  const adminClient = await getSupabaseAdmin();
+  const enabled = await isAutoNewsEnabled(adminClient);
+  if (!enabled) return { inserted: 0, skipped: 0, total: 0 };
+  return ingest(adminClient);
 }
 
 export async function runManualNewsIngest(): Promise<{
@@ -175,31 +150,7 @@ export async function runManualNewsIngest(): Promise<{
   skipped: number;
   total: number;
 }> {
-  if (!adminClient) throw new Error("Configuração do servidor incompleta");
-  const items = await fetchAndParse();
-  let inserted = 0;
-  let skipped = 0;
-  for (const it of items) {
-    const { data: existing } = await (adminClient as any)
-      .from("news")
-      .select("id")
-      .eq("source_url", it.link)
-      .maybeSingle();
-    if (existing) {
-      skipped++;
-      continue;
-    }
-    const { error } = await (adminClient as any).from("news").insert({
-      title: it.title.slice(0, 180),
-      summary: it.summary,
-      content: `${it.summary}\n\nFonte: ${it.source}\n${it.link}`,
-      image_url: it.image || null,
-      source_url: it.link,
-      source_name: it.source,
-      auto_generated: true,
-      is_published: true,
-    });
-    if (!error) inserted++;
-  }
-  return { inserted, skipped, total: items.length };
+  const adminClient = await getSupabaseAdmin();
+  return ingest(adminClient);
 }
+

@@ -336,7 +336,14 @@ export const getUploadUrl = createAdminServerFn("POST")
   });
 
 export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async () => {
-  return runManualNewsIngest();
+  try {
+    const result = await runManualNewsIngest();
+    return result ?? { inserted: 0, skipped: 0, total: 0 };
+  } catch (e) {
+    console.error("[triggerAutoNewsManual] erro:", e);
+    const message = e instanceof Error ? e.message : "Falha ao buscar notícias";
+    throw new Error(message);
+  }
 });
 
 export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
