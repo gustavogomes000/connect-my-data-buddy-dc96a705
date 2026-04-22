@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PromotionPopup } from "@/components/PromotionPopup";
