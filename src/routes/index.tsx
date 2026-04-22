@@ -226,6 +226,7 @@ function IndexPage() {
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
+  const nowHHMM = new Date().toTimeString().slice(0, 5);
 
   useEffect(() => {
     Promise.all([
