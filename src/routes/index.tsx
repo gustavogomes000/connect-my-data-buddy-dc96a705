@@ -6,7 +6,7 @@ import { PromotionDetailsModal } from "@/components/PromotionDetailsModal";
 import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import heroGirl from "@/assets/hero-girl-music.png";
+import heroGirl from "@/assets/mascote-top.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
