@@ -355,13 +355,13 @@ function IndexPage() {
                   Promoções no ar
                 </motion.span>
 
-                <h2 className="mt-3 text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
+                <h2 className="mt-3 text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
                   Participe agora e leve{" "}
                   <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
                     brindes incríveis
                   </span>
                 </h2>
-                <p className="mt-1.5 text-sm text-white/70">
+                <p className="mt-1.5 text-xs sm:text-sm text-white/70">
                   Escolha uma promoção e garanta seu prêmio com a TOP100 FM 🎁
                 </p>
 
