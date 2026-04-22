@@ -469,22 +469,6 @@ function IndexPage() {
                   </motion.button>
                 ))}
               </motion.div>
-
-              {/* Coluna 3 — mascote */}
-              <motion.div
-                className="relative hidden lg:flex lg:col-span-3 items-center justify-center"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.img
-                  src={mascoteTop}
-                  alt="Patrícia nas promoções da TOP100 FM"
-                  className="relative z-10 h-auto w-full max-w-[300px] rounded-3xl object-contain drop-shadow-[0_28px_50px_rgba(0,0,0,0.55)]"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </motion.div>
             </div>
           </div>
 
