@@ -328,13 +328,19 @@ function IndexPage() {
           />
 
           <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-10 lg:pt-16 lg:pb-20">
-            {/* Mobile/tablet: Patrícia inline em cima */}
-            <img
-              src={mascoteTop}
-              alt=""
-              aria-hidden
-              className="mx-auto mb-5 block max-h-[220px] w-auto select-none object-contain sm:max-h-[260px] lg:hidden"
-            />
+            {/* Mobile/tablet: Patrícia inline em cima (otimizada por tela) */}
+            <picture>
+              <source media="(min-width: 640px) and (max-width: 1023px)" srcSet={mascoteTablet} />
+              <source media="(max-width: 639px)" srcSet={mascoteMobile} />
+              <img
+                src={mascoteMobile}
+                alt=""
+                aria-hidden
+                width={576}
+                height={1024}
+                className="mx-auto mb-5 block max-h-[240px] w-auto select-none object-contain sm:max-h-[300px] lg:hidden"
+              />
+            </picture>
 
             <div className="grid items-start gap-6 lg:grid-cols-12">
               {/* Coluna única — promoções à esquerda com CTA */}
