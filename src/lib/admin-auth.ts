@@ -7,6 +7,7 @@ const ADMIN_COOKIE = "admin_session";
 const ADMIN_PRESENCE_COOKIE = "admin_present";
 const SESSION_DURATION = 60 * 60 * 24; // 24h
 const SESSION_TOKEN_VALUE = "authenticated";
+const IS_SECURE_COOKIE = process.env.NODE_ENV === "production";
 export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
 export const ADMIN_PRESENCE_KEY = ADMIN_PRESENCE_COOKIE;
 export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
@@ -56,7 +57,7 @@ export const adminLogin = createServerFn({ method: "POST" })
     // sem precisar bater no servidor. O cookie real de auth segue httpOnly.
     setCookie(ADMIN_PRESENCE_COOKIE, "1", {
       httpOnly: false,
-      secure: true,
+      secure: IS_SECURE_COOKIE,
       sameSite: "lax",
       maxAge: SESSION_DURATION,
       path: "/",
