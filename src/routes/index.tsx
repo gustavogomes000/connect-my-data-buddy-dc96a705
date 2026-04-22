@@ -310,7 +310,7 @@ function IndexPage() {
             className="hidden lg:block pointer-events-none absolute -left-16 -bottom-8 h-[26rem] w-auto object-contain anim-float-slow drop-shadow-2xl opacity-95 z-0"
           />
 
-          <div className="relative mx-auto max-w-7xl px-4">
+          <div className="relative z-10 mx-auto max-w-7xl px-4 lg:pl-72">
             <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
                 <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#ff5470]" />
