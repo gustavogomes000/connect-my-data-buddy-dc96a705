@@ -23,14 +23,6 @@ const adminClient: SupabaseClient | null =
       })
     : null;
 
-function requireAdmin() {
-  const cookie = getCookie("admin_session");
-  const header = getRequestHeader("x-admin-token");
-  if (cookie !== "authenticated" && header !== "authenticated") {
-    throw new Error("Não autorizado");
-  }
-}
-
 function getAdminSupabase(): SupabaseClient {
   if (!adminClient) throw new Error("Configuração do servidor incompleta");
   return adminClient;
