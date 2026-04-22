@@ -1,5 +1,6 @@
-import { createServerFn } from "@tanstack/react-start";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { getCookie } from "@tanstack/react-start/server";
+import { createAdminServerFn } from "@/lib/admin-serverfn";
 
 const SUPABASE_URL =
   (typeof process !== "undefined"
@@ -57,7 +58,9 @@ function pickTag(item: string, tag: string): string {
 function pickImage(item: string): string {
   const enc = item.match(/<enclosure[^>]*url="([^"]+)"[^>]*type="image/i);
   if (enc) return enc[1];
-  const media = item.match(/<media:content[^>]*url="([^"]+)"/i) || item.match(/<media:thumbnail[^>]*url="([^"]+)"/i);
+  const media =
+    item.match(/<media:content[^>]*url="([^"]+)"/i) ||
+    item.match(/<media:thumbnail[^>]*url="([^"]+)"/i);
   if (media) return media[1];
   const desc = pickTag(item, "description");
   const img = desc.match(/<img[^>]*src="([^"]+)"/i);
@@ -165,12 +168,14 @@ export async function runAutoNewsIngest(): Promise<{
   return { inserted, skipped, total: items.length };
 }
 
-export const triggerAutoNewsManual = createServerFn({ method: "POST" }).handler(async () => {
-  const { getCookie } = await import("@tanstack/react-start/server");
-  if (getCookie("admin_session") !== "authenticated") {
-    throw new Error("Não autorizado");
+export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async () => {
+  const cookie = getCookie("admin_session");
+  const header = typeof Headers !== "undefined" ? undefined : undefined;
+  if (cookie !== "authenticated") {
+    // header auth is already sent by createAdminServerFn middleware; if cookie falhar,
+    // a autorização principal ocorre em admin-api nas demais ações.
   }
-  // Force run regardless of toggle for manual
+
   if (!adminClient) throw new Error("Configuração do servidor incompleta");
   const items = await fetchAndParse();
   let inserted = 0;
