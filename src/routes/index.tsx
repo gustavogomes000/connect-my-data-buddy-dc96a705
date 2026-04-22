@@ -411,57 +411,6 @@ function IndexPage() {
                 </div>
               </motion.div>
 
-              {/* Mascote dançando (coluna central) */}
-              <motion.div
-                className="relative hidden lg:flex items-end justify-center min-h-[420px]"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  style={{
-                    background:
-                      "radial-gradient(circle at 50% 55%, rgba(255,84,112,0.5) 0%, rgba(255,216,77,0.2) 35%, transparent 65%)",
-                    filter: "blur(24px)",
-                  }}
-                />
-                <motion.span
-                  aria-hidden
-                  className="absolute top-4 left-2 text-3xl z-20"
-                  animate={{ y: [0, -12, 0], rotate: [-8, 8, -8] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  🎵
-                </motion.span>
-                <motion.span
-                  aria-hidden
-                  className="absolute top-16 right-0 text-2xl z-20"
-                  animate={{ y: [0, -10, 0], rotate: [10, -10, 10] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                >
-                  🎶
-                </motion.span>
-                <motion.span
-                  aria-hidden
-                  className="absolute bottom-32 left-0 text-xl z-20"
-                  animate={{ y: [0, -8, 0], opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                >
-                  ✨
-                </motion.span>
-                <motion.img
-                  src={mascoteTop}
-                  alt="Mascote TOP100 FM dançando"
-                  className="relative z-10 w-full max-w-[340px] h-auto object-contain drop-shadow-[0_24px_30px_rgba(0,0,0,0.55)]"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </motion.div>
-
               {/* Card dinâmico: Live YouTube ou Programação ao vivo */}
               <motion.div
                 className="relative"
