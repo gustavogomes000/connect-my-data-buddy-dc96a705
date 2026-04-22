@@ -720,6 +720,13 @@ function IndexPage() {
       </main>
 
       <SiteFooter />
+
+      {selectedPromo && (
+        <PromotionDetailsModal
+          promo={selectedPromo}
+          onClose={() => setSelectedPromo(null)}
+        />
+      )}
     </div>
   );
 }
