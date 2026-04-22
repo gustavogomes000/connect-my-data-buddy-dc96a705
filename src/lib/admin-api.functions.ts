@@ -1,5 +1,5 @@
 import { createAdminServerFn } from "@/lib/admin-serverfn";
-import { getAdminSupabase } from "@/lib/admin-supabase";
+import { getAdminSupabase } from "@/lib/admin-supabase.server";
 import { runManualNewsIngest } from "./news-auto";
 
 export const getPromotions = createAdminServerFn("GET").handler(async () => {
