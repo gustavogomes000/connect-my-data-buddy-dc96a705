@@ -411,49 +411,104 @@ function IndexPage() {
                 </div>
               </motion.div>
 
-              {/* Mascote */}
+              {/* Card dinâmico: Live YouTube ou Programação ao vivo */}
               <motion.div
-                className="relative flex items-end justify-center lg:justify-end"
+                className="relative"
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               >
-                {/* halo atrás da mascote */}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="h-72 w-72 lg:h-96 lg:w-96 rounded-full bg-gradient-to-tr from-[#c8102e]/40 via-[#ff5470]/30 to-[#ffd84d]/40 blur-2xl"
-                    animate={{ scale: [1, 1.08, 1] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </div>
-                {/* notas musicais flutuando */}
-                {["♪", "♫", "♬"].map((note, i) => (
-                  <motion.span
-                    key={i}
-                    className="absolute text-[#ffd84d] text-2xl lg:text-3xl font-black select-none"
-                    style={{
-                      top: `${15 + i * 22}%`,
-                      left: i % 2 === 0 ? "8%" : "auto",
-                      right: i % 2 === 1 ? "8%" : "auto",
-                    }}
-                    animate={{
-                      y: [0, -14, 0],
-                      opacity: [0.4, 1, 0.4],
-                      rotate: [0, 8, -8, 0],
-                    }}
-                    transition={{ duration: 3 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-                  >
-                    {note}
-                  </motion.span>
-                ))}
-                <motion.img
-                  src={mascoteTop}
-                  alt="Mascote TOP100 FM"
-                  loading="eager"
-                  className="relative z-10 h-80 lg:h-[28rem] w-auto object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.55)]"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                {/* halo de fundo */}
+                <motion.div
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-to-tr from-[#c8102e]/30 via-[#ff5470]/20 to-[#ffd84d]/30 blur-2xl"
+                  animate={{ opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 />
+
+                {liveActive && liveYoutubeId ? (
+                  <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur">
+                    <div className="flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-[#c8102e] to-[#a00d24]">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-2.5 w-2.5">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+                        </span>
+                        <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white">Ao vivo agora</span>
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/80">YouTube</span>
+                    </div>
+                    <div className="aspect-video w-full bg-black">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
+                        title={liveTitle || "Transmissão ao vivo"}
+                        allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
+                        allowFullScreen
+                        className="h-full w-full"
+                      />
+                    </div>
+                    {liveTitle && (
+                      <div className="px-4 py-3 bg-white/5">
+                        <p className="text-sm font-bold text-white line-clamp-1">{liveTitle}</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 lg:p-7 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur">
+                    <div className="flex items-center justify-between">
+                      <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-white/80 border border-white/10">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#ffd84d]" />
+                        Programação de hoje
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">{DAYS[today]}</span>
+                    </div>
+
+                    {currentProgram ? (
+                      <div className="mt-5">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffd84d]">No ar</p>
+                        <h3 className="mt-1 text-2xl lg:text-3xl font-black text-white leading-tight">
+                          {currentProgram.program_name}
+                        </h3>
+                        {currentProgram.presenter && (
+                          <p className="mt-1 text-sm text-white/70">com {currentProgram.presenter}</p>
+                        )}
+                        <p className="mt-2 text-xs text-white/50 font-mono tracking-wider">
+                          {fmtTime(currentProgram.start_time)} — {fmtTime(currentProgram.end_time)}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="mt-5">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffd84d]">Música 24/7</p>
+                        <h3 className="mt-1 text-2xl lg:text-3xl font-black text-white leading-tight">O melhor da TOP100 FM</h3>
+                        <p className="mt-1 text-sm text-white/70">Sem programa ao vivo agora — siga curtindo no rádio.</p>
+                      </div>
+                    )}
+
+                    {upcomingPrograms.length > 0 && (
+                      <div className="mt-6 border-t border-white/10 pt-4">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/40 mb-3">A seguir</p>
+                        <ul className="space-y-2.5">
+                          {upcomingPrograms.map((u) => (
+                            <li key={u.id} className="flex items-center justify-between gap-3 text-sm">
+                              <div className="min-w-0">
+                                <p className="font-bold text-white truncate">{u.program_name}</p>
+                                {u.presenter && <p className="text-xs text-white/50 truncate">{u.presenter}</p>}
+                              </div>
+                              <span className="shrink-0 text-xs font-mono text-[#ffd84d]/90">{fmtTime(u.start_time)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    <Link
+                      to="/programacao"
+                      className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-white/90 hover:text-[#ffd84d] transition"
+                    >
+                      Ver programação completa <span>→</span>
+                    </Link>
+                  </div>
+                )}
               </motion.div>
             </div>
           </div>
