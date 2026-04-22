@@ -1,16 +1,23 @@
 import { createMiddleware, createServerFn } from "@tanstack/react-start";
-import { useSession } from "@tanstack/react-start/server";
+import { getRequestHeader, useSession } from "@tanstack/react-start/server";
+import { verifyAdminToken } from "@/lib/admin-token";
 
 const ADMIN_COOKIE = "admin_session";
+const ADMIN_HEADER = "x-admin-token";
 const SESSION_DURATION = 60 * 60 * 24;
 
-export function getAdminSessionConfig() {
-  const isSecure = process.env.NODE_ENV === "production";
-  const password =
+export function getAdminSecret() {
+  return (
     process.env.MY_ADMIN_SESSION_SECRET ||
     process.env.ADMIN_SESSION_SECRET ||
     process.env.MY_SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY;
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+}
+
+export function getAdminSessionConfig() {
+  const isSecure = process.env.NODE_ENV === "production";
+  const password = getAdminSecret();
 
   if (!password) {
     throw new Error("Configuração da sessão admin incompleta");
@@ -29,10 +36,29 @@ export function getAdminSessionConfig() {
   };
 }
 
+export const adminClientTokenMiddleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
+  const token =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("admin_session") || localStorage.getItem("admin_session")
+      : null;
+
+  return next({
+    headers: token
+      ? {
+          [ADMIN_HEADER]: token,
+        }
+      : undefined,
+  });
+});
+
 const requireAdminMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
   const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
+  const secret = getAdminSecret();
+  const headerToken = getRequestHeader(ADMIN_HEADER);
 
-  if (session.data.authenticated !== true) {
+  const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
+
+  if (session.data.authenticated !== true && !hasValidHeader) {
     throw new Error("Não autorizado");
   }
 
@@ -40,5 +66,5 @@ const requireAdminMiddleware = createMiddleware({ type: "function" }).server(asy
 });
 
 export function createAdminServerFn(method: "GET" | "POST") {
-  return createServerFn({ method }).middleware([requireAdminMiddleware]);
+  return createServerFn({ method }).middleware([adminClientTokenMiddleware, requireAdminMiddleware]);
 }
