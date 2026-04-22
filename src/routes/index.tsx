@@ -377,17 +377,17 @@ function IndexPage() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffd84d]" />
                   </span>
-                  Promoções no ar
+                  Concorra agora
                 </motion.span>
 
                 <h2 className="mt-3 text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
-                  Participe agora e leve{" "}
+                  Participe e{" "}
                   <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
-                    brindes incríveis
+                    concorra a prêmios incríveis
                   </span>
                 </h2>
-                <p className="mt-1.5 text-xs sm:text-sm text-white/70">
-                  Escolha uma promoção e garanta seu prêmio com a TOP100 FM 🎁
+                <p className="mt-1.5 text-xs sm:text-sm text-white/80">
+                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio na TOP100 FM 🎁
                 </p>
 
                 <div className="mt-5 flex flex-col gap-3">
@@ -399,39 +399,18 @@ function IndexPage() {
                     whileHover={{ y: -4, scale: 1.015 }}
                     className="group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
                   >
-                    {/* Slot mágico estilo Doctor Strange */}
-                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0">
-                      {/* halo radial */}
+                    {/* Imagem do prêmio — maior, sem anéis girando */}
+                    <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0">
+                      {/* halo radial suave */}
                       <div
                         aria-hidden
-                        className="absolute inset-0 rounded-2xl opacity-70 blur-md transition group-hover:opacity-100"
-                        style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.35) 45%, transparent 75%)" }}
-                      />
-                      {/* anel externo girando */}
-                      <motion.div
-                        aria-hidden
-                        className="absolute inset-0 rounded-2xl border border-dashed border-[#ffd84d]/50"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-                      />
-                      {/* anel intermediário girando ao contrário */}
-                      <motion.div
-                        aria-hidden
-                        className="absolute inset-2 rounded-xl border border-[#ff9a3c]/50"
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
-                      />
-                      {/* terceiro anel pontilhado */}
-                      <motion.div
-                        aria-hidden
-                        className="absolute inset-[14px] rounded-lg border-2 border-dotted border-white/25"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+                        className="absolute -inset-1 rounded-2xl opacity-60 blur-md transition group-hover:opacity-90"
+                        style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.3) 50%, transparent 75%)" }}
                       />
                       {/* notas musicais flutuando */}
                       <motion.span
                         aria-hidden
-                        className="absolute -top-1 -right-1 text-base text-[#ffd84d] drop-shadow-[0_0_6px_rgba(255,216,77,0.9)]"
+                        className="absolute -top-1 -right-1 z-10 text-lg text-[#ffd84d] drop-shadow-[0_0_6px_rgba(255,216,77,0.9)]"
                         animate={{ y: [0, -6, 0], rotate: [-10, 10, -10] }}
                         transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
                       >
@@ -439,34 +418,22 @@ function IndexPage() {
                       </motion.span>
                       <motion.span
                         aria-hidden
-                        className="absolute -bottom-1 -left-1 text-sm text-[#ff9a3c] drop-shadow-[0_0_6px_rgba(255,154,60,0.9)]"
+                        className="absolute -bottom-1 -left-1 z-10 text-base text-[#ff9a3c] drop-shadow-[0_0_6px_rgba(255,154,60,0.9)]"
                         animate={{ y: [0, -5, 0], rotate: [12, -12, 12] }}
                         transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 + i * 0.2 }}
                       >
                         ♫
                       </motion.span>
-                      <motion.span
-                        aria-hidden
-                        className="absolute top-1/2 -right-2 -translate-y-1/2 text-xs text-white/70"
-                        animate={{ x: [0, 4, 0], opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                      >
-                        ✦
-                      </motion.span>
                       {/* núcleo com a imagem da promoção */}
-                      <motion.div
-                        className="absolute inset-[18px] overflow-hidden rounded-lg border-2 border-white/20 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]"
-                        animate={{ y: [0, -3, 0] }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.25 }}
-                      >
+                      <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <img src={illustGift} alt="" className="h-10 w-10 object-contain drop-shadow-lg" loading="lazy" width={40} height={40} />
+                            <img src={illustGift} alt="" className="h-16 w-16 object-contain drop-shadow-lg" loading="lazy" width={64} height={64} />
                           </div>
                         )}
-                      </motion.div>
+                      </div>
                     </div>
 
                     <div className="min-w-0 flex-1 pr-1">
