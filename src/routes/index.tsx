@@ -318,9 +318,8 @@ function IndexPage() {
             src={mascoteTop}
             alt=""
             aria-hidden
-            className="pointer-events-none absolute right-0 top-0 z-0 h-full w-full select-none object-cover opacity-30 sm:opacity-50 lg:w-1/2 lg:opacity-90"
+            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
             style={{
-              objectPosition: "right center",
               maskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
               WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
             }}
