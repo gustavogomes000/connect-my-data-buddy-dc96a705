@@ -21,8 +21,7 @@ export const Route = createFileRoute("/admin/")({
     const hasLocalSession =
       typeof document !== "undefined" &&
       (document.cookie.split("; ").some((c) => c.startsWith("admin_present=")) ||
-        (typeof localStorage !== "undefined" &&
-          localStorage.getItem("admin_session") === "authenticated"));
+        (typeof localStorage !== "undefined" && !!localStorage.getItem("admin_session")));
 
     if (!hasLocalSession) {
       throw redirect({ to: "/admin/login", replace: true });

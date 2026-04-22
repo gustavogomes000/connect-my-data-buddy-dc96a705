@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminLogin, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
+import { adminLogin, ADMIN_SESSION_KEY } from "@/lib/admin-auth";
 import topLogo from "@/assets/top100-logo.png";
 
 const REMEMBER_KEY = "admin_remember";
@@ -50,8 +50,10 @@ function AdminLoginPage() {
       const result = await adminLogin({ data: { username: u, password: p } });
       if (result.success) {
         try {
-          sessionStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
-          localStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
+          if (result.token) {
+            sessionStorage.setItem(ADMIN_SESSION_KEY, result.token);
+            localStorage.setItem(ADMIN_SESSION_KEY, result.token);
+          }
           if (remember) {
             localStorage.setItem(REMEMBER_KEY, JSON.stringify({ username: u, password: p }));
           } else {
