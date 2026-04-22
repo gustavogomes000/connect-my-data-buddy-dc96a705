@@ -224,9 +224,14 @@ function IndexPage() {
   const [podcasts, setPodcasts] = useState<PodcastItem[]>([]);
   const [playingPodcast, setPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
+  const [liveActive, setLiveActive] = useState(false);
+  const [liveYoutubeId, setLiveYoutubeId] = useState<string | null>(null);
+  const [liveTitle, setLiveTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
+  const currentProgram = prog.find((p) => p.start_time <= nowHHMM && p.end_time > nowHHMM) || prog[0];
+  const upcomingPrograms = prog.filter((p) => p.start_time > nowHHMM).slice(0, 3);
 
   useEffect(() => {
     Promise.all([
