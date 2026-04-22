@@ -422,7 +422,7 @@ function IndexPage() {
                           }}
                         />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-white/90 text-6xl drop-shadow-lg">🎉</span>
+                          <img src={illustGift} alt="" className="h-32 w-32 object-contain anim-float drop-shadow-xl" loading="lazy" width={128} height={128} />
                         </div>
                       </>
                     )}
