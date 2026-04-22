@@ -326,6 +326,13 @@ function IndexPage() {
           />
 
           <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-12 lg:pt-16 lg:pb-20">
+            <div className="mb-5 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] lg:hidden">
+              <img
+                src={mascoteTop}
+                alt="Patrícia nas promoções da TOP100 FM"
+                className="h-[240px] w-full object-cover object-center"
+              />
+            </div>
 
             <div className="grid items-start gap-6 lg:grid-cols-12">
               {/* Coluna única — promoções à esquerda com CTA */}
