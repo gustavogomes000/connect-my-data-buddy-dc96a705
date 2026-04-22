@@ -1,29 +1,18 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { type SupabaseClient } from "@supabase/supabase-js";
+import { createServerOnlyFn } from "@tanstack/react-start";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
-
 
 // Cliente Supabase admin (service role). Criado sob demanda DENTRO dos handlers
 // dos server functions, então só roda no servidor — nunca vai para o bundle do cliente.
 let _adminClient: SupabaseClient | null = null;
-async function getAdminSupabase(): Promise<SupabaseClient> {
+
+const getAdminSupabase = createServerOnlyFn(async (): Promise<SupabaseClient> => {
   if (_adminClient) return _adminClient;
 
-  const env = (typeof process !== "undefined" ? process.env : {}) as Record<string, string | undefined>;
-
-  const url = env.MY_SUPABASE_URL || env.SUPABASE_URL;
-  const key = env.MY_SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !key) {
-    throw new Error(
-      "Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY",
-    );
-  }
-
-  _adminClient = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  const { getSupabaseAdmin } = await import("@/integrations/supabase/client.server");
+  _adminClient = await getSupabaseAdmin();
   return _adminClient;
-}
+});
 
 export const getPromotions = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
