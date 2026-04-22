@@ -379,33 +379,27 @@ function IndexPage() {
                       {/* halo radial */}
                       <div
                         aria-hidden
-                        className="absolute inset-0 rounded-full opacity-70 blur-md transition group-hover:opacity-100"
+                        className="absolute inset-0 rounded-2xl opacity-70 blur-md transition group-hover:opacity-100"
                         style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.35) 45%, transparent 75%)" }}
                       />
                       {/* anel externo girando */}
                       <motion.div
                         aria-hidden
-                        className="absolute inset-0 rounded-full border border-dashed border-[#ffd84d]/50"
+                        className="absolute inset-0 rounded-2xl border border-dashed border-[#ffd84d]/50"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
                       />
-                      {/* anel interno girando ao contrário */}
+                      {/* anel intermediário girando ao contrário */}
                       <motion.div
                         aria-hidden
-                        className="absolute inset-2 rounded-full border border-[#ff9a3c]/40"
-                        style={{
-                          background:
-                            "conic-gradient(from 0deg, transparent 0deg, rgba(255,154,60,0.35) 60deg, transparent 120deg, rgba(255,216,77,0.35) 200deg, transparent 280deg)",
-                          maskImage: "radial-gradient(circle, transparent 55%, black 56%, black 100%)",
-                          WebkitMaskImage: "radial-gradient(circle, transparent 55%, black 56%, black 100%)",
-                        }}
+                        className="absolute inset-2 rounded-xl border border-[#ff9a3c]/50"
                         animate={{ rotate: -360 }}
                         transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
                       />
                       {/* terceiro anel pontilhado */}
                       <motion.div
                         aria-hidden
-                        className="absolute inset-[14px] rounded-full border-2 border-dotted border-white/25"
+                        className="absolute inset-[14px] rounded-lg border-2 border-dotted border-white/25"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
                       />
@@ -436,7 +430,7 @@ function IndexPage() {
                       </motion.span>
                       {/* núcleo com a imagem da promoção */}
                       <motion.div
-                        className="absolute inset-[18px] overflow-hidden rounded-full border-2 border-white/20 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]"
+                        className="absolute inset-[18px] overflow-hidden rounded-lg border-2 border-white/20 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]"
                         animate={{ y: [0, -3, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.25 }}
                       >
