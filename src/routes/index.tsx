@@ -316,337 +316,131 @@ function IndexPage() {
       <AudioActivationOverlay />
 
       <main className="bg-background">
-        {/* PÓDIO — Hero das Promoções (estilo Spotify/Apple Music) */}
+        {/* HERO DE PROMOÇÕES */}
         <section className="relative overflow-hidden bg-[#0a1f4a]">
-          {/* fundo: gradiente vivo + grid sutil + glows */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#1a3a8c_0%,#0a1f4a_45%,#06122d_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#1a3a8c_0%,#0a1f4a_48%,#06122d_100%)]" />
           <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "44px 44px" }} />
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute -top-32 -right-24 h-[28rem] w-[28rem] rounded-full bg-[#c8102e]/40 blur-[120px]"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.85, 0.6] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-40 -left-24 h-[32rem] w-[32rem] rounded-full bg-[#ffd84d]/20 blur-[140px]"
-            animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.7, 0.4] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 lg:pt-20 lg:pb-24">
-            <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-              {/* Texto */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.span
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                >
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffd84d]" />
-                  </span>
-                  Promoções no ar
-                </motion.span>
-
-                <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-tight text-white">
-                  Ouça, dance e{" "}
-                  <span className="relative inline-block">
-                    <span className="relative z-10 bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
-                      concorra.
-                    </span>
-                    <motion.span
-                      className="absolute -bottom-1 left-0 right-0 h-2 rounded-full bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] opacity-30"
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                      style={{ originX: 0 }}
-                    />
-                  </span>
-                </h1>
-
-                <p className="mt-5 max-w-xl text-base md:text-lg leading-relaxed text-white/70">
-                  Participe das promoções da TOP100 FM e leve prêmios sem sair do ritmo. Ingressos, brindes e experiências exclusivas todo mês.
-                </p>
-
-                <div className="mt-8 flex flex-wrap items-center gap-3">
-                  <Link
-                    to="/promocoes"
-                    className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#0c2651] shadow-[0_12px_30px_-10px_rgba(255,255,255,0.5)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-10px_rgba(255,255,255,0.6)]"
-                  >
-                    Quero participar
-                    <span className="transition group-hover:translate-x-0.5">→</span>
-                  </Link>
-                  <Link
-                    to="/promocoes"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
-                  >
-                    Ver todas
-                  </Link>
-                </div>
-
-                {/* mini-stats */}
-                <div className="mt-10 flex flex-wrap gap-8 border-t border-white/10 pt-6">
-                  {[
-                    { n: "12+", l: "Promoções ativas" },
-                    { n: "98.5", l: "FM ao vivo" },
-                    { n: "24/7", l: "No ar" },
-                  ].map((s, idx) => (
-                    <motion.div
-                      key={s.l}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + idx * 0.1, duration: 0.5 }}
-                    >
-                      <div className="text-2xl font-black text-white">{s.n}</div>
-                      <div className="text-[11px] uppercase tracking-widest text-white/50">{s.l}</div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Card dinâmico: Live YouTube ou Programação ao vivo */}
-              <motion.div
-                className="relative"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {/* halo de fundo */}
-                <motion.div
-                  aria-hidden
-                  className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-to-tr from-[#c8102e]/30 via-[#ff5470]/20 to-[#ffd84d]/30 blur-2xl"
-                  animate={{ opacity: [0.5, 0.8, 0.5] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                />
-
-                {liveActive && liveYoutubeId ? (
-                  <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur">
-                    <div className="flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-[#c8102e] to-[#a00d24]">
-                      <div className="flex items-center gap-2">
-                        <span className="relative flex h-2.5 w-2.5">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
-                        </span>
-                        <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white">Ao vivo agora</span>
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/80">YouTube</span>
-                    </div>
-                    <div className="aspect-video w-full bg-black">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
-                        title={liveTitle || "Transmissão ao vivo"}
-                        allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
-                        allowFullScreen
-                        className="h-full w-full"
-                      />
-                    </div>
-                    {liveTitle && (
-                      <div className="px-4 py-3 bg-white/5">
-                        <p className="text-sm font-bold text-white line-clamp-1">{liveTitle}</p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 lg:p-7 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur">
-                    <div className="flex items-center justify-between">
-                      <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-white/80 border border-white/10">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#ffd84d]" />
-                        Programação de hoje
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">{DAYS[today]}</span>
-                    </div>
-
-                    {currentProgram ? (
-                      <div className="mt-5">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffd84d]">No ar</p>
-                        <h3 className="mt-1 text-2xl lg:text-3xl font-black text-white leading-tight">
-                          {currentProgram.program_name}
-                        </h3>
-                        {currentProgram.presenter && (
-                          <p className="mt-1 text-sm text-white/70">com {currentProgram.presenter}</p>
-                        )}
-                        <p className="mt-2 text-xs text-white/50 font-mono tracking-wider">
-                          {fmtTime(currentProgram.start_time)} — {fmtTime(currentProgram.end_time)}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="mt-5">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffd84d]">Música 24/7</p>
-                        <h3 className="mt-1 text-2xl lg:text-3xl font-black text-white leading-tight">O melhor da TOP100 FM</h3>
-                        <p className="mt-1 text-sm text-white/70">Sem programa ao vivo agora — siga curtindo no rádio.</p>
-                      </div>
-                    )}
-
-                    {upcomingPrograms.length > 0 && (
-                      <div className="mt-6 border-t border-white/10 pt-4">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/40 mb-3">A seguir</p>
-                        <ul className="space-y-2.5">
-                          {upcomingPrograms.map((u) => (
-                            <li key={u.id} className="flex items-center justify-between gap-3 text-sm">
-                              <div className="min-w-0">
-                                <p className="font-bold text-white truncate">{u.program_name}</p>
-                                {u.presenter && <p className="text-xs text-white/50 truncate">{u.presenter}</p>}
-                              </div>
-                              <span className="shrink-0 text-xs font-mono text-[#ffd84d]/90">{fmtTime(u.start_time)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    <Link
-                      to="/programacao"
-                      className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-white/90 hover:text-[#ffd84d] transition"
-                    >
-                      Ver programação completa <span>→</span>
-                    </Link>
-                  </div>
-                )}
-              </motion.div>
-            </div>
-          </div>
-
-          {/* divisor com curva */}
-          <svg className="block w-full h-12 lg:h-16 text-background" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden>
-            <path fill="currentColor" d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" />
-          </svg>
-        </section>
-
-        {/* SEÇÃO DE PROMOÇÕES — identidade visual com a Patrícia */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-background via-[#fff5f7] to-background py-16 lg:py-20">
-          {/* ornamentos suaves */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 25% 25%, #c8102e 1.5px, transparent 1.5px)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[#ffd84d]/30 blur-[100px]"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
+            className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#c8102e]/35 blur-[110px]"
+            animate={{ scale: [1, 1.12, 1], opacity: [0.45, 0.7, 0.45] }}
             transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-[#ff5470]/25 blur-[120px]"
-            animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.7, 0.4] }}
+            className="pointer-events-none absolute -bottom-28 left-0 h-[26rem] w-[26rem] rounded-full bg-[#ffd84d]/18 blur-[120px]"
+            animate={{ scale: [1.08, 1, 1.08], opacity: [0.35, 0.55, 0.35] }}
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4">
-            <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-              {/* Coluna da Patrícia — mascote em destaque */}
-              <motion.div
-                className="relative flex items-end justify-center lg:justify-start min-h-[420px]"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {/* círculo decorativo atrás dela */}
-                <div
-                  aria-hidden
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[88%] aspect-square rounded-full"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,154,60,0.25) 40%, transparent 70%)",
-                  }}
-                />
-                {/* anel pontilhado */}
+          <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-18 lg:pb-20">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
+              <div className="relative">
                 <motion.div
-                  aria-hidden
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[78%] aspect-square rounded-full border-2 border-dashed border-[#c8102e]/25"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                />
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative z-20 max-w-xl"
+                >
+                  <motion.span
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffd84d]" />
+                    </span>
+                    Promoções no ar
+                  </motion.span>
 
-                {/* notas musicais flutuantes */}
-                <motion.div
-                  aria-hidden
-                  className="absolute top-6 left-4 text-3xl"
-                  animate={{ y: [0, -14, 0], rotate: [-8, 8, -8] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  🎵
-                </motion.div>
-                <motion.div
-                  aria-hidden
-                  className="absolute top-20 right-6 text-2xl"
-                  animate={{ y: [0, -10, 0], rotate: [10, -10, 10] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                >
-                  🎶
-                </motion.div>
-                <motion.div
-                  aria-hidden
-                  className="absolute bottom-32 right-2 text-2xl"
-                  animate={{ y: [0, -12, 0], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-                >
-                  🎁
-                </motion.div>
+                  <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-black leading-[0.94] tracking-tight text-white">
+                    Entre nas promoções
+                    <span className="mt-1 block bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
+                      da TOP100 FM.
+                    </span>
+                  </h1>
 
-                {/* mascote */}
-                <motion.img
-                  src={mascoteTop}
-                  alt="Patrícia, voz das promoções da TOP100 FM"
-                  className="relative z-10 w-full max-w-[400px] h-auto object-contain drop-shadow-[0_24px_30px_rgba(200,16,46,0.25)]"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                />
+                  <p className="mt-5 max-w-lg text-base md:text-lg leading-relaxed text-white/74">
+                    A Patrícia chama você para participar, ganhar brindes, ingressos e experiências que prendem a atenção logo no primeiro olhar.
+                  </p>
 
-                {/* etiqueta flutuante */}
-                <motion.div
-                  className="absolute bottom-6 left-2 lg:left-0 z-20 rounded-2xl bg-white px-4 py-3 shadow-xl border border-[#c8102e]/10"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5, duration: 0.5 }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#c8102e] to-[#ff5470] flex items-center justify-center text-white text-lg">🎙️</div>
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#c8102e]">Apresenta</p>
-                      <p className="text-sm font-black text-[#0c2651] leading-tight">Patrícia · TOP Promo</p>
-                    </div>
+                  <div className="mt-8 flex flex-wrap items-center gap-3">
+                    <Link
+                      to="/promocoes"
+                      className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#0c2651] shadow-[0_12px_30px_-10px_rgba(255,255,255,0.5)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-10px_rgba(255,255,255,0.6)]"
+                    >
+                      Quero participar
+                      <span className="transition group-hover:translate-x-0.5">→</span>
+                    </Link>
+                    <Link
+                      to="/promocoes"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
+                    >
+                      Ver todas
+                    </Link>
                   </div>
                 </motion.div>
-              </motion.div>
 
-              {/* Coluna dos cards de promoção */}
-              <div>
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="mb-6"
+                  className="relative mt-10 flex min-h-[360px] items-end justify-center lg:absolute lg:-right-6 lg:bottom-[-16px] lg:mt-0 lg:w-[58%]"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
-                    Em destaque · Promoções da semana
-                  </p>
-                  <h2 className="mt-2 text-3xl md:text-4xl font-black text-[#0c2651] tracking-tight leading-[1.05]">
-                    Prêmios de verdade,{" "}
-                    <span className="bg-gradient-to-r from-[#c8102e] to-[#ff5470] bg-clip-text text-transparent">
-                      todo mês.
-                    </span>
-                  </h2>
-                  <p className="mt-3 text-base text-muted-foreground max-w-xl leading-relaxed">
-                    Participe das promoções da TOP100 FM com a Patrícia. Ingressos, brindes e experiências exclusivas para quem é ouvinte de verdade.
-                  </p>
+                  <div
+                    aria-hidden
+                    className="absolute left-1/2 top-1/2 w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                    style={{ aspectRatio: "1 / 1", background: "radial-gradient(circle, rgba(255,216,77,0.52) 0%, rgba(255,84,112,0.18) 42%, transparent 72%)" }}
+                  />
+                  <motion.div
+                    aria-hidden
+                    className="absolute left-1/2 top-1/2 w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-white/20"
+                    style={{ aspectRatio: "1 / 1" }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.span
+                    aria-hidden
+                    className="absolute left-6 top-6 text-3xl"
+                    animate={{ y: [0, -12, 0], rotate: [-8, 8, -8] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    🎵
+                  </motion.span>
+                  <motion.span
+                    aria-hidden
+                    className="absolute right-5 top-16 text-2xl"
+                    animate={{ y: [0, -10, 0], rotate: [10, -10, 10] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                  >
+                    🎶
+                  </motion.span>
+                  <motion.span
+                    aria-hidden
+                    className="absolute bottom-24 right-4 text-2xl"
+                    animate={{ y: [0, -12, 0], opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+                  >
+                    ✨
+                  </motion.span>
+                  <motion.img
+                    src={mascoteTop}
+                    alt="Patrícia nas promoções da TOP100 FM"
+                    className="relative z-10 h-auto w-full max-w-[370px] object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.35)]"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                  />
                 </motion.div>
+              </div>
 
+              <motion.div
+                className="relative"
+                initial={{ opacity: 0, x: 36 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <div className="grid gap-4 sm:grid-cols-2">
                   {promos.slice(0, 3).map((p, i) => {
                     const isFeatured = i === 0;
@@ -655,47 +449,22 @@ function IndexPage() {
                         key={p.id}
                         type="button"
                         onClick={() => setSelectedPromo(p)}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-60px" }}
-                        transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                         whileHover={{ y: -4 }}
-                        className={`group relative overflow-hidden rounded-2xl bg-white border border-gray-200/80 hover:border-[#c8102e]/40 shadow-[0_4px_20px_-8px_rgba(12,38,81,0.15)] hover:shadow-[0_20px_40px_-12px_rgba(200,16,46,0.25)] transition-all duration-300 flex flex-col text-left cursor-pointer ${isFeatured ? "sm:col-span-2 sm:flex-row" : ""}`}
+                        className={`group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/95 text-left shadow-[0_30px_60px_-28px_rgba(0,0,0,0.45)] transition-all duration-300 hover:border-[#ff5470]/30 hover:shadow-[0_30px_70px_-24px_rgba(200,16,46,0.38)] ${isFeatured ? "sm:col-span-2 sm:grid sm:grid-cols-[0.94fr_1.06fr]" : ""}`}
                       >
-                        <div
-                          className={`relative overflow-hidden bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] ${isFeatured ? "sm:w-[44%] aspect-[16/10] sm:aspect-auto" : "aspect-[16/10]"}`}
-                        >
+                        <div className={`relative overflow-hidden bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] ${isFeatured ? "min-h-[220px]" : "aspect-[16/10]"}`}>
                           {p.image_url ? (
-                            <img
-                              src={p.image_url}
-                              alt={p.title}
-                              className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
-                            />
+                            <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                           ) : (
                             <>
-                              <div
-                                className="absolute inset-0 opacity-25"
-                                style={{
-                                  backgroundImage:
-                                    "radial-gradient(circle at 30% 30%, white 1px, transparent 1px)",
-                                  backgroundSize: "20px 20px",
-                                }}
-                              />
+                              <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "radial-gradient(circle at 30% 30%, white 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
                               <div className="absolute inset-0 flex items-center justify-center">
-                                <img
-                                  src={illustGift}
-                                  alt=""
-                                  className="h-28 w-28 object-contain anim-float drop-shadow-2xl"
-                                  loading="lazy"
-                                  width={112}
-                                  height={112}
-                                />
+                                <img src={illustGift} alt="" className="h-28 w-28 object-contain anim-float drop-shadow-2xl" loading="lazy" width={112} height={112} />
                               </div>
-                              {/* brilho diagonal */}
-                              <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-white/0 via-white/10 to-white/0 rotate-12 transition-transform duration-1000 group-hover:translate-x-1/4" />
+                              <div className="absolute -left-1/3 top-0 h-full w-1/2 rotate-12 bg-white/10 blur-2xl transition-transform duration-700 group-hover:translate-x-20" />
                             </>
                           )}
-                          <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c8102e] shadow-md">
+                          <div className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c8102e] shadow-md">
                             <span className="relative flex h-1.5 w-1.5">
                               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c8102e] opacity-75" />
                               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#c8102e]" />
@@ -703,16 +472,16 @@ function IndexPage() {
                             {isFeatured ? "Destaque" : `Promo ${i + 1}`}
                           </div>
                         </div>
-                        <div className={`p-5 flex-1 flex flex-col ${isFeatured ? "sm:p-6 sm:justify-center" : ""}`}>
-                          <h3 className={`font-black text-[#0c2651] leading-tight group-hover:text-[#c8102e] transition line-clamp-2 ${isFeatured ? "text-xl md:text-2xl" : "text-base"}`}>
+                        <div className={`flex flex-1 flex-col p-5 ${isFeatured ? "sm:p-6 sm:justify-center" : ""}`}>
+                          <h2 className={`font-black leading-tight text-[#0c2651] transition group-hover:text-[#c8102e] ${isFeatured ? "text-2xl" : "text-lg"}`}>
                             {p.title}
-                          </h3>
+                          </h2>
                           {p.description && (
-                            <p className={`mt-2 text-sm text-muted-foreground leading-relaxed flex-1 ${isFeatured ? "line-clamp-3" : "line-clamp-2"}`}>
+                            <p className={`mt-2 flex-1 text-sm leading-relaxed text-slate-600 ${isFeatured ? "line-clamp-3" : "line-clamp-2"}`}>
                               {p.description}
                             </p>
                           )}
-                          <div className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-[#c8102e] group-hover:gap-2.5 transition-all">
+                          <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[#c8102e] transition-all group-hover:gap-2.5">
                             Quero participar
                             <span>→</span>
                           </div>
@@ -721,19 +490,13 @@ function IndexPage() {
                     );
                   })}
                 </div>
-
-                <div className="mt-6 flex justify-end">
-                  <Link
-                    to="/promocoes"
-                    className="group inline-flex items-center gap-1.5 rounded-full border border-[#c8102e]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] shadow-sm transition hover:bg-[#c8102e] hover:text-white hover:shadow-md"
-                  >
-                    Ver todas as promoções
-                    <span className="transition group-hover:translate-x-0.5">→</span>
-                  </Link>
-                </div>
-              </div>
+              </motion.div>
             </div>
           </div>
+
+          <svg className="block h-12 w-full text-background lg:h-16" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden>
+            <path fill="currentColor" d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" />
+          </svg>
         </section>
 
         {/* HERO + NOTÍCIAS DESTAQUE */}
