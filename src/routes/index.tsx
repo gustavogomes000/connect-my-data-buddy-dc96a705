@@ -326,19 +326,19 @@ function IndexPage() {
           />
 
           <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
-            <div className="grid items-center gap-8 lg:gap-10 lg:grid-cols-12">
-              {/* Coluna 1 — texto */}
+            <div className="grid items-start gap-6 lg:grid-cols-12">
+              {/* Coluna única — promoções à esquerda com CTA */}
               <motion.div
+                className="relative z-10 lg:col-span-7"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="relative z-10 lg:col-span-5"
+                transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               >
                 <motion.span
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
+                  transition={{ delay: 0.15, duration: 0.5 }}
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
@@ -347,29 +347,17 @@ function IndexPage() {
                   Promoções no ar
                 </motion.span>
 
-                <h1 className="mt-5 text-4xl md:text-5xl font-black leading-[0.95] tracking-tight text-white">
-                  Entre nas promoções
-                  <span className="mt-1 block bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
-                    da TOP100 FM.
+                <h2 className="mt-3 text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
+                  Participe agora e leve{" "}
+                  <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
+                    brindes incríveis
                   </span>
-                </h1>
+                </h2>
+                <p className="mt-1.5 text-sm text-white/70">
+                  Escolha uma promoção e garanta seu prêmio com a TOP100 FM 🎁
+                </p>
 
-                <div className="mt-7 flex flex-wrap items-center gap-3">
-                  <Link
-                    to="/promocoes"
-                    className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#0c2651] shadow-[0_12px_30px_-10px_rgba(255,255,255,0.5)] transition hover:-translate-y-0.5"
-                  >
-                    Quero participar
-                    <span className="transition group-hover:translate-x-0.5">→</span>
-                  </Link>
-                  <Link
-                    to="/promocoes"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
-                  >
-                    Ver todas
-                  </Link>
-                </div>
-              </motion.div>
+                <div className="mt-5 flex flex-col gap-3">
 
               {/* Coluna 2 — cards de promoções (foco principal) */}
               <motion.div
