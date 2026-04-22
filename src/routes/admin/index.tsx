@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
-import { adminLogout } from "@/lib/admin-auth";
+import { adminLogout, checkAdminSession } from "@/lib/admin-auth";
 import { AdminSidebar, type AdminTab } from "@/components/admin/AdminSidebar";
 import { PromotionsManager } from "@/components/admin/PromotionsManager";
 import { EntriesManager } from "@/components/admin/EntriesManager";
@@ -17,18 +17,22 @@ const queryClient = new QueryClient();
 
 // Rota protegida – valida a sessão no servidor antes de renderizar.
 export const Route = createFileRoute("/admin/")({
-  beforeLoad: () => {
-    // Verificação rápida via cookie "marcador" no cliente.
-    // O cookie real de auth é httpOnly e validado server-side em cada chamada admin.
-    if (typeof document !== "undefined") {
-      const hasSession =
-        document.cookie.split("; ").some((c) => c.startsWith("admin_present=")) ||
+  beforeLoad: async () => {
+    const hasLocalSession =
+      typeof document !== "undefined" &&
+      (document.cookie.split("; ").some((c) => c.startsWith("admin_present=")) ||
         (typeof localStorage !== "undefined" &&
-          localStorage.getItem("admin_session") === "authenticated");
-      if (!hasSession) {
-        throw redirect({ to: "/admin/login", replace: true });
-      }
+          localStorage.getItem("admin_session") === "authenticated"));
+
+    if (!hasLocalSession) {
+      throw redirect({ to: "/admin/login", replace: true });
     }
+
+    const session = await checkAdminSession();
+    if (!session?.authenticated) {
+      throw redirect({ to: "/admin/login", replace: true });
+    }
+
     return {};
   },
   head: () => ({
