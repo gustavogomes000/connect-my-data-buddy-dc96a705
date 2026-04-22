@@ -578,8 +578,17 @@ function IndexPage() {
 
 
         {/* PROGRAMAÇÃO DO DIA */}
-        <section className="bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
-          <div className="mx-auto max-w-7xl px-4">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
+          <img
+            src={illustMic}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            width={240}
+            height={240}
+            className="hidden md:block absolute right-6 top-6 h-48 w-48 object-contain opacity-90 anim-float-slow drop-shadow-2xl pointer-events-none"
+          />
+          <div className="relative mx-auto max-w-7xl px-4">
             <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
                 <span className="h-8 w-1.5 rounded-full bg-[#c8102e]" />
@@ -705,8 +714,17 @@ function IndexPage() {
 
         {/* PODCASTS — mesma estética da Programação */}
         {podcasts.length > 0 && (
-          <section className="bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
-            <div className="mx-auto max-w-7xl px-4">
+          <section className="relative overflow-hidden bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
+            <img
+              src={illustDancer}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width={240}
+              height={240}
+              className="hidden md:block absolute right-4 top-2 h-56 w-56 object-contain opacity-95 anim-wiggle drop-shadow-2xl pointer-events-none"
+            />
+            <div className="relative mx-auto max-w-7xl px-4">
               <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
                 <div className="flex items-center gap-3">
                   <span className="h-8 w-1.5 rounded-full bg-[#ffc107]" />
