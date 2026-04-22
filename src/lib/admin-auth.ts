@@ -3,9 +3,11 @@ import { setCookie, deleteCookie, getCookie } from "@tanstack/react-start/server
 import { createClient } from "@supabase/supabase-js";
 
 const ADMIN_COOKIE = "admin_session";
+const ADMIN_PRESENCE_COOKIE = "admin_present";
 const SESSION_DURATION = 60 * 60 * 24; // 24h
 const SESSION_TOKEN_VALUE = "authenticated";
 export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
+export const ADMIN_PRESENCE_KEY = ADMIN_PRESENCE_COOKIE;
 export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
 
 const SUPABASE_URL =
@@ -54,11 +56,22 @@ export const adminLogin = createServerFn({ method: "POST" })
       path: "/",
     });
 
+    // Cookie "marcador" legível pelo cliente para o beforeLoad detectar sessão
+    // sem precisar bater no servidor. O cookie real de auth segue httpOnly.
+    setCookie(ADMIN_PRESENCE_COOKIE, "1", {
+      httpOnly: false,
+      secure: true,
+      sameSite: "lax",
+      maxAge: SESSION_DURATION,
+      path: "/",
+    });
+
     return { success: true, token: SESSION_TOKEN_VALUE };
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
   deleteCookie(ADMIN_COOKIE);
+  deleteCookie(ADMIN_PRESENCE_COOKIE);
   return { success: true };
 });
 

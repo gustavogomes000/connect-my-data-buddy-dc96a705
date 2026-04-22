@@ -18,11 +18,11 @@ const queryClient = new QueryClient();
 // Rota protegida – valida a sessão no servidor antes de renderizar.
 export const Route = createFileRoute("/admin/")({
   beforeLoad: () => {
-    // Verificação rápida via cookie no cliente; cookie httpOnly é validado
-    // server-side em cada chamada de admin. Evita round-trip extra no load.
+    // Verificação rápida via cookie "marcador" no cliente.
+    // O cookie real de auth é httpOnly e validado server-side em cada chamada admin.
     if (typeof document !== "undefined") {
       const hasSession =
-        document.cookie.includes("admin_session=") ||
+        document.cookie.split("; ").some((c) => c.startsWith("admin_present=")) ||
         (typeof localStorage !== "undefined" &&
           localStorage.getItem("admin_session") === "authenticated");
       if (!hasSession) {
