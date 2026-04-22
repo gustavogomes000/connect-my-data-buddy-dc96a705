@@ -8,8 +8,6 @@ import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import mascoteTop from "@/assets/mascote-top.png";
-import mascoteMobile from "@/assets/mascote-mobile.png";
-import mascoteTablet from "@/assets/mascote-tablet.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
@@ -315,32 +313,19 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia — desktop: ancorada na metade direita */}
+          {/* Patrícia — mesma imagem em todas as telas, ancorada à direita */}
           <img
             src={mascoteTop}
             alt=""
             aria-hidden
-            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
+            className="pointer-events-none absolute right-0 top-0 z-0 h-full w-[70%] select-none object-cover object-right opacity-40 sm:w-[60%] sm:opacity-60 lg:w-1/2 lg:opacity-90"
             style={{
-              maskImage: "linear-gradient(to right, transparent 0%, black 35%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 35%, black 100%)",
+              maskImage: "linear-gradient(to right, transparent 0%, black 45%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 45%, black 100%)",
             }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-10 lg:pt-16 lg:pb-20">
-            {/* Mobile/tablet: Patrícia inline em cima (otimizada por tela) */}
-            <picture>
-              <source media="(min-width: 640px) and (max-width: 1023px)" srcSet={mascoteTablet} />
-              <source media="(max-width: 639px)" srcSet={mascoteMobile} />
-              <img
-                src={mascoteMobile}
-                alt=""
-                aria-hidden
-                width={576}
-                height={1024}
-                className="mx-auto mb-5 block max-h-[240px] w-auto select-none object-contain sm:max-h-[300px] lg:hidden"
-              />
-            </picture>
+          <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-12 lg:pt-16 lg:pb-20">
 
             <div className="grid items-start gap-6 lg:grid-cols-12">
               {/* Coluna única — promoções à esquerda com CTA */}
