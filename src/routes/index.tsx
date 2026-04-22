@@ -375,7 +375,7 @@ function IndexPage() {
                     className="group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
                   >
                     {/* Slot mágico estilo Doctor Strange */}
-                    <div className="relative h-28 w-28 shrink-0">
+                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0">
                       {/* halo radial */}
                       <div
                         aria-hidden
