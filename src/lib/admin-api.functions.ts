@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
-import { runManualNewsIngest } from "./news-auto.server";
+
 
 // Cliente Supabase admin (service role). Criado sob demanda DENTRO dos handlers
 // dos server functions, então só roda no servidor — nunca vai para o bundle do cliente.
