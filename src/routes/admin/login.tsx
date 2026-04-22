@@ -61,7 +61,8 @@ function AdminLoginPage() {
           }
         } catch {}
 
-        navigate({ to: "/admin", replace: true });
+        // Mantém overlay de carregamento ativo durante a navegação
+        await navigate({ to: "/admin", replace: true });
         return;
       } else {
         setError(result.error || "Não foi possível entrar.");
@@ -75,6 +76,37 @@ function AdminLoginPage() {
 
   return (
     <div className="admin-login-page">
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(8, 10, 18, 0.78)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            gap: "1rem",
+          }}
+        >
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              border: "4px solid rgba(255,255,255,0.15)",
+              borderTopColor: "#fff",
+              borderRadius: "50%",
+              animation: "admin-spin 0.9s linear infinite",
+            }}
+          />
+          <p style={{ color: "#fff", fontWeight: 500, letterSpacing: 0.3 }}>
+            Entrando no painel…
+          </p>
+          <style>{`@keyframes admin-spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
       <div className="admin-login-card">
         <div className="admin-login-header">
           <img src={topLogo} alt="TOP100 FM" className="admin-login-logo-img" />
