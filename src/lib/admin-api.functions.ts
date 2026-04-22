@@ -8,8 +8,10 @@ let _adminClient: SupabaseClient | null = null;
 type ServerEnvKey =
   | "SUPABASE_URL"
   | "SUPABASE_SERVICE_ROLE_KEY"
+  | "SUPABASE_PUBLISHABLE_KEY"
   | "MY_SUPABASE_URL"
-  | "MY_SUPABASE_SERVICE_ROLE_KEY";
+  | "MY_SUPABASE_SERVICE_ROLE_KEY"
+  | "MY_SUPABASE_PUBLISHABLE_KEY";
 
 function getServerEnv(key: ServerEnvKey): string | undefined {
   if (typeof process !== "undefined" && process.env) {
