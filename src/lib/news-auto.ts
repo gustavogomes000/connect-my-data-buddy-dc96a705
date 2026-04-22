@@ -1,6 +1,4 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getCookie } from "@tanstack/react-start/server";
-import { createAdminServerFn } from "@/lib/admin-serverfn";
 
 const SUPABASE_URL =
   (typeof process !== "undefined"
@@ -168,14 +166,11 @@ export async function runAutoNewsIngest(): Promise<{
   return { inserted, skipped, total: items.length };
 }
 
-export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async () => {
-  const cookie = getCookie("admin_session");
-  const header = typeof Headers !== "undefined" ? undefined : undefined;
-  if (cookie !== "authenticated") {
-    // header auth is already sent by createAdminServerFn middleware; if cookie falhar,
-    // a autorização principal ocorre em admin-api nas demais ações.
-  }
-
+export async function runManualNewsIngest(): Promise<{
+  inserted: number;
+  skipped: number;
+  total: number;
+}> {
   if (!adminClient) throw new Error("Configuração do servidor incompleta");
   const items = await fetchAndParse();
   let inserted = 0;
@@ -203,4 +198,4 @@ export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async (
     if (!error) inserted++;
   }
   return { inserted, skipped, total: items.length };
-});
+}

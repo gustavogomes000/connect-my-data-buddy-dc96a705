@@ -1,6 +1,7 @@
 import { getCookie, getRequestHeader } from "@tanstack/react-start/server";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
+import { runManualNewsIngest } from "./news-auto";
 
 const SUPABASE_URL =
   (typeof process !== "undefined"
@@ -366,7 +367,10 @@ export const getUploadUrl = createAdminServerFn("POST")
     return { signedUrl: result.signedUrl, token: result.token, path, publicUrl };
   });
 
-export { triggerAutoNewsManual } from "./news-auto";
+export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async () => {
+  requireAdmin();
+  return runManualNewsIngest();
+});
 
 export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
   requireAdmin();
