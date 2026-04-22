@@ -224,6 +224,9 @@ function IndexPage() {
   const [podcasts, setPodcasts] = useState<PodcastItem[]>([]);
   const [playingPodcast, setPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
+  const [liveActive, setLiveActive] = useState(false);
+  const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
+  const [liveTitle, setLiveTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
@@ -254,8 +257,7 @@ function IndexPage() {
       (supabase as any)
         .from("site_settings")
         .select("setting_key,setting_value")
-        .eq("setting_key", "sponsors")
-        .maybeSingle(),
+        .in("setting_key", ["sponsors", "live_active", "live_youtube_url", "live_title"]),
       (supabase as any)
         .from("podcasts")
         .select("id,title,description,youtube_url,thumbnail_url")
@@ -269,13 +271,23 @@ function IndexPage() {
       const promoData = ((pr.data as any) || []) as PromoItem[];
       setPromos(promoData.length > 0 ? promoData : MOCK_PROMOS);
       try {
-        const raw = (sp as any)?.data?.setting_value;
-        const parsed = raw ? (typeof raw === "string" ? JSON.parse(raw) : raw) : [];
-        const list = (Array.isArray(parsed) ? parsed : []) as Sponsor[];
+        const rows = ((sp as any)?.data || []) as Array<{ setting_key: string; setting_value: any }>;
+        const map: Record<string, any> = {};
+        for (const r of rows) {
+          let v = r.setting_value;
+          if (typeof v === "string") {
+            try { v = JSON.parse(v); } catch { /* keep as string */ }
+          }
+          map[r.setting_key] = v;
+        }
+        const list = (Array.isArray(map.sponsors) ? map.sponsors : []) as Sponsor[];
         const filtered = list
           .filter((s) => s.is_active !== false && s.logo_url)
           .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
         setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
+        setLiveActive(!!map.live_active);
+        setLiveYoutubeUrl(typeof map.live_youtube_url === "string" ? map.live_youtube_url : "");
+        setLiveTitle(typeof map.live_title === "string" ? map.live_title : "");
       } catch {
         setSponsors(MOCK_SPONSORS);
       }
@@ -284,6 +296,9 @@ function IndexPage() {
       setLoading(false);
     });
   }, [today]);
+
+  const liveYoutubeId = liveActive ? getYoutubeId(liveYoutubeUrl) : null;
+  const isLive = liveActive && !!liveYoutubeId;
 
   const featured = news[0];
   const secondary = news.slice(1, 3);
@@ -313,36 +328,72 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia — mesma imagem em todas as telas, ancorada à direita */}
-          <img
-            src={mascoteTop}
-            alt=""
-            aria-hidden
-            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
-            style={{
-              maskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
-            }}
-          />
+          {/* Desktop: Patrícia OU player ao vivo (substitui a foto) */}
+          {isLive ? (
+            <div className="pointer-events-auto absolute right-0 top-0 z-10 hidden h-full w-1/2 items-center justify-center p-6 lg:flex">
+              <div
+                className="relative w-full max-w-[640px] overflow-hidden rounded-[24px] border border-[#ffd84d]/40 bg-black shadow-[0_30px_80px_-20px_rgba(255,84,112,0.55)]"
+                style={{ aspectRatio: "16 / 9" }}
+              >
+                <iframe
+                  src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&playsinline=1&rel=0`}
+                  title={liveTitle || "Transmissão ao vivo TOP100 FM"}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full"
+                />
+                <div className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#ffd84d] backdrop-blur-md">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff5470] opacity-75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff5470]" />
+                  </span>
+                  TV · Ao vivo
+                </div>
+              </div>
+            </div>
+          ) : (
+            <img
+              src={mascoteTop}
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
+              style={{
+                maskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
+                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
+              }}
+            />
+          )}
 
           <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-12 lg:pt-16 lg:pb-20">
+            {/* Mobile/tablet: bloco com a Patrícia OU player ao vivo */}
             <div className="relative mb-6 overflow-hidden rounded-[28px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
-              <img
-                src={mascoteTop}
-                alt="Patrícia nas promoções da TOP100 FM"
-                className="h-[280px] w-full object-cover object-center sm:h-[340px]"
-              />
-              {/* brilho superior */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/10 to-transparent" />
-              {/* fade inferior pra colar com o conteúdo */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
-              {/* selo flutuante */}
+              {isLive ? (
+                <div className="relative w-full bg-black" style={{ aspectRatio: "16 / 9" }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&playsinline=1&rel=0`}
+                    title={liveTitle || "Transmissão ao vivo TOP100 FM"}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 h-full w-full"
+                  />
+                </div>
+              ) : (
+                <>
+                  <img
+                    src={mascoteTop}
+                    alt="Patrícia nas promoções da TOP100 FM"
+                    className="h-[280px] w-full object-cover object-center sm:h-[340px]"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/10 to-transparent" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
+                </>
+              )}
               <div className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#ffd84d] backdrop-blur-md">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ffd84d]" />
                 </span>
-                Ao vivo · Promoções
+                {isLive ? "TV · Ao vivo" : "Ao vivo · Promoções"}
               </div>
             </div>
 
