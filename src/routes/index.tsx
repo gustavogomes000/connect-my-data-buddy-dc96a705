@@ -313,6 +313,17 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
+          {/* Patrícia gigante flutuando no background */}
+          <motion.img
+            src={mascoteTop}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute -right-16 top-1/2 z-0 hidden -translate-y-1/2 select-none rounded-[2rem] opacity-60 mix-blend-screen drop-shadow-[0_40px_80px_rgba(0,0,0,0.6)] lg:block"
+            style={{ width: "min(58vw, 780px)", maskImage: "radial-gradient(ellipse at center, black 55%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 55%, transparent 92%)" }}
+            animate={{ y: ["-52%", "-48%", "-52%"], rotate: [-1.2, 1.2, -1.2] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          />
+
           <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
             <div className="grid items-center gap-8 lg:gap-10 lg:grid-cols-12">
               {/* Coluna 1 — texto */}
