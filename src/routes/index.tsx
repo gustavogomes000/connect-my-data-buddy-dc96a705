@@ -365,44 +365,17 @@ function IndexPage() {
 
               {/* Coluna 2 — mascote */}
               <motion.div
-                className="relative hidden lg:flex lg:col-span-3 items-end justify-center"
+                className="relative hidden lg:flex lg:col-span-3 items-center justify-center"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div
-                  aria-hidden
-                  className="absolute left-1/2 top-1/2 aspect-square w-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={{ background: "radial-gradient(circle, rgba(255,216,77,0.35) 0%, rgba(255,84,112,0.18) 40%, transparent 70%)" }}
-                />
-                <motion.div
-                  aria-hidden
-                  className="absolute left-1/2 top-1/2 aspect-square w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-white/15"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.span
-                  aria-hidden
-                  className="absolute left-2 top-4 text-2xl"
-                  animate={{ y: [0, -10, 0], rotate: [-8, 8, -8] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  🎵
-                </motion.span>
-                <motion.span
-                  aria-hidden
-                  className="absolute right-0 top-20 text-xl"
-                  animate={{ y: [0, -8, 0], rotate: [10, -10, 10] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                >
-                  🎶
-                </motion.span>
                 <motion.img
                   src={mascoteTop}
                   alt="Patrícia nas promoções da TOP100 FM"
-                  className="relative z-10 h-auto w-full max-w-[320px] object-contain drop-shadow-[0_28px_36px_rgba(0,0,0,0.45)]"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative z-10 h-auto w-full max-w-[380px] rounded-3xl object-contain drop-shadow-[0_28px_50px_rgba(0,0,0,0.55)]"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 />
               </motion.div>
 
