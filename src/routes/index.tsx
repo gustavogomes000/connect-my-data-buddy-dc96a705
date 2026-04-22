@@ -313,23 +313,31 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia full-bleed estática como fundo */}
+          {/* Patrícia — desktop: ancorada na metade direita */}
           <img
             src={mascoteTop}
             alt=""
             aria-hidden
-            className="pointer-events-none absolute inset-0 z-0 hidden h-full w-full select-none object-cover object-right opacity-90 lg:block"
+            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
             style={{
-              maskImage: "linear-gradient(to right, transparent 0%, transparent 28%, black 58%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, transparent 28%, black 58%, black 100%)",
+              maskImage: "linear-gradient(to right, transparent 0%, black 35%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 35%, black 100%)",
             }}
           />
 
-          <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-16 lg:pt-20 lg:pb-24">
+          <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-10 lg:pt-16 lg:pb-20">
+            {/* Mobile/tablet: Patrícia inline em cima */}
+            <img
+              src={mascoteTop}
+              alt=""
+              aria-hidden
+              className="mx-auto mb-5 block max-h-[220px] w-auto select-none object-contain sm:max-h-[260px] lg:hidden"
+            />
+
             <div className="grid items-start gap-6 lg:grid-cols-12">
               {/* Coluna única — promoções à esquerda com CTA */}
               <motion.div
-                className="relative z-10 lg:col-span-7"
+                className="relative z-10 lg:col-span-6"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
@@ -347,13 +355,13 @@ function IndexPage() {
                   Promoções no ar
                 </motion.span>
 
-                <h2 className="mt-3 text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
+                <h2 className="mt-3 text-xl sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
                   Participe agora e leve{" "}
                   <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
                     brindes incríveis
                   </span>
                 </h2>
-                <p className="mt-1.5 text-sm text-white/70">
+                <p className="mt-1.5 text-xs sm:text-sm text-white/70">
                   Escolha uma promoção e garanta seu prêmio com a TOP100 FM 🎁
                 </p>
 
@@ -367,7 +375,7 @@ function IndexPage() {
                     className="group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
                   >
                     {/* Slot mágico estilo Doctor Strange */}
-                    <div className="relative h-28 w-28 shrink-0">
+                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0">
                       {/* halo radial */}
                       <div
                         aria-hidden
