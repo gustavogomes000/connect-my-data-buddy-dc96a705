@@ -453,10 +453,11 @@ function IndexPage() {
 
             <div className="grid gap-5 md:grid-cols-3">
               {promos.slice(0, 3).map((p, i) => (
-                <Link
+                <button
                   key={p.id}
-                  to="/promocoes"
-                  className="group relative overflow-hidden rounded-2xl bg-white border border-gray-200 hover:border-[#c8102e]/40 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                  type="button"
+                  onClick={() => setSelectedPromo(p)}
+                  className="group relative overflow-hidden rounded-2xl bg-white border border-gray-200 hover:border-[#c8102e]/40 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col text-left cursor-pointer"
                 >
                   {/* badge nº */}
                   <div className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c8102e] shadow-sm border border-[#c8102e]/20">
@@ -502,7 +503,7 @@ function IndexPage() {
                       <span>→</span>
                     </div>
                   </div>
-                </Link>
+                </button>
               ))}
             </div>
           </div>
