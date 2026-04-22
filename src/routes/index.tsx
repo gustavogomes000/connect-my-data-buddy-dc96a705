@@ -6,7 +6,7 @@ import { PromotionDetailsModal } from "@/components/PromotionDetailsModal";
 import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import heroGirl from "@/assets/hero-girl-music.png";
+import heroGirl from "@/assets/mascote-top.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
@@ -299,8 +299,18 @@ function IndexPage() {
         <section className="relative overflow-hidden bg-gradient-to-br from-[#fff8f0] via-white to-[#fff0f3] py-14 border-b border-[#c8102e]/10">
           <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#c8102e]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#0c2651]/10 blur-3xl" />
+          {/* Mascote decorativa — lateral esquerda */}
+          <img
+            src={heroGirl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            width={420}
+            height={420}
+            className="hidden lg:block pointer-events-none absolute -left-16 -bottom-8 h-[26rem] w-auto object-contain anim-float-slow drop-shadow-2xl opacity-95 z-0"
+          />
 
-          <div className="relative mx-auto max-w-7xl px-4">
+          <div className="relative z-10 mx-auto max-w-7xl px-4 lg:pl-72">
             <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
                 <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#ff5470]" />
