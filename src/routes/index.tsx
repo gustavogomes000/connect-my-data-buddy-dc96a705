@@ -313,15 +313,15 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia full-bleed estática como fundo */}
+          {/* Patrícia — desktop: ancorada na metade direita */}
           <img
             src={mascoteTop}
             alt=""
             aria-hidden
-            className="pointer-events-none absolute inset-0 z-0 hidden h-full w-full select-none object-cover object-right opacity-90 lg:block"
+            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
             style={{
-              maskImage: "linear-gradient(to right, transparent 0%, transparent 28%, black 58%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, transparent 28%, black 58%, black 100%)",
+              maskImage: "linear-gradient(to right, transparent 0%, black 35%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 35%, black 100%)",
             }}
           />
 
