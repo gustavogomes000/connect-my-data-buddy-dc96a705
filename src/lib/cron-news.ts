@@ -1,4 +1,4 @@
-import { runAutoNewsIngest } from "@/lib/news-auto";
+import { runAutoNewsIngest } from "@/lib/news-auto.server";
 
 export const CRON_NEWS_CORS = {
   "Access-Control-Allow-Origin": "*",
