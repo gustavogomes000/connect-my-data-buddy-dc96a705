@@ -22,11 +22,15 @@ const adminClient: SupabaseClient | null =
     : null;
 
 const FEEDS = [
-  { name: "G1", url: "https://g1.globo.com/rss/g1/" },
-  { name: "UOL", url: "https://rss.uol.com.br/feed/noticias.xml" },
+  { name: "Câmara dos Deputados", url: "https://www.camara.leg.br/noticias/rss" },
+  { name: "TV Câmara", url: "https://www.camara.leg.br/noticias/rss/19" },
+  { name: "Senado Federal", url: "https://www12.senado.leg.br/noticias/ultimas/feed" },
+  { name: "TV Senado", url: "https://www12.senado.leg.br/radio/rss/ultimas-noticias" },
+  { name: "Gov.br", url: "https://www.gov.br/pt-br/noticias/RSS" },
+  { name: "Agência Brasil", url: "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml" },
 ];
 
-const MAX_PER_FEED = 5;
+const MAX_PER_FEED = 6;
 
 function decodeEntities(s: string): string {
   return s
