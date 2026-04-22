@@ -5,6 +5,7 @@ const ADMIN_COOKIE = "admin_session";
 const SESSION_DURATION = 60 * 60 * 24;
 
 export function getAdminSessionConfig() {
+  const isSecure = process.env.NODE_ENV === "production";
   const password =
     process.env.MY_ADMIN_SESSION_SECRET ||
     process.env.ADMIN_SESSION_SECRET ||
@@ -21,7 +22,7 @@ export function getAdminSessionConfig() {
     maxAge: SESSION_DURATION,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: isSecure,
       sameSite: "lax" as const,
       path: "/",
     },
