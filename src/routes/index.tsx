@@ -268,7 +268,11 @@ function IndexPage() {
         .order("display_order", { ascending: true })
         .order("created_at", { ascending: false })
         .limit(6),
-    ]).then(([n, p, pr, sp, pc]) => {
+      (supabase as any)
+        .from("site_settings")
+        .select("setting_key,setting_value")
+        .in("setting_key", ["live_active", "live_youtube_url", "live_title"]),
+    ]).then(([n, p, pr, sp, pc, ls]) => {
       setNews((n.data as any) || []);
       setProg((p.data as any) || []);
       const promoData = ((pr.data as any) || []) as PromoItem[];
@@ -286,6 +290,17 @@ function IndexPage() {
       }
       const pcData = ((pc as any)?.data as PodcastItem[]) || [];
       setPodcasts(pcData.length > 0 ? pcData : MOCK_PODCASTS);
+      try {
+        const rows = ((ls as any)?.data as Array<{ setting_key: string; setting_value: any }>) || [];
+        const map = new Map(rows.map((r) => [r.setting_key, r.setting_value]));
+        const parseVal = (v: any) => (typeof v === "string" ? (() => { try { return JSON.parse(v); } catch { return v; } })() : v);
+        const active = parseVal(map.get("live_active"));
+        const url = parseVal(map.get("live_youtube_url")) || "";
+        const title = parseVal(map.get("live_title")) || "";
+        setLiveActive(active === true || active === "true");
+        setLiveYoutubeId(url ? getYoutubeId(String(url)) : null);
+        setLiveTitle(typeof title === "string" ? title : "");
+      } catch {}
       setLoading(false);
     });
   }, [today]);
