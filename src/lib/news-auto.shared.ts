@@ -1,0 +1,143 @@
+const FEEDS = [
+  { name: "Câmara dos Deputados", url: "https://www.camara.leg.br/noticias/rss" },
+  { name: "TV Câmara", url: "https://www.camara.leg.br/noticias/rss/19" },
+  { name: "Senado Federal", url: "https://www12.senado.leg.br/noticias/ultimas/feed" },
+  { name: "TV Senado", url: "https://www12.senado.leg.br/radio/rss/ultimas-noticias" },
+  { name: "Gov.br", url: "https://www.gov.br/pt-br/noticias/RSS" },
+  { name: "Agência Brasil", url: "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml" },
+];
+
+const MAX_PER_FEED = 6;
+
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
+}
+
+function stripCdata(s: string): string {
+  return s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").trim();
+}
+
+function stripHtml(s: string): string {
+  return decodeEntities(stripCdata(s).replace(/<[^>]+>/g, "")).trim();
+}
+
+function pickTag(item: string, tag: string): string {
+  const m = item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, "i"));
+  return m ? stripCdata(m[1]) : "";
+}
+
+function pickImage(item: string): string {
+  const enc = item.match(/<enclosure[^>]*url="([^"]+)"[^>]*type="image/i);
+  if (enc) return enc[1];
+  const media =
+    item.match(/<media:content[^>]*url="([^"]+)"/i) ||
+    item.match(/<media:thumbnail[^>]*url="([^"]+)"/i);
+  if (media) return media[1];
+  const desc = pickTag(item, "description");
+  const img = desc.match(/<img[^>]*src="([^"]+)"/i);
+  if (img) return img[1];
+  return "";
+}
+
+type ParsedItem = {
+  title: string;
+  summary: string;
+  link: string;
+  image: string;
+  source: string;
+};
+
+export type NewsIngestResult = {
+  inserted: number;
+  skipped: number;
+  total: number;
+};
+
+function parseFeed(xml: string, source: string): ParsedItem[] {
+  const items: ParsedItem[] = [];
+  const itemRe = /<item[\s>][\s\S]*?<\/item>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = itemRe.exec(xml)) && items.length < MAX_PER_FEED) {
+    const it = match[0];
+    const title = stripHtml(pickTag(it, "title"));
+    const link = stripHtml(pickTag(it, "link"));
+    const summary = stripHtml(pickTag(it, "description")).slice(0, 280);
+    const image = pickImage(it);
+    if (title && link) items.push({ title, summary, link, image, source });
+  }
+  return items;
+}
+
+async function fetchAndParse(): Promise<ParsedItem[]> {
+  const all: ParsedItem[] = [];
+  for (const feed of FEEDS) {
+    try {
+      const res = await fetch(feed.url, {
+        headers: { "User-Agent": "Mozilla/5.0 RadioBot/1.0" },
+      });
+      if (!res.ok) continue;
+      const xml = await res.text();
+      all.push(...parseFeed(xml, feed.name));
+    } catch (e) {
+      console.error(`[news-auto] feed ${feed.name} failed`, e);
+    }
+  }
+  return all;
+}
+
+export async function isAutoNewsEnabled(adminClient: any): Promise<boolean> {
+  const { data, error } = await adminClient
+    .from("site_settings")
+    .select("*")
+    .or("setting_key.eq.auto_news_enabled,key.eq.auto_news_enabled")
+    .limit(1);
+
+  if (error || !Array.isArray(data) || data.length === 0) return false;
+
+  const row = data[0] as { setting_value?: unknown; value?: unknown };
+  const raw = row.setting_value ?? row.value;
+  return raw === true || raw === "true" || raw === '"true"';
+}
+
+export async function runNewsIngestWithClient(adminClient: any): Promise<NewsIngestResult> {
+  const items = await fetchAndParse();
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const it of items) {
+    const { data: existing } = await adminClient
+      .from("news")
+      .select("id")
+      .eq("source_url", it.link)
+      .maybeSingle();
+
+    if (existing) {
+      skipped++;
+      continue;
+    }
+
+    const { error } = await adminClient.from("news").insert({
+      title: it.title.slice(0, 180),
+      summary: it.summary,
+      content: `${it.summary}\n\nFonte: ${it.source}\n${it.link}`,
+      image_url: it.image || null,
+      source_url: it.link,
+      source_name: it.source,
+      auto_generated: true,
+      is_published: true,
+    });
+
+    if (!error) inserted++;
+    else console.error("[news-auto] insert error", error);
+  }
+
+  return { inserted, skipped, total: items.length };
+}
