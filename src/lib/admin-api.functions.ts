@@ -10,18 +10,8 @@ async function getAdminSupabase(): Promise<SupabaseClient> {
 
   const env = (typeof process !== "undefined" ? process.env : {}) as Record<string, string | undefined>;
 
-  let url = env.MY_SUPABASE_URL || env.SUPABASE_URL;
-  let key = env.MY_SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
-
-  // Cloudflare Workers: env via cloudflare:workers
-  if (!url || !key) {
-    try {
-      const cf = await import(/* @vite-ignore */ "cloudflare:workers");
-      const cfEnv = (cf as any).env || {};
-      url = url || cfEnv.MY_SUPABASE_URL || cfEnv.SUPABASE_URL;
-      key = key || cfEnv.MY_SUPABASE_SERVICE_ROLE_KEY || cfEnv.SUPABASE_SERVICE_ROLE_KEY;
-    } catch {}
-  }
+  const url = env.MY_SUPABASE_URL || env.SUPABASE_URL;
+  const key = env.MY_SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) {
     throw new Error(
