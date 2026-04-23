@@ -1,8 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { env } from "cloudflare:workers";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
 
-// Cliente Supabase admin (service role). Criado sob demanda DENTRO dos handlers
-// dos server functions, então só roda no servidor — nunca vai para o bundle do cliente.
 let _adminClient: SupabaseClient | null = null;
 
 type ServerEnvKey =
@@ -13,23 +12,24 @@ type ServerEnvKey =
   | "MY_SUPABASE_SERVICE_ROLE_KEY"
   | "MY_SUPABASE_PUBLISHABLE_KEY";
 
-function getServerEnv(key: ServerEnvKey): string | undefined {
-  // Try process.env (works in Node dev + Workers with nodejs_compat)
+function getRuntimeEnv(key: ServerEnvKey): string | undefined {
+  const fromWorker = env?.[key];
+  if (typeof fromWorker === "string" && fromWorker.length > 0) return fromWorker;
+
   if (typeof process !== "undefined" && process.env) {
-    const v = process.env[key];
-    if (typeof v === "string" && v.length > 0) return v;
+    const fromProcess = process.env[key];
+    if (typeof fromProcess === "string" && fromProcess.length > 0) return fromProcess;
   }
-  // Try globalThis bindings (Cloudflare Workers expose env on globalThis in some runtimes)
-  const g: any = globalThis as any;
-  const gv = g?.[key] ?? g?.env?.[key] ?? g?.process?.env?.[key];
-  if (typeof gv === "string" && gv.length > 0) return gv;
-  return undefined;
+
+  const g = globalThis as Record<string, unknown> & { env?: Record<string, unknown> };
+  const fromGlobal = g[key] ?? g.env?.[key];
+  return typeof fromGlobal === "string" && fromGlobal.length > 0 ? fromGlobal : undefined;
 }
 
 function resolveEnv(...keys: ServerEnvKey[]): string | undefined {
-  for (const k of keys) {
-    const v = getServerEnv(k);
-    if (v) return v;
+  for (const key of keys) {
+    const value = getRuntimeEnv(key);
+    if (value) return value;
   }
   return undefined;
 }
@@ -38,18 +38,10 @@ async function getAdminSupabase(): Promise<SupabaseClient> {
   if (_adminClient) return _adminClient;
 
   const url = resolveEnv("MY_SUPABASE_URL", "SUPABASE_URL");
-  const key = resolveEnv(
-    "MY_SUPABASE_SERVICE_ROLE_KEY",
-    "SUPABASE_SERVICE_ROLE_KEY",
-  );
+  const key = resolveEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY");
 
   if (!url || !key) {
-    const available = typeof process !== "undefined" && process.env
-      ? Object.keys(process.env).filter((k) => k.includes("SUPABASE"))
-      : [];
-    throw new Error(
-      `Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY (encontrados: ${available.join(", ") || "nenhum"})`,
-    );
+    throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
   }
 
   _adminClient = createClient(url, key, {

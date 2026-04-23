@@ -1,43 +1,46 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setCookie, deleteCookie, getCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
+import { env } from "cloudflare:workers";
 import { adminClientTokenMiddleware, getAdminSecret, getAdminSessionConfig } from "@/lib/admin-serverfn";
 import { createAdminToken, verifyAdminToken } from "@/lib/admin-token";
 
 const ADMIN_COOKIE = "admin_session";
 const ADMIN_PRESENCE_COOKIE = "admin_present";
-const SESSION_DURATION = 60 * 60 * 24; // 24h
+const SESSION_DURATION = 60 * 60 * 24;
 const SESSION_TOKEN_VALUE = "authenticated";
 const IS_SECURE_COOKIE = process.env.NODE_ENV === "production";
 export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
 export const ADMIN_PRESENCE_KEY = ADMIN_PRESENCE_COOKIE;
 export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
 
-const SUPABASE_URL =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_URL || process.env?.SUPABASE_URL
-    : undefined) || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.MY_SUPABASE_PUBLISHABLE_KEY ||
-      process.env?.SUPABASE_PUBLISHABLE_KEY
-    : undefined) ||
-  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+function getRuntimeEnv(key: "MY_SUPABASE_URL" | "SUPABASE_URL" | "MY_SUPABASE_SERVICE_ROLE_KEY" | "SUPABASE_SERVICE_ROLE_KEY") {
+  const fromWorker = env?.[key];
+  if (typeof fromWorker === "string" && fromWorker.length > 0) return fromWorker;
+  if (typeof process !== "undefined" && process.env) {
+    const fromProcess = process.env[key];
+    if (typeof fromProcess === "string" && fromProcess.length > 0) return fromProcess;
+  }
+  const g = globalThis as Record<string, unknown> & { env?: Record<string, unknown> };
+  const fromGlobal = g[key] ?? g.env?.[key];
+  return typeof fromGlobal === "string" && fromGlobal.length > 0 ? fromGlobal : undefined;
+}
 
-// Cliente único reutilizado entre invocações
-const adminAuthClient =
-  SUPABASE_URL && SUPABASE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-    : null;
+function getAdminAuthClient() {
+  const supabaseUrl = getRuntimeEnv("MY_SUPABASE_URL") || getRuntimeEnv("SUPABASE_URL") || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = getRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY") || getRuntimeEnv("SUPABASE_SERVICE_ROLE_KEY") || import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) return null;
+
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
 
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((input: { username: string; password: string }) => input)
   .handler(async ({ data }) => {
+    const adminAuthClient = getAdminAuthClient();
     if (!adminAuthClient) {
       return { success: false, error: "Configuração do servidor incompleta" };
     }
