@@ -1,32 +1,5 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
-import { resolveRuntimeEnv } from "@/lib/runtime-env";
-
-let _adminClient: SupabaseClient | null = null;
-
-type ServerEnvKey =
-  | "SUPABASE_URL"
-  | "SUPABASE_SERVICE_ROLE_KEY"
-  | "SUPABASE_PUBLISHABLE_KEY"
-  | "MY_SUPABASE_URL"
-  | "MY_SUPABASE_SERVICE_ROLE_KEY"
-  | "MY_SUPABASE_PUBLISHABLE_KEY";
-
-async function getAdminSupabase(): Promise<SupabaseClient> {
-  if (_adminClient) return _adminClient;
-
-  const url = await resolveRuntimeEnv("MY_SUPABASE_URL", "SUPABASE_URL");
-  const key = await resolveRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY");
-
-  if (!url || !key) {
-    throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
-  }
-
-  _adminClient = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  return _adminClient;
-}
+import { getAdminSupabase, hashAdminPassword } from "@/lib/admin-supabase";
 
 export const getPromotions = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
@@ -294,11 +267,25 @@ export const deletePodcast = createAdminServerFn("POST")
 export const createAdminUser = createAdminServerFn("POST")
   .inputValidator((input: { username: string; password: string }) => input)
   .handler(async ({ data }) => {
-      const supabase = await getAdminSupabase();
-    const { error } = await supabase.rpc("admin_create_user", {
-      p_username: data.username,
-      p_password: data.password,
-    });
+    const supabase = await getAdminSupabase();
+    const username = data.username.trim();
+
+    if (!username || data.password.length < 8) {
+      throw new Error("Usuário obrigatório e senha com no mínimo 8 caracteres.");
+    }
+
+    const { data: existing, error: existingError } = await supabase
+      .from("admin_users")
+      .select("id")
+      .ilike("username", username)
+      .limit(1)
+      .maybeSingle();
+
+    if (existingError) throw new Error(existingError.message);
+    if (existing) throw new Error("Já existe um administrador com esse nome de usuário.");
+
+    const password_hash = await hashAdminPassword(data.password);
+    const { error } = await supabase.from("admin_users").insert({ username, password_hash });
     if (error) throw new Error(error.message);
     return { success: true };
   });
@@ -353,7 +340,7 @@ export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async (
 
 export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data, error } = await supabase.from("site_settings").select("*");
+  const { data, error } = await (supabase as any).from("site_settings").select("*");
   if (error) throw new Error(error.message);
 
   const settings: Record<string, any> = {};
@@ -370,11 +357,11 @@ export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
 export const updateSiteSettings = createAdminServerFn("POST")
   .inputValidator((input: { key: string; value: any }) => input)
   .handler(async ({ data }) => {
-      const supabase = await getAdminSupabase();
+    const supabase = await getAdminSupabase();
 
     const stringValue = typeof data.value === "object" ? JSON.stringify(data.value) : String(data.value);
 
-    const { error } = await supabase.from("site_settings").upsert(
+    const { error } = await (supabase as any).from("site_settings").upsert(
       {
         setting_key: data.key,
         setting_value: stringValue,
