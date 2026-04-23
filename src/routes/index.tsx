@@ -784,71 +784,63 @@ function IndexPage() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {podcasts.map((p) => {
-                  const ytId = getYoutubeId(p.youtube_url);
-                  const thumb = p.thumbnail_url || (ytId ? `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg` : "");
-                  const isPlaying = playingPodcast === p.id;
-                  return (
-                    <article
-                      key={p.id}
-                      className="rounded-xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition flex flex-col"
-                    >
-                      <div className="relative aspect-video bg-black/40 overflow-hidden">
-                        {isPlaying && ytId ? (
-                          <iframe
-                            src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`}
-                            title={p.title}
-                            className="w-full h-full border-0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => setPlayingPodcast(p.id)}
-                            className="group w-full h-full flex items-center justify-center bg-cover bg-center"
-                            style={thumb ? { backgroundImage: `url(${thumb})` } : undefined}
-                            aria-label={`Reproduzir ${p.title}`}
-                          >
-                            <span className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                            <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-[#ffc107] text-[#0c2651] shadow-xl group-hover:scale-110 transition">
-                              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                            </span>
-                          </button>
-                        )}
-                      </div>
-                      <div className="p-4 flex-1 flex flex-col gap-2">
-                        <h4 className="font-bold leading-tight text-white line-clamp-2">{p.title}</h4>
-                        {p.description && (
-                          <p className="text-xs text-white/70 line-clamp-2">{p.description}</p>
-                        )}
-                        <div className="mt-auto pt-2 flex items-center gap-2">
-                          {!isPlaying && (
-                            <button
-                              onClick={() => setPlayingPodcast(p.id)}
-                              className="text-[11px] uppercase font-black bg-[#ffc107] text-[#0c2651] px-3 py-1.5 rounded-full hover:bg-white transition"
-                            >
-                              ▶ Escutar
-                            </button>
-                          )}
-                          <a
-                            href={p.youtube_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[11px] uppercase font-bold text-white/70 hover:text-white transition"
-                          >
-                            YouTube ↗
-                          </a>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
+                {podcasts.slice(0, 3).map((p) => (
+                  <PodcastCardDark
+                    key={p.id}
+                    p={p}
+                    isPlaying={playingPodcast === p.id}
+                    onPlay={() => setPlayingPodcast(p.id)}
+                  />
+                ))}
               </div>
+
+              {podcasts.length > 3 && (
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setPodcastModalOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#ffc107] px-7 py-3 text-sm font-black uppercase tracking-wide text-[#0c2651] shadow-xl hover:scale-105 transition-transform"
+                  >
+                    Ver todos os podcasts ({podcasts.length})
+                  </button>
+                </div>
+              )}
             </div>
           </section>
+        )}
+
+        {podcastModalOpen && (
+          <div
+            className="fixed inset-0 z-[9998] flex items-start justify-center overflow-y-auto bg-black/75 backdrop-blur-md p-4 sm:p-8"
+            onClick={() => setPodcastModalOpen(false)}
+          >
+            <div
+              className="relative w-full max-w-6xl rounded-2xl bg-gradient-to-br from-[#0c2651] to-[#1a3a7a] p-5 sm:p-7 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-5 flex items-center justify-between">
+                <h3 className="text-xl sm:text-2xl font-black text-white">🎧 Todos os podcasts</h3>
+                <button
+                  type="button"
+                  onClick={() => setPodcastModalOpen(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ffc107] text-[#0c2651] font-black hover:scale-110 transition"
+                  aria-label="Fechar"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {podcasts.map((p) => (
+                  <PodcastCardDark
+                    key={p.id}
+                    p={p}
+                    isPlaying={modalPlayingPodcast === p.id}
+                    onPlay={() => setModalPlayingPodcast(p.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
         )}
       </main>
 
