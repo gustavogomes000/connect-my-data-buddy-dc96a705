@@ -21,15 +21,26 @@ function getServerEnv(key: ServerEnvKey): string | undefined {
   return undefined;
 }
 
+let _cfEnvCache: any = null;
+let _cfEnvTried = false;
 async function getCfEnv(key: ServerEnvKey): Promise<string | undefined> {
-  try {
-    const modName = "cloudflare:workers";
-    const mod: any = await import(/* @vite-ignore */ /* @rollup-ignore */ modName);
-    const val = mod?.env?.[key];
-    if (typeof val === "string" && val.length > 0) return val;
-  } catch {
-    // not in CF worker runtime
+  if (!_cfEnvTried) {
+    _cfEnvTried = true;
+    try {
+      const modName = "cloudflare:workers";
+      const mod: any = await import(/* @vite-ignore */ /* @rollup-ignore */ modName);
+      _cfEnvCache = mod?.env ?? null;
+      console.log("[admin-api] cloudflare:workers env loaded, keys:", _cfEnvCache ? Object.keys(_cfEnvCache).filter(k => k.includes("SUPABASE")) : "none");
+    } catch (e) {
+      console.log("[admin-api] cloudflare:workers import failed:", (e as Error).message);
+    }
   }
+  const val = _cfEnvCache?.[key];
+  if (typeof val === "string" && val.length > 0) return val;
+  // Try globalThis fallbacks (some runtimes expose env there)
+  const g: any = globalThis as any;
+  const gv = g?.env?.[key] ?? g?.[key];
+  if (typeof gv === "string" && gv.length > 0) return gv;
   return undefined;
 }
 
