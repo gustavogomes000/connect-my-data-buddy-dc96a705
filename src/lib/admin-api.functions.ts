@@ -340,7 +340,7 @@ export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async (
 
 export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data, error } = await supabase.from("site_settings").select("*");
+  const { data, error } = await (supabase as any).from("site_settings").select("*");
   if (error) throw new Error(error.message);
 
   const settings: Record<string, any> = {};
@@ -357,11 +357,11 @@ export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
 export const updateSiteSettings = createAdminServerFn("POST")
   .inputValidator((input: { key: string; value: any }) => input)
   .handler(async ({ data }) => {
-      const supabase = await getAdminSupabase();
+    const supabase = await getAdminSupabase();
 
     const stringValue = typeof data.value === "object" ? JSON.stringify(data.value) : String(data.value);
 
-    const { error } = await supabase.from("site_settings").upsert(
+    const { error } = await (supabase as any).from("site_settings").upsert(
       {
         setting_key: data.key,
         setting_value: stringValue,
