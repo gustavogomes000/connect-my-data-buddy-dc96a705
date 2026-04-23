@@ -1,23 +1,24 @@
 import { createMiddleware, createServerFn } from "@tanstack/react-start";
 import { getRequestHeader, useSession } from "@tanstack/react-start/server";
 import { verifyAdminToken } from "@/lib/admin-token";
+import { getRuntimeEnv } from "@/lib/runtime-env";
 
 const ADMIN_COOKIE = "admin_session";
 const ADMIN_HEADER = "x-admin-token";
 const SESSION_DURATION = 60 * 60 * 24;
 
-export function getAdminSecret() {
+export async function getAdminSecret() {
   return (
-    process.env.MY_ADMIN_SESSION_SECRET ||
-    process.env.ADMIN_SESSION_SECRET ||
-    process.env.MY_SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    (await getRuntimeEnv("MY_ADMIN_SESSION_SECRET")) ||
+    (await getRuntimeEnv("ADMIN_SESSION_SECRET")) ||
+    (await getRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY")) ||
+    (await getRuntimeEnv("SUPABASE_SERVICE_ROLE_KEY"))
   );
 }
 
-export function getAdminSessionConfig() {
+export async function getAdminSessionConfig() {
   const isSecure = process.env.NODE_ENV === "production";
-  const password = getAdminSecret();
+  const password = await getAdminSecret();
 
   if (!password) {
     throw new Error("Configuração da sessão admin incompleta");
@@ -52,8 +53,8 @@ export const adminClientTokenMiddleware = createMiddleware({ type: "function" })
 });
 
 const requireAdminMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
-  const session = await useSession<{ authenticated?: boolean }>(getAdminSessionConfig());
-  const secret = getAdminSecret();
+  const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+  const secret = await getAdminSecret();
   const headerToken = getRequestHeader(ADMIN_HEADER);
 
   const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
