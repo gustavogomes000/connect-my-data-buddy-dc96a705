@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { env } from "cloudflare:workers";
 import { createAdminServerFn } from "@/lib/admin-serverfn";
+import { resolveRuntimeEnv } from "@/lib/runtime-env";
 
 let _adminClient: SupabaseClient | null = null;
 
@@ -12,33 +12,11 @@ type ServerEnvKey =
   | "MY_SUPABASE_SERVICE_ROLE_KEY"
   | "MY_SUPABASE_PUBLISHABLE_KEY";
 
-function getRuntimeEnv(key: ServerEnvKey): string | undefined {
-  const fromWorker = env?.[key];
-  if (typeof fromWorker === "string" && fromWorker.length > 0) return fromWorker;
-
-  if (typeof process !== "undefined" && process.env) {
-    const fromProcess = process.env[key];
-    if (typeof fromProcess === "string" && fromProcess.length > 0) return fromProcess;
-  }
-
-  const g = globalThis as Record<string, unknown> & { env?: Record<string, unknown> };
-  const fromGlobal = g[key] ?? g.env?.[key];
-  return typeof fromGlobal === "string" && fromGlobal.length > 0 ? fromGlobal : undefined;
-}
-
-function resolveEnv(...keys: ServerEnvKey[]): string | undefined {
-  for (const key of keys) {
-    const value = getRuntimeEnv(key);
-    if (value) return value;
-  }
-  return undefined;
-}
-
 async function getAdminSupabase(): Promise<SupabaseClient> {
   if (_adminClient) return _adminClient;
 
-  const url = resolveEnv("MY_SUPABASE_URL", "SUPABASE_URL");
-  const key = resolveEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY");
+  const url = await resolveRuntimeEnv("MY_SUPABASE_URL", "SUPABASE_URL");
+  const key = await resolveRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY");
 
   if (!url || !key) {
     throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
