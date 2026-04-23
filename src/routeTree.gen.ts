@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiCronNewsRouteImport } from './routes/api/cron.news'
+import { Route as ApiPublicSetupPodcastsRouteImport } from './routes/api/public/setup.podcasts'
 import { Route as ApiPublicCronNewsRouteImport } from './routes/api/public/cron.news'
 
 const PromocoesRoute = PromocoesRouteImport.update({
@@ -59,6 +60,11 @@ const ApiCronNewsRoute = ApiCronNewsRouteImport.update({
   path: '/api/cron/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSetupPodcastsRoute = ApiPublicSetupPodcastsRouteImport.update({
+  id: '/api/public/setup/podcasts',
+  path: '/api/public/setup/podcasts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCronNewsRoute = ApiPublicCronNewsRouteImport.update({
   id: '/api/public/cron/news',
   path: '/api/public/cron/news',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/api/cron/news': typeof ApiCronNewsRoute
   '/api/public/cron/news': typeof ApiPublicCronNewsRoute
+  '/api/public/setup/podcasts': typeof ApiPublicSetupPodcastsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/api/cron/news': typeof ApiCronNewsRoute
   '/api/public/cron/news': typeof ApiPublicCronNewsRoute
+  '/api/public/setup/podcasts': typeof ApiPublicSetupPodcastsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/api/cron/news': typeof ApiCronNewsRoute
   '/api/public/cron/news': typeof ApiPublicCronNewsRoute
+  '/api/public/setup/podcasts': typeof ApiPublicSetupPodcastsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/api/cron/news'
     | '/api/public/cron/news'
+    | '/api/public/setup/podcasts'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/api/cron/news'
     | '/api/public/cron/news'
+    | '/api/public/setup/podcasts'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/api/cron/news'
     | '/api/public/cron/news'
+    | '/api/public/setup/podcasts'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   ApiCronNewsRoute: typeof ApiCronNewsRoute
   ApiPublicCronNewsRoute: typeof ApiPublicCronNewsRoute
+  ApiPublicSetupPodcastsRoute: typeof ApiPublicSetupPodcastsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCronNewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/setup/podcasts': {
+      id: '/api/public/setup/podcasts'
+      path: '/api/public/setup/podcasts'
+      fullPath: '/api/public/setup/podcasts'
+      preLoaderRoute: typeof ApiPublicSetupPodcastsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cron/news': {
       id: '/api/public/cron/news'
       path: '/api/public/cron/news'
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   ApiCronNewsRoute: ApiCronNewsRoute,
   ApiPublicCronNewsRoute: ApiPublicCronNewsRoute,
+  ApiPublicSetupPodcastsRoute: ApiPublicSetupPodcastsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
