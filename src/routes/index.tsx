@@ -223,6 +223,8 @@ function IndexPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [podcasts, setPodcasts] = useState<PodcastItem[]>([]);
   const [playingPodcast, setPlayingPodcast] = useState<string | null>(null);
+  const [podcastModalOpen, setPodcastModalOpen] = useState(false);
+  const [modalPlayingPodcast, setModalPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
   const [liveActive, setLiveActive] = useState(false);
   const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
