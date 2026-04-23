@@ -156,6 +156,20 @@ const MOCK_PODCASTS: PodcastItem[] = [
     youtube_url: "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
     thumbnail_url: null,
   },
+  {
+    id: "mock-pc-4",
+    title: "TOP Cultura — Cinema e séries",
+    description: "Dicas de filmes, séries e tudo que está bombando nas telas.",
+    youtube_url: "https://www.youtube.com/watch?v=L_jWHffIx5E",
+    thumbnail_url: null,
+  },
+  {
+    id: "mock-pc-5",
+    title: "Papo Reto — Política e cidade",
+    description: "Análises sobre o que acontece em Aparecida e região.",
+    youtube_url: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+    thumbnail_url: null,
+  },
 ];
 
 const svgLogo = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
