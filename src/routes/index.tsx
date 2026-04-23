@@ -762,6 +762,59 @@ function IndexPage() {
           </div>
         </section>
 
+        {/* PODCASTS — mesma estética da Programação */}
+        {podcasts.length > 0 && (
+          <section className="relative overflow-hidden bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
+            <img
+              src={illustDancer}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width={240}
+              height={240}
+              className="hidden md:block absolute right-4 top-2 h-56 w-56 object-contain opacity-95 anim-wiggle drop-shadow-2xl pointer-events-none"
+            />
+            <div className="relative mx-auto max-w-7xl px-4">
+              <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <span className="h-8 w-1.5 rounded-full bg-[#ffc107]" />
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffc107]">
+                      🎧 No ar quando quiser
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-none text-white">
+                      Podcasts
+                    </h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {podcasts.slice(0, 3).map((p) => (
+                  <PodcastCardDark
+                    key={p.id}
+                    p={p}
+                    isPlaying={playingPodcast === p.id}
+                    onPlay={() => setPlayingPodcast(p.id)}
+                  />
+                ))}
+              </div>
+
+              {podcasts.length > 3 && (
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setPodcastModalOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#ffc107] px-7 py-3 text-sm font-black uppercase tracking-wide text-[#0c2651] shadow-xl hover:scale-105 transition-transform"
+                  >
+                    Ver todos os podcasts ({podcasts.length})
+                  </button>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* PATROCINADORES */}
         {sponsors.length > 0 && (
           <section className="bg-white py-14 border-b border-gray-100">
@@ -823,59 +876,6 @@ function IndexPage() {
                   <span>→</span>
                 </a>
               </div>
-            </div>
-          </section>
-        )}
-
-        {/* PODCASTS — mesma estética da Programação */}
-        {podcasts.length > 0 && (
-          <section className="relative overflow-hidden bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
-            <img
-              src={illustDancer}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              width={240}
-              height={240}
-              className="hidden md:block absolute right-4 top-2 h-56 w-56 object-contain opacity-95 anim-wiggle drop-shadow-2xl pointer-events-none"
-            />
-            <div className="relative mx-auto max-w-7xl px-4">
-              <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
-                <div className="flex items-center gap-3">
-                  <span className="h-8 w-1.5 rounded-full bg-[#ffc107]" />
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffc107]">
-                      🎧 No ar quando quiser
-                    </p>
-                    <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-none text-white">
-                      Podcasts
-                    </h2>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {podcasts.slice(0, 3).map((p) => (
-                  <PodcastCardDark
-                    key={p.id}
-                    p={p}
-                    isPlaying={playingPodcast === p.id}
-                    onPlay={() => setPlayingPodcast(p.id)}
-                  />
-                ))}
-              </div>
-
-              {podcasts.length > 3 && (
-                <div className="mt-8 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() => setPodcastModalOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#ffc107] px-7 py-3 text-sm font-black uppercase tracking-wide text-[#0c2651] shadow-xl hover:scale-105 transition-transform"
-                  >
-                    Ver todos os podcasts ({podcasts.length})
-                  </button>
-                </div>
-              )}
             </div>
           </section>
         )}
