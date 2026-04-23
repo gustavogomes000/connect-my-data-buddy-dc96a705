@@ -14,43 +14,21 @@ type ServerEnvKey =
   | "MY_SUPABASE_PUBLISHABLE_KEY";
 
 function getServerEnv(key: ServerEnvKey): string | undefined {
+  // Try process.env (works in Node dev + Workers with nodejs_compat)
   if (typeof process !== "undefined" && process.env) {
-    const val = process.env[key];
-    if (typeof val === "string" && val.length > 0) return val;
+    const v = process.env[key];
+    if (typeof v === "string" && v.length > 0) return v;
   }
-  return undefined;
-}
-
-let _cfEnvCache: any = null;
-let _cfEnvTried = false;
-async function getCfEnv(key: ServerEnvKey): Promise<string | undefined> {
-  if (!_cfEnvTried) {
-    _cfEnvTried = true;
-    try {
-      const modName = "cloudflare:workers";
-      const mod: any = await import(/* @vite-ignore */ /* @rollup-ignore */ modName);
-      _cfEnvCache = mod?.env ?? null;
-      console.log("[admin-api] cloudflare:workers env loaded, keys:", _cfEnvCache ? Object.keys(_cfEnvCache).filter(k => k.includes("SUPABASE")) : "none");
-    } catch (e) {
-      console.log("[admin-api] cloudflare:workers import failed:", (e as Error).message);
-    }
-  }
-  const val = _cfEnvCache?.[key];
-  if (typeof val === "string" && val.length > 0) return val;
-  // Try globalThis fallbacks (some runtimes expose env there)
+  // Try globalThis bindings (Cloudflare Workers expose env on globalThis in some runtimes)
   const g: any = globalThis as any;
-  const gv = g?.env?.[key] ?? g?.[key];
+  const gv = g?.[key] ?? g?.env?.[key] ?? g?.process?.env?.[key];
   if (typeof gv === "string" && gv.length > 0) return gv;
   return undefined;
 }
 
-async function resolveEnv(...keys: ServerEnvKey[]): Promise<string | undefined> {
+function resolveEnv(...keys: ServerEnvKey[]): string | undefined {
   for (const k of keys) {
     const v = getServerEnv(k);
-    if (v) return v;
-  }
-  for (const k of keys) {
-    const v = await getCfEnv(k);
     if (v) return v;
   }
   return undefined;
@@ -59,16 +37,19 @@ async function resolveEnv(...keys: ServerEnvKey[]): Promise<string | undefined> 
 async function getAdminSupabase(): Promise<SupabaseClient> {
   if (_adminClient) return _adminClient;
 
-  const url = await resolveEnv("MY_SUPABASE_URL", "SUPABASE_URL");
-  const key = await resolveEnv(
+  const url = resolveEnv("MY_SUPABASE_URL", "SUPABASE_URL");
+  const key = resolveEnv(
     "MY_SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
-    "MY_SUPABASE_PUBLISHABLE_KEY",
-    "SUPABASE_PUBLISHABLE_KEY",
   );
 
   if (!url || !key) {
-    throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
+    const available = typeof process !== "undefined" && process.env
+      ? Object.keys(process.env).filter((k) => k.includes("SUPABASE"))
+      : [];
+    throw new Error(
+      `Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY (encontrados: ${available.join(", ") || "nenhum"})`,
+    );
   }
 
   _adminClient = createClient(url, key, {
