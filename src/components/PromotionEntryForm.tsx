@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { submitPromotionEntry } from "@/lib/public-api";
 import { LgpdTermsModal } from "@/components/LgpdTermsModal";
+import logo from "@/assets/top100-logo.png";
 
 const maskCpf = (v: string) => v.replace(/\D/g, "").slice(0, 11)
   .replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
@@ -36,76 +37,172 @@ export function PromotionEntryForm({ promotionId, onClose, onSuccess }: { promot
 
   return (
     <>
+      <style>{`
+        .promo-form-card {
+          max-width: 460px !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+          border-radius: 14px !important;
+          box-shadow: 0 25px 60px -15px rgba(10,31,68,0.45) !important;
+        }
+        .promo-form-header {
+          background: linear-gradient(135deg, #0a1f44 0%, #142a5c 50%, #1e3a7a 100%);
+          padding: 26px 28px 22px;
+          color: #fff;
+          text-align: center;
+          position: relative;
+        }
+        .promo-form-header::after {
+          content: "";
+          position: absolute;
+          left: 0; right: 0; bottom: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #f5a623 0%, #f7b733 50%, #f5a623 100%);
+        }
+        .promo-form-logo {
+          height: 48px;
+          width: auto;
+          margin: 0 auto 12px;
+          display: block;
+          filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+        }
+        .promo-form-header h2 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+        }
+        .promo-form-header p {
+          margin: 4px 0 0;
+          font-size: 12.5px;
+          opacity: 0.85;
+          font-weight: 400;
+        }
+        .promo-form-body {
+          padding: 22px 28px 24px;
+          background: #fff;
+        }
+        .promo-form-body .entry-input {
+          width: 100%;
+          padding: 11px 14px;
+          border: 1.5px solid #e2e6ee;
+          border-radius: 8px;
+          font-size: 14px;
+          color: #1f2937;
+          background: #fafbfc;
+          transition: all 0.18s ease;
+          font-family: inherit;
+        }
+        .promo-form-body .entry-input:focus {
+          outline: none;
+          border-color: #0a1f44;
+          background: #fff;
+          box-shadow: 0 0 0 3px rgba(10,31,68,0.08);
+        }
+        .promo-form-body .entry-input::placeholder { color: #9ca3af; }
+        .promo-form-lgpd {
+          display: flex;
+          align-items: flex-start;
+          gap: 9px;
+          padding: 12px 14px;
+          background: #f4f6fb;
+          border-radius: 8px;
+          margin-top: 6px;
+          font-size: 12px;
+          color: #4b5563;
+          line-height: 1.5;
+        }
+        .promo-form-lgpd input[type="checkbox"] {
+          margin-top: 2px;
+          width: 15px;
+          height: 15px;
+          accent-color: #0a1f44;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+        .promo-form-lgpd .lgpd-link {
+          background: none;
+          border: none;
+          padding: 0;
+          color: #0a1f44;
+          font-weight: 600;
+          text-decoration: underline;
+          cursor: pointer;
+          font-size: 12px;
+        }
+        .promo-form-submit {
+          width: 100%;
+          padding: 13px;
+          margin-top: 4px;
+          background: linear-gradient(135deg, #0a1f44 0%, #1e3a7a 100%);
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          font-size: 14.5px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 12px rgba(10,31,68,0.25);
+        }
+        .promo-form-submit:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 18px rgba(10,31,68,0.35);
+        }
+        .promo-form-submit:disabled {
+          opacity: 0.55;
+          cursor: not-allowed;
+          background: #6b7280;
+          box-shadow: none;
+        }
+        .promo-form-error {
+          padding: 10px 12px;
+          background: #fef2f2;
+          border-left: 3px solid #c0392b;
+          color: #991b1b;
+          font-size: 13px;
+          border-radius: 4px;
+        }
+      `}</style>
+
       <div className="popup-overlay" onClick={onClose}>
-        <div className="popup-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 480 }}>
-          <button className="popup-close" onClick={onClose}>✕</button>
-          <div className="popup-body">
-            <h2 style={{ marginTop: 0 }}>Participar da promoção</h2>
-            <p style={{ color: "#555", marginTop: -4 }}>Preencha todos os campos para concorrer.</p>
+        <div className="popup-card promo-form-card" onClick={(e) => e.stopPropagation()}>
+          <button className="popup-close" onClick={onClose} style={{ zIndex: 2 }}>✕</button>
+
+          <div className="promo-form-header">
+            <img src={logo} alt="Rádio TOP100 FM" className="promo-form-logo" />
+            <h2>Participar da Promoção</h2>
+            <p>Preencha seus dados e concorra a prêmios</p>
+          </div>
+
+          <div className="promo-form-body">
             <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <input required placeholder="Nome completo *" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} className="entry-input" />
-              <input
-                required
-                type="date"
-                placeholder="Data de nascimento *"
-                value={form.birth_date}
-                onChange={(e) => setForm({ ...form, birth_date: e.target.value })}
-                className="entry-input"
-              />
+              <input required type="date" value={form.birth_date} onChange={(e) => setForm({ ...form, birth_date: e.target.value })} className="entry-input" />
               <input required placeholder="WhatsApp * (com DDD)" value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: maskPhone(e.target.value) })} className="entry-input" />
               <input required placeholder="CPF *" value={form.cpf} onChange={(e) => setForm({ ...form, cpf: maskCpf(e.target.value) })} className="entry-input" />
               <input required placeholder="@usuário do Instagram *" value={form.instagram} onChange={(e) => setForm({ ...form, instagram: e.target.value })} className="entry-input" />
 
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 8,
-                  fontSize: 12,
-                  color: "#555",
-                  lineHeight: 1.45,
-                  marginTop: 4,
-                }}
-              >
+              <label className="promo-form-lgpd">
                 <input
                   type="checkbox"
                   checked={acceptedLgpd}
                   onChange={(e) => setAcceptedLgpd(e.target.checked)}
-                  style={{ marginTop: 3 }}
                   required
                 />
                 <span>
                   Li e aceito o tratamento dos meus dados pessoais conforme a LGPD.{" "}
-                  <button
-                    type="button"
-                    onClick={() => setShowTerms(true)}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      padding: 0,
-                      color: "#0a1f44",
-                      textDecoration: "underline",
-                      cursor: "pointer",
-                      fontSize: 12,
-                    }}
-                  >
+                  <button type="button" onClick={() => setShowTerms(true)} className="lgpd-link">
                     ler termos
                   </button>
                 </span>
               </label>
 
-              {err && <div style={{ color: "#c0392b", fontSize: 14 }}>{err}</div>}
-              <button
-                type="submit"
-                disabled={loading || !acceptedLgpd}
-                className="popup-link"
-                style={{
-                  border: "none",
-                  cursor: loading || !acceptedLgpd ? "not-allowed" : "pointer",
-                  opacity: loading || !acceptedLgpd ? 0.6 : 1,
-                }}
-              >
-                {loading ? "Enviando..." : "Confirmar inscrição"}
+              {err && <div className="promo-form-error">{err}</div>}
+
+              <button type="submit" disabled={loading || !acceptedLgpd} className="promo-form-submit">
+                {loading ? "Enviando..." : "Confirmar Inscrição"}
               </button>
             </form>
           </div>
