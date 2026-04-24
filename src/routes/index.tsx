@@ -760,7 +760,7 @@ function IndexPage() {
               </button>
               <div className="overflow-y-auto flex-1">
                 {openNews.image_url && (
-                  <img src={openNews.image_url} alt={openNews.title} className="w-full max-h-80 object-cover" />
+                  <img src={safeImageUrl(openNews.image_url)} alt={openNews.title} referrerPolicy="no-referrer" className="w-full max-h-80 object-cover" />
                 )}
                 <div className="p-6 sm:p-8">
                   <div className="text-xs uppercase tracking-wider font-bold text-[#c8102e] mb-2">
