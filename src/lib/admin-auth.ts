@@ -31,11 +31,14 @@ export const adminLogin = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
 
+    console.log("[adminLogin] username=", username, "found=", !!user, "error=", error?.message);
+
     if (error) {
       throw new Error(error.message);
     }
 
     const isValid = user ? await verifyAdminPassword(password, user.password_hash) : false;
+    console.log("[adminLogin] isValid=", isValid, "hashPrefix=", user?.password_hash?.slice(0, 7));
     if (!user || !isValid) {
       return { success: false, error: "Credenciais inválidas" };
     }
