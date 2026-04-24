@@ -40,7 +40,13 @@ export const adminLogin = createServerFn({ method: "POST" })
       return { success: false, error: "Credenciais inválidas" };
     }
 
-    const session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    let session;
+    try {
+      session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    } catch {
+      try { deleteCookie(ADMIN_COOKIE); } catch {}
+      session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    }
     await session.update({ authenticated: true, username: user.username });
     const secret = (await getAdminSessionConfig()).password;
     const token = await createAdminToken(
