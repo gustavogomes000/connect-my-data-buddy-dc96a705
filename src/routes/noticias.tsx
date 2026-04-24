@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { safeImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/noticias")({
   head: () => ({
@@ -103,9 +104,10 @@ function NoticiasPage() {
                 {n.image_url ? (
                   <div className="aspect-video overflow-hidden bg-muted">
                     <img
-                      src={n.image_url}
+                      src={safeImageUrl(n.image_url)}
                       alt={n.title}
                       loading="lazy"
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover transition group-hover:scale-105"
                     />
                   </div>
@@ -156,7 +158,7 @@ function NoticiasPage() {
               </button>
               <div className="overflow-y-auto flex-1">
                 {open.image_url && (
-                  <img src={open.image_url} alt={open.title} className="w-full max-h-80 object-cover" />
+                  <img src={safeImageUrl(open.image_url)} alt={open.title} referrerPolicy="no-referrer" className="w-full max-h-80 object-cover" />
                 )}
                 <div className="p-6 sm:p-8">
                   <div className="text-xs uppercase tracking-wider font-bold text-[#c8102e] mb-2">
