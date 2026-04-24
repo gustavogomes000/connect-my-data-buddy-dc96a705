@@ -11,6 +11,8 @@ import mascoteTop from "@/assets/mascote-top.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
+import axisDigitalLogo from "@/assets/axis-digital.png";
+import draFernandaSarelliLogo from "@/assets/dra-fernanda-sarelli.png";
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null;
@@ -173,6 +175,20 @@ const MOCK_PODCASTS: PodcastItem[] = [
 ];
 
 const svgLogo = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+
+const SPONSOR_LOGO_FALLBACKS: Record<string, string> = {
+  "axis-digital": axisDigitalLogo,
+  "dra-fernanda-sarelli": draFernandaSarelliLogo,
+};
+
+const normalizeSponsorLogo = (s: Sponsor): Sponsor => {
+  const fallback = SPONSOR_LOGO_FALLBACKS[s.id];
+  if (!fallback) return s;
+  if (!s.logo_url || s.logo_url.startsWith("/sponsors/")) {
+    return { ...s, logo_url: fallback };
+  }
+  return s;
+};
 
 const MOCK_SPONSORS: Sponsor[] = [
   {
@@ -356,7 +372,8 @@ function IndexPage() {
         }
         const list = (Array.isArray(map.sponsors) ? map.sponsors : []) as Sponsor[];
         const filtered = list
-          .filter((s) => s.is_active !== false && s.logo_url)
+          .filter((s) => s.is_active !== false && (s.logo_url || SPONSOR_LOGO_FALLBACKS[s.id]))
+          .map(normalizeSponsorLogo)
           .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
         setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
         setLiveActive(!!map.live_active);
