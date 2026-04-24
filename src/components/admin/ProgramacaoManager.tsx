@@ -4,7 +4,7 @@ import {
   createProgramacao,
   updateProgramacao,
   deleteProgramacao,
-} from "@/lib/admin-api";
+} from "@/lib/admin-api.functions";
 import { CalendarIcon, PencilIcon, PlusIcon, PowerIcon, TrashIcon } from "./icons";
 import { DAYS_LABELS, type ProgItem } from "./types";
 

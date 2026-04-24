@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getUploadUrl } from "@/lib/admin-api";
+import { getUploadUrl } from "@/lib/admin-api.functions";
 import { ImageIcon } from "./icons";
 import { supabase } from "@/integrations/supabase/client";
 

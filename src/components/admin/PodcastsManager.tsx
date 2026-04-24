@@ -4,7 +4,7 @@ import {
   createPodcast,
   updatePodcast,
   deletePodcast,
-} from "@/lib/admin-api";
+} from "@/lib/admin-api.functions";
 import { ImageUploader } from "./ImageUploader";
 import { MicIcon, PencilIcon, PlusIcon, PowerIcon, TrashIcon } from "./icons";
 import type { PodcastItemAdmin } from "./types";
