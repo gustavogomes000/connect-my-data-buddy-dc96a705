@@ -26,8 +26,8 @@ const ENDERECO = "Rua Exemplo, 123 — Cidade/UF";
 const SOCIAIS = [
   {
     name: "Instagram",
-    handle: "@top100fm",
-    href: "https://instagram.com/top100fm",
+    handle: "@top100fmoficial",
+    href: "https://www.instagram.com/top100fmoficial",
     Icon: Instagram,
     gradient: "from-[#feda75] via-[#d62976] to-[#4f5bd5]",
   },
