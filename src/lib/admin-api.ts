@@ -265,7 +265,7 @@ export const getUploadUrl = createServerFn({ method: "POST" })
   });
 
 // ── Auto News ──
-export { triggerAutoNewsManual } from "./news-auto";
+export { triggerAutoNewsManual } from "./admin-api.functions";
 
 // ── Site Settings ──
 
