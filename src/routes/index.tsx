@@ -176,6 +176,20 @@ const MOCK_PODCASTS: PodcastItem[] = [
 
 const svgLogo = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
+const SPONSOR_LOGO_FALLBACKS: Record<string, string> = {
+  "axis-digital": axisDigitalLogo,
+  "dra-fernanda-sarelli": draFernandaSarelliLogo,
+};
+
+const normalizeSponsorLogo = (s: Sponsor): Sponsor => {
+  const fallback = SPONSOR_LOGO_FALLBACKS[s.id];
+  if (!fallback) return s;
+  if (!s.logo_url || s.logo_url.startsWith("/sponsors/")) {
+    return { ...s, logo_url: fallback };
+  }
+  return s;
+};
+
 const MOCK_SPONSORS: Sponsor[] = [
   {
     id: "mock-sp-1",
