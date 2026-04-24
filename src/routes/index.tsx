@@ -297,6 +297,7 @@ function IndexPage() {
   const [podcastModalOpen, setPodcastModalOpen] = useState(false);
   const [modalPlayingPodcast, setModalPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
+  const [openNews, setOpenNews] = useState<NewsItem | null>(null);
   const [liveActive, setLiveActive] = useState(false);
   const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
   const [liveTitle, setLiveTitle] = useState<string>("");
