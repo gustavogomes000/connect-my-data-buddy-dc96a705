@@ -1,6 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useState } from "react";
-import { adminLogout, checkAdminSession } from "@/lib/admin-auth";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { adminLogout, checkAdminSession, ADMIN_SESSION_KEY, ADMIN_PRESENCE_KEY } from "@/lib/admin-auth";
 import { AdminSidebar, type AdminTab } from "@/components/admin/AdminSidebar";
 import { PromotionsManager } from "@/components/admin/PromotionsManager";
 import { EntriesManager } from "@/components/admin/EntriesManager";
@@ -15,38 +15,73 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
-// Rota protegida – valida a sessão no servidor antes de renderizar.
 export const Route = createFileRoute("/admin/")({
-  beforeLoad: async () => {
-    const hasLocalSession =
-      typeof document !== "undefined" &&
-      (document.cookie.split("; ").some((c) => c.startsWith("admin_present=")) ||
-        (typeof localStorage !== "undefined" && !!localStorage.getItem("admin_session")));
-
-    if (!hasLocalSession) {
-      throw redirect({ to: "/admin/login", replace: true });
-    }
-
-    const session = await checkAdminSession();
-    if (!session?.authenticated) {
-      throw redirect({ to: "/admin/login", replace: true });
-    }
-
-    return {};
-  },
   head: () => ({
     meta: [{ title: "Painel · TOP100 FM" }],
   }),
   component: WrappedAdminDashboard,
 });
 
+function clearAdminClientSession() {
+  try {
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    localStorage.removeItem(ADMIN_SESSION_KEY);
+    document.cookie = `${ADMIN_PRESENCE_KEY}=; Max-Age=0; path=/; SameSite=Lax`;
+  } catch {}
+}
+
 function AdminDashboard() {
   const [tab, setTab] = useState<AdminTab>("promos");
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const validateSession = async () => {
+      try {
+        const session = await checkAdminSession();
+        if (!active) return;
+
+        if (session?.authenticated) {
+          setIsAuthorized(true);
+          return;
+        }
+      } catch {
+      }
+
+      if (!active) return;
+      clearAdminClientSession();
+      window.location.replace("/admin/login");
+    };
+
+    void validateSession().finally(() => {
+      if (active) setIsCheckingSession(false);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleLogout = async () => {
-    await adminLogout();
-    window.location.replace("/admin/login");
+    try {
+      await adminLogout();
+    } finally {
+      clearAdminClientSession();
+      window.location.replace("/admin/login");
+    }
   };
+
+  if (isCheckingSession || !isAuthorized) {
+    return (
+      <div className="admin-layout" style={{ minHeight: "100vh", placeItems: "center" }}>
+        <main className="admin-main" style={{ display: "grid", placeItems: "center" }}>
+          <p className="admin-hint">Carregando painel…</p>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-layout">
@@ -74,3 +109,4 @@ function WrappedAdminDashboard() {
     </QueryClientProvider>
   );
 }
+

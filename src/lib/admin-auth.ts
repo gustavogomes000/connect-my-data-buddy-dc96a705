@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { setCookie, deleteCookie, getCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
+import { setCookie, deleteCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
 import { adminClientTokenMiddleware, getAdminSecret, getAdminSessionConfig } from "@/lib/admin-serverfn";
 import { getAdminSupabase, verifyAdminPassword } from "@/lib/admin-supabase";
 import { createAdminToken, verifyAdminToken } from "@/lib/admin-token";
@@ -84,15 +84,21 @@ export const checkAdminSession = createServerFn({ method: "GET" })
       const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
       sessionAuthenticated = session.data.authenticated === true;
     } catch {
-      // cookie inválido/secret alterado – ignora e tenta outras formas
       try {
         deleteCookie(ADMIN_COOKIE);
       } catch {}
     }
-    const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
+
     const secret = await getAdminSecret();
     const headerToken = getRequestHeader("x-admin-token");
     const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
+    const authenticated = sessionAuthenticated || hasValidHeader;
 
-    return { authenticated: sessionAuthenticated || cookie === "1" || hasValidHeader };
+    if (!authenticated) {
+      try {
+        deleteCookie(ADMIN_PRESENCE_COOKIE);
+      } catch {}
+    }
+
+    return { authenticated };
   });
