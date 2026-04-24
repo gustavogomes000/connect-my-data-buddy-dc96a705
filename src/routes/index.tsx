@@ -371,6 +371,19 @@ function IndexPage() {
     });
   }, [today]);
 
+  // ESC fecha modal de notícia + trava scroll
+  useEffect(() => {
+    if (!openNews) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenNews(null);
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [openNews]);
+
   const liveYoutubeId = liveActive ? getYoutubeId(liveYoutubeUrl) : null;
   const isLive = liveActive && !!liveYoutubeId;
 
