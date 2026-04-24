@@ -32,10 +32,15 @@ export function safeImageUrl(url?: string | null): string | undefined {
     // imagens da própria infra (supabase storage, lovable) não precisam de proxy
     const host = parsed.hostname;
     if (
-      host.endsWith(".supabase.co") ||
-      host.endsWith(".supabase.in") ||
       host.endsWith("lovable.app") ||
       host.endsWith("lovable.dev") ||
+      host.endsWith("lovableproject.com")
+    ) {
+      return `${parsed.pathname}${parsed.search}${parsed.hash}` || parsed.pathname;
+    }
+    if (
+      host.endsWith(".supabase.co") ||
+      host.endsWith(".supabase.in") ||
       host.endsWith("top100fm.com.br")
     ) {
       return u;
