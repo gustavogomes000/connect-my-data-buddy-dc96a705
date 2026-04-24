@@ -1,27 +1,50 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { MessageCircle, Instagram, Facebook, Youtube, Mail, MapPin, ArrowUpRight } from "lucide-react";
+import {
+  MessageCircle,
+  Instagram,
+  Facebook,
+  Youtube,
+  Mail,
+  MapPin,
+  ArrowUpRight,
+  Navigation,
+} from "lucide-react";
 
 export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
       { title: "Contato | TOP100 FM" },
-      { name: "description", content: "Fale com a Rádio TOP100 FM pelo WhatsApp, e-mail e redes sociais." },
+      { name: "description", content: "Fale com a Rádio TOP100 FM pelo WhatsApp, e-mail, redes sociais ou visite nosso estúdio em Aparecida de Goiânia." },
       { property: "og:title", content: "Contato | TOP100 FM" },
-      { property: "og:description", content: "Fale com a Rádio TOP100 FM." },
+      { property: "og:description", content: "WhatsApp, e-mail, redes sociais e endereço do estúdio TOP100 FM." },
     ],
   }),
   component: ContatoPage,
 });
 
+// ⚠️ AJUSTE AQUI quando tiver o número/email reais
 const WHATSAPP = {
-  display: "(00) 00000-0000",
-  href: "https://wa.me/5500000000000?text=Ol%C3%A1%2C%20TOP100%20FM!",
+  display: "(62) 00000-0000",
+  href: "https://wa.me/5562000000000?text=Ol%C3%A1%2C%20TOP100%20FM!",
 };
 
-const EMAIL = "contato@top100fm.com.br";
-const ENDERECO = "Rua Exemplo, 123 — Cidade/UF";
+const EMAIL = "contato@axisdigital.com.br";
+
+const ENDERECO = {
+  label: "Estúdio TOP 100",
+  street: "R. Antártida — Conj. Planície",
+  city: "Aparecida de Goiânia — GO",
+  cep: "74988-716",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent("R. Antártida, Conj. Planicie, Aparecida de Goiânia - GO, 74988-716"),
+  embedUrl:
+    "https://www.google.com/maps?q=" +
+    encodeURIComponent("R. Antártida, Conj. Planicie, Aparecida de Goiânia - GO, 74988-716") +
+    "&output=embed",
+};
 
 const SOCIAIS = [
   {
@@ -44,6 +67,20 @@ const SOCIAIS = [
     href: "https://www.youtube.com/@top100fmoficial",
     Icon: Youtube,
     gradient: "from-[#ff0000] to-[#990000]",
+  },
+  {
+    name: "WhatsApp",
+    handle: "Fale agora",
+    href: WHATSAPP.href,
+    Icon: MessageCircle,
+    gradient: "from-[#25d366] to-[#128c7e]",
+  },
+  {
+    name: "E-mail",
+    handle: EMAIL,
+    href: `mailto:${EMAIL}`,
+    Icon: Mail,
+    gradient: "from-[#0a1f44] to-[#1a3a7a]",
   },
 ];
 
@@ -81,20 +118,20 @@ function ContatoPage() {
             </span>
           </h1>
           <p className="mt-4 text-white/70 max-w-xl text-sm md:text-base leading-relaxed">
-            Manda um oi, sugere uma música, participa do programa ou só vem trocar ideia. A gente responde rapidinho.
+            Manda um oi, sugere uma música, participa do programa ou venha visitar nosso estúdio em Aparecida de Goiânia.
           </p>
         </div>
       </section>
 
       <main className="mx-auto max-w-5xl px-4 py-12 md:py-16">
-        {/* CANAIS DIRETOS — grid uniforme */}
-        <div className="grid gap-4 md:gap-5 md:grid-cols-3">
-          {/* WhatsApp (destaque verde) */}
+        {/* CANAIS DIRETOS */}
+        <div className="grid gap-4 md:gap-5 md:grid-cols-2">
+          {/* WhatsApp (destaque) */}
           <a
             href={WHATSAPP.href}
             target="_blank"
             rel="noopener"
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#25d366] to-[#128c7e] p-6 shadow-[0_12px_32px_-12px_rgba(37,211,102,0.55)] hover:shadow-[0_18px_40px_-12px_rgba(37,211,102,0.75)] hover:-translate-y-1 transition-all duration-300 md:col-span-1"
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#25d366] to-[#128c7e] p-6 shadow-[0_12px_32px_-12px_rgba(37,211,102,0.55)] hover:shadow-[0_18px_40px_-12px_rgba(37,211,102,0.75)] hover:-translate-y-1 transition-all duration-300"
           >
             <div
               className="absolute inset-0 opacity-10"
@@ -114,11 +151,11 @@ function ContatoPage() {
               <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/80 mb-1.5">
                 WhatsApp
               </div>
-              <div className="text-lg md:text-xl font-black text-white font-mono tabular-nums leading-tight">
+              <div className="text-xl md:text-2xl font-black text-white font-mono tabular-nums leading-tight">
                 {WHATSAPP.display}
               </div>
               <div className="mt-1.5 text-xs text-white/85">
-                Resposta rápida
+                Estúdio · sugestões · participação
               </div>
             </div>
           </a>
@@ -138,32 +175,67 @@ function ContatoPage() {
               <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground mb-1.5">
                 E-mail
               </div>
-              <div className="text-sm md:text-base font-black text-[#0a1f44] truncate group-hover:text-[#c8102e] transition leading-tight">
+              <div className="text-base md:text-lg font-black text-[#0a1f44] truncate group-hover:text-[#c8102e] transition leading-tight">
                 {EMAIL}
               </div>
               <div className="mt-1.5 text-xs text-muted-foreground">
-                Para imprensa & parcerias
+                Imprensa, parcerias & comercial
               </div>
             </div>
           </a>
+        </div>
 
-          {/* Endereço */}
-          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#c8102e] to-[#a00d24] flex items-center justify-center text-white">
+        {/* ESTÚDIO + MAPA */}
+        <div className="mt-10">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="h-7 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0a1f44]" />
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
+                Visite a gente
+              </p>
+              <h2 className="text-xl md:text-2xl font-black text-[#0a1f44] tracking-tight leading-none mt-0.5">
+                Nosso estúdio
+              </h2>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-5">
+            {/* Card endereço */}
+            <div className="md:col-span-2 rounded-2xl border border-gray-200 bg-white p-6 flex flex-col">
+              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#c8102e] to-[#a00d24] flex items-center justify-center text-white mb-4">
                 <MapPin className="h-5 w-5" />
               </div>
-            </div>
-            <div>
               <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground mb-1.5">
-                Estúdio
+                {ENDERECO.label}
               </div>
-              <div className="text-sm md:text-base font-black text-[#0a1f44] leading-tight">
-                {ENDERECO}
+              <div className="text-base md:text-lg font-black text-[#0a1f44] leading-snug">
+                {ENDERECO.street}
               </div>
-              <div className="mt-1.5 text-xs text-muted-foreground">
-                Visite nosso estúdio
-              </div>
+              <div className="text-sm text-[#0a1f44]/80 mt-0.5">{ENDERECO.city}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">CEP {ENDERECO.cep}</div>
+
+              <a
+                href={ENDERECO.mapsUrl}
+                target="_blank"
+                rel="noopener"
+                className="mt-auto pt-5 inline-flex items-center justify-center gap-2 rounded-full bg-[#0a1f44] px-4 py-2.5 text-xs md:text-sm font-bold text-white hover:bg-[#c8102e] hover:-translate-y-0.5 transition-all shadow-sm"
+              >
+                <Navigation className="h-4 w-4" />
+                Abrir no Google Maps
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+            </div>
+
+            {/* Mapa */}
+            <div className="md:col-span-3 rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm min-h-[260px] md:min-h-0">
+              <iframe
+                title="Localização Estúdio TOP 100"
+                src={ENDERECO.embedUrl}
+                className="w-full h-full min-h-[260px] md:min-h-[340px] border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           </div>
         </div>
@@ -182,7 +254,7 @@ function ContatoPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {SOCIAIS.map(({ name, handle, href, Icon, gradient }) => (
               <a
                 key={name}
@@ -191,23 +263,22 @@ function ContatoPage() {
                 rel="noopener"
                 className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white hover:border-transparent hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
-                {/* gradiente que aparece no hover */}
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                 />
-                <div className="relative p-6">
+                <div className="relative p-5">
                   <div className="flex items-center justify-between mb-4">
                     <div
-                      className={`h-12 w-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md group-hover:bg-white/20 group-hover:backdrop-blur transition-all`}
+                      className={`h-11 w-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md group-hover:bg-white/20 group-hover:backdrop-blur transition-all`}
                     >
-                      <Icon className="h-6 w-6" strokeWidth={2} />
+                      <Icon className="h-5 w-5" strokeWidth={2} />
                     </div>
-                    <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                    <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                   </div>
-                  <div className="text-base font-black text-[#0a1f44] group-hover:text-white transition-colors">
+                  <div className="text-sm font-black text-[#0a1f44] group-hover:text-white transition-colors">
                     {name}
                   </div>
-                  <div className="text-sm text-muted-foreground group-hover:text-white/85 transition-colors mt-0.5">
+                  <div className="text-xs text-muted-foreground group-hover:text-white/85 transition-colors mt-0.5 truncate">
                     {handle}
                   </div>
                 </div>
