@@ -181,6 +181,47 @@ function ContatoPage() {
           </div>
         </section>
 
+        {/* CARD ÚNICO — REDES SOCIAIS */}
+        <section>
+          <SectionTitle eyebrow="Siga & participe" title="Nas redes sociais" />
+          <article className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 md:p-8 shadow-[0_12px_40px_-20px_rgba(10,31,68,0.35)]">
+            <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-[#c8102e]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-[#0a1f44]/10 blur-3xl" />
+
+            <div className="relative grid gap-4 sm:grid-cols-3">
+              {SOCIAIS.map(({ name, handle, href, Icon, gradient }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener"
+                  className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white hover:border-transparent hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                  />
+                  <div className="relative p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <div
+                        className={`h-12 w-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md group-hover:bg-white/20 group-hover:backdrop-blur transition-all`}
+                      >
+                        <Icon className="h-5 w-5" strokeWidth={2} />
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                    </div>
+                    <div className="text-base font-black text-[#0a1f44] group-hover:text-white transition-colors">
+                      {name}
+                    </div>
+                    <div className="text-xs text-muted-foreground group-hover:text-white/90 transition-colors mt-1 truncate">
+                      {handle}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </article>
+        </section>
+
         {/* CARD ÚNICO — ENDEREÇO + MAPA */}
         <section>
           <SectionTitle eyebrow="Visite a gente" title="Nosso estúdio" />
@@ -248,47 +289,6 @@ function ContatoPage() {
                   allowFullScreen
                 />
               </div>
-            </div>
-          </article>
-        </section>
-
-        {/* CARD ÚNICO — REDES SOCIAIS */}
-        <section>
-          <SectionTitle eyebrow="Siga & participe" title="Nas redes sociais" />
-          <article className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 md:p-8 shadow-[0_12px_40px_-20px_rgba(10,31,68,0.35)]">
-            <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-[#c8102e]/10 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-[#0a1f44]/10 blur-3xl" />
-
-            <div className="relative grid gap-4 sm:grid-cols-3">
-              {SOCIAIS.map(({ name, handle, href, Icon, gradient }) => (
-                <a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noopener"
-                  className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white hover:border-transparent hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                >
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                  />
-                  <div className="relative p-5">
-                    <div className="flex items-center justify-between mb-4">
-                      <div
-                        className={`h-12 w-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md group-hover:bg-white/20 group-hover:backdrop-blur transition-all`}
-                      >
-                        <Icon className="h-5 w-5" strokeWidth={2} />
-                      </div>
-                      <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-                    </div>
-                    <div className="text-base font-black text-[#0a1f44] group-hover:text-white transition-colors">
-                      {name}
-                    </div>
-                    <div className="text-xs text-muted-foreground group-hover:text-white/90 transition-colors mt-1 truncate">
-                      {handle}
-                    </div>
-                  </div>
-                </a>
-              ))}
             </div>
           </article>
         </section>
