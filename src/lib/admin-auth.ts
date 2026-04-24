@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { setCookie, deleteCookie, getCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
+import { setCookie, deleteCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
 import { adminClientTokenMiddleware, getAdminSecret, getAdminSessionConfig } from "@/lib/admin-serverfn";
 import { getAdminSupabase, verifyAdminPassword } from "@/lib/admin-supabase";
 import { createAdminToken, verifyAdminToken } from "@/lib/admin-token";
