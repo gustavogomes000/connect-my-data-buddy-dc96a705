@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createAdminUser } from "@/lib/admin-api";
+import { createAdminUser } from "@/lib/admin-api.functions";
 import { ShieldIcon } from "./icons";
 
 export function UsersManager() {

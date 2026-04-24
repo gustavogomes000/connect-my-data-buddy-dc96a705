@@ -7,7 +7,7 @@ import {
   getSiteSettings,
   updateSiteSettings,
   triggerAutoNewsManual,
-} from "@/lib/admin-api";
+} from "@/lib/admin-api.functions";
 import { ImageUploader } from "./ImageUploader";
 import { NewsIcon, PencilIcon, PinIcon, PlusIcon, PowerIcon, TrashIcon } from "./icons";
 import type { NewsItem } from "./types";
