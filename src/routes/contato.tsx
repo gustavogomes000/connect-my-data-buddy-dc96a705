@@ -40,8 +40,8 @@ const SOCIAIS = [
   },
   {
     name: "YouTube",
-    handle: "@top100fm",
-    href: "https://youtube.com/@top100fm",
+    handle: "@top100fmoficial",
+    href: "https://www.youtube.com/@top100fmoficial",
     Icon: Youtube,
     gradient: "from-[#ff0000] to-[#990000]",
   },
