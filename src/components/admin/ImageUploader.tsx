@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getUploadUrl } from "@/lib/admin-api";
 import { ImageIcon } from "./icons";
+import { supabase } from "@/integrations/supabase/client";
 
 const MAX_DIM = 2400;
 const TARGET_QUALITY = 0.85;
@@ -56,17 +57,19 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
         compressed.type === "image/jpeg" && !/\.jpe?g$/i.test(file.name)
           ? file.name.replace(/\.[^.]+$/, "") + ".jpg"
           : file.name;
-      const { signedUrl, publicUrl } = await getUploadUrl({
+      const { path, token, publicUrl } = await getUploadUrl({
         data: { filename: finalName, contentType: compressed.type || file.type },
       });
-      const res = await fetch(signedUrl, {
-        method: "PUT",
-        headers: { "Content-Type": compressed.type || file.type, "x-upsert": "true" },
-        body: compressed,
-      });
-      if (!res.ok) throw new Error("upload failed");
+      const { error } = await supabase.storage
+        .from("media")
+        .uploadToSignedUrl(path, token, compressed, {
+          contentType: compressed.type || file.type,
+          upsert: true,
+        });
+      if (error) throw error;
       onUploaded(publicUrl);
-    } catch {
+    } catch (err) {
+      console.error("Upload error:", err);
       alert("Erro ao enviar imagem. Tente novamente.");
     } finally {
       setUploading(false);

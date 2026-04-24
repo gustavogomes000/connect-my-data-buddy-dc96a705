@@ -68,16 +68,15 @@ export function PromotionPopup() {
               ✅ Inscrição confirmada! Boa sorte!
             </div>
           ) : (
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 }}>
+            <div className="popup-actions">
               <button
                 onClick={() => setParticipating(true)}
-                className="popup-link"
-                style={{ border: "none", cursor: "pointer" }}
+                className="popup-btn-primary"
               >
                 🎁 Participar agora
               </button>
               {promo.link && (
-                <a href={promo.link} target="_blank" rel="noopener noreferrer" className="popup-link">
+                <a href={promo.link} target="_blank" rel="noopener noreferrer" className="popup-btn-secondary">
                   Saiba mais →
                 </a>
               )}

@@ -256,7 +256,8 @@ export const getUploadUrl = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     requireAdmin();
     const supabase = getAdminSupabase();
-    const path = `uploads/${Date.now()}-${data.filename}`;
+    const safeName = data.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `uploads/${Date.now()}-${safeName}`;
     const { data: result, error } = await supabase.storage.from("media").createSignedUploadUrl(path);
     if (error) throw new Error(error.message);
     const publicUrl = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;

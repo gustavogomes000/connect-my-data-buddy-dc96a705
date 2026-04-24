@@ -37,12 +37,21 @@ export const adminLogin = createServerFn({ method: "POST" })
       return { success: false, error: "Configuração do servidor incompleta" };
     }
 
-    const { data: users, error } = await adminAuthClient.rpc("admin_check_password", {
-      p_username: data.username,
-      p_password: data.password,
-    });
+    const { data: users, error } = await adminAuthClient
+      .from("admin_users")
+      .select("*")
+      .eq("username", data.username)
+      .limit(1);
 
     if (error || !users || users.length === 0) {
+      return { success: false, error: "Credenciais inválidas" };
+    }
+
+    const user = users[0];
+    const bcrypt = await import("bcryptjs");
+    const isValid = await bcrypt.compare(data.password, user.password_hash);
+
+    if (!isValid) {
       return { success: false, error: "Credenciais inválidas" };
     }
 
