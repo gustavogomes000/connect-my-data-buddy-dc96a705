@@ -40,7 +40,13 @@ export const adminLogin = createServerFn({ method: "POST" })
       return { success: false, error: "Credenciais inválidas" };
     }
 
-    const session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    let session;
+    try {
+      session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    } catch {
+      try { deleteCookie(ADMIN_COOKIE); } catch {}
+      session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    }
     await session.update({ authenticated: true, username: user.username });
     const secret = (await getAdminSessionConfig()).password;
     const token = await createAdminToken(
@@ -73,11 +79,20 @@ export const adminLogout = createServerFn({ method: "POST" }).handler(async () =
 export const checkAdminSession = createServerFn({ method: "GET" })
   .middleware([adminClientTokenMiddleware])
   .handler(async () => {
-    const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+    let sessionAuthenticated = false;
+    try {
+      const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+      sessionAuthenticated = session.data.authenticated === true;
+    } catch {
+      // cookie inválido/secret alterado – ignora e tenta outras formas
+      try {
+        deleteCookie(ADMIN_COOKIE);
+      } catch {}
+    }
     const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
     const secret = await getAdminSecret();
     const headerToken = getRequestHeader("x-admin-token");
     const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
 
-    return { authenticated: session.data.authenticated === true || cookie === "1" || hasValidHeader };
+    return { authenticated: sessionAuthenticated || cookie === "1" || hasValidHeader };
   });
