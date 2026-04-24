@@ -9,7 +9,7 @@ export type PromotionLike = {
   link?: string | null;
 };
 
-const INSTAGRAM_URL = "https://www.instagram.com/top100fm";
+const INSTAGRAM_URL = "https://www.instagram.com/top100fmoficial";
 
 export function PromotionDetailsModal({
   promo,
@@ -19,7 +19,7 @@ export function PromotionDetailsModal({
   onClose: () => void;
 }) {
   const [step, setStep] = useState<"details" | "form" | "success">("details");
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(12);
 
   useEffect(() => {
     if (step !== "success") return;
