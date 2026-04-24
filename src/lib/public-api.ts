@@ -61,27 +61,42 @@ export type PodcastItem = {
 };
 
 export const submitPromotionEntry = createServerFn({ method: "POST" })
-  .inputValidator((input: { promotion_id: string; full_name: string; whatsapp: string; cpf: string; instagram: string; facebook: string }) => {
+  .inputValidator((input: { promotion_id: string; full_name: string; birth_date?: string; whatsapp: string; cpf: string; instagram: string; facebook?: string }) => {
     const trim = (s: string) => (s || "").trim();
     const data = {
       promotion_id: trim(input.promotion_id),
       full_name: trim(input.full_name),
+      birth_date: trim(input.birth_date || ""),
       whatsapp: trim(input.whatsapp),
       cpf: trim(input.cpf).replace(/\D/g, ""),
       instagram: trim(input.instagram),
-      facebook: trim(input.facebook),
+      facebook: trim(input.facebook || ""),
     };
     if (!data.promotion_id) throw new Error("Promoção inválida");
     if (data.full_name.length < 3 || data.full_name.length > 120) throw new Error("Nome inválido");
+    if (!data.birth_date || !/^\d{4}-\d{2}-\d{2}$/.test(data.birth_date)) throw new Error("Data de nascimento inválida");
     if (data.whatsapp.replace(/\D/g, "").length < 10) throw new Error("WhatsApp inválido");
     if (data.cpf.length !== 11) throw new Error("CPF deve ter 11 dígitos");
     if (!data.instagram || data.instagram.length > 80) throw new Error("Instagram obrigatório");
-    if (!data.facebook || data.facebook.length > 120) throw new Error("Facebook obrigatório");
     return data;
   })
   .handler(async ({ data }) => {
     const supabase = await getPublicSupabase();
-    const { error } = await (supabase as any).from("promotion_entries").insert(data);
+    // Try insert with birth_date; fallback if column not yet in schema
+    const payload: any = {
+      promotion_id: data.promotion_id,
+      full_name: data.full_name,
+      whatsapp: data.whatsapp,
+      cpf: data.cpf,
+      instagram: data.instagram,
+      facebook: data.facebook || data.instagram, // keep legacy NOT NULL safe
+      birth_date: data.birth_date,
+    };
+    let { error } = await (supabase as any).from("promotion_entries").insert(payload);
+    if (error && /birth_date/i.test(error.message || "")) {
+      delete payload.birth_date;
+      ({ error } = await (supabase as any).from("promotion_entries").insert(payload));
+    }
     if (error) {
       if (error.code === "23505") throw new Error("Este CPF já foi cadastrado nesta promoção.");
       throw new Error(error.message);

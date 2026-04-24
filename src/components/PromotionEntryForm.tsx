@@ -46,9 +46,9 @@ export function PromotionEntryForm({ promotionId, onClose, onSuccess }: { promot
           box-shadow: 0 25px 60px -15px rgba(10,31,68,0.45) !important;
         }
         .promo-form-header {
-          background: linear-gradient(135deg, #0a1f44 0%, #142a5c 50%, #1e3a7a 100%);
-          padding: 26px 28px 22px;
-          color: #fff;
+          background: linear-gradient(135deg, #f5a623 0%, #f7b733 50%, #ffcb47 100%);
+          padding: 28px 28px 24px;
+          color: #0a1f44;
           text-align: center;
           position: relative;
         }
@@ -57,14 +57,14 @@ export function PromotionEntryForm({ promotionId, onClose, onSuccess }: { promot
           position: absolute;
           left: 0; right: 0; bottom: 0;
           height: 3px;
-          background: linear-gradient(90deg, #f5a623 0%, #f7b733 50%, #f5a623 100%);
+          background: linear-gradient(90deg, #0a1f44 0%, #1e3a7a 50%, #0a1f44 100%);
         }
         .promo-form-logo {
-          height: 48px;
+          height: 78px;
           width: auto;
-          margin: 0 auto 12px;
+          margin: 0 auto 14px;
           display: block;
-          filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+          filter: drop-shadow(0 3px 8px rgba(0,0,0,0.18));
         }
         .promo-form-header h2 {
           margin: 0;

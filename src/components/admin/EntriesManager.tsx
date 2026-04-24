@@ -14,18 +14,25 @@ function formatCpf(v: string) {
     : v;
 }
 
+function formatDate(v?: string | null) {
+  if (!v) return "—";
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return v;
+  return d.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+}
+
 function downloadCsv(rows: EntryRow[], filename: string) {
-  const headers = ["Nome", "WhatsApp", "CPF", "Instagram", "Facebook", "Promoção", "Data"];
+  const headers = ["Nome", "Nascimento", "WhatsApp", "CPF", "Instagram", "Promoção", "Data"];
   const escape = (s: string) => `"${(s ?? "").replace(/"/g, '""')}"`;
   const lines = [
     headers.map(escape).join(","),
     ...rows.map((r) =>
       [
         r.full_name,
+        formatDate(r.birth_date),
         r.whatsapp,
         formatCpf(r.cpf),
         r.instagram,
-        r.facebook,
         r.promotions?.title || "",
         new Date(r.created_at).toLocaleString("pt-BR"),
       ]
@@ -112,7 +119,8 @@ export function EntriesManager() {
                 WhatsApp: {r.whatsapp} · CPF: {formatCpf(r.cpf)}
               </p>
               <p>
-                Instagram: {r.instagram} · Facebook: {r.facebook}
+                Instagram: {r.instagram}
+                {r.birth_date ? ` · Nascimento: ${formatDate(r.birth_date)}` : ""}
               </p>
               <div className="admin-list-tags">
                 <span className="admin-tag">{r.promotions?.title || "—"}</span>

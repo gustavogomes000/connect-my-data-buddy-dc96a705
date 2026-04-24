@@ -55,6 +55,7 @@ export type EntryRow = {
   id: string;
   promotion_id: string;
   full_name: string;
+  birth_date?: string | null;
   whatsapp: string;
   cpf: string;
   instagram: string;
