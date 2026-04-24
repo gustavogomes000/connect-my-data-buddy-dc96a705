@@ -37,221 +37,29 @@ function getAdminSupabase(): SupabaseClient {
   return adminClient;
 }
 
-// ── Promotions ──
-
-export const getPromotions = createServerFn({ method: "GET" }).handler(async () => {
-  requireAdmin();
-  const supabase = getAdminSupabase();
-  const { data } = await supabase.from("promotions").select("*").order("display_order");
-  return data || [];
-});
-
-export const createPromotion = createServerFn({ method: "POST" })
-  .inputValidator((input: { title: string; description?: string; image_url?: string; link?: string; popup_duration_seconds?: number; show_as_popup?: boolean; display_order?: number }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { data: result, error } = await supabase.from("promotions").insert({ ...data, is_active: true }).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const updatePromotion = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string; title?: string; description?: string; image_url?: string; link?: string; is_active?: boolean; popup_duration_seconds?: number; show_as_popup?: boolean; display_order?: number }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { id, ...updates } = data;
-    const { data: result, error } = await supabase.from("promotions").update({ ...updates, updated_at: new Date().toISOString() }).eq("id", id).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const deletePromotion = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { error } = await supabase.from("promotions").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { success: true };
-  });
-
-// ── News ──
-
-export const getNews = createServerFn({ method: "GET" }).handler(async () => {
-  requireAdmin();
-  const supabase = getAdminSupabase();
-  const { data } = await (supabase as any)
-    .from("news")
-    .select("*")
-    .order("is_pinned", { ascending: false })
-    .order("pinned_at", { ascending: false, nullsFirst: false })
-    .order("updated_at", { ascending: false });
-  return data || [];
-});
-
-export const createNews = createServerFn({ method: "POST" })
-  .inputValidator((input: { title: string; content?: string; summary?: string; image_url?: string; podcast_link?: string; display_order?: number }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { data: result, error } = await supabase.from("news").insert(data).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const updateNews = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string; title?: string; content?: string; summary?: string; image_url?: string; podcast_link?: string; is_published?: boolean; is_pinned?: boolean; pinned_at?: string | null; display_order?: number }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { id, ...updates } = data;
-    const { data: result, error } = await (supabase as any).from("news").update({ ...updates, updated_at: new Date().toISOString() }).eq("id", id).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const deleteNews = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { error } = await supabase.from("news").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { success: true };
-  });
-
-// ── Programação ──
-
-export const getProgramacaoAdmin = createServerFn({ method: "GET" }).handler(async () => {
-  requireAdmin();
-  const supabase = getAdminSupabase();
-  const { data } = await (supabase as any)
-    .from("programacao")
-    .select("*")
-    .order("day_of_week")
-    .order("start_time");
-  return data || [];
-});
-
-export const createProgramacao = createServerFn({ method: "POST" })
-  .inputValidator((input: { day_of_week: number; program_name: string; presenter?: string; start_time: string; end_time: string; display_order?: number }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { data: result, error } = await (supabase as any).from("programacao").insert({ ...data, is_active: true }).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const updateProgramacao = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string; day_of_week?: number; program_name?: string; presenter?: string; start_time?: string; end_time?: string; display_order?: number; is_active?: boolean }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { id, ...updates } = data;
-    const { data: result, error } = await (supabase as any).from("programacao").update({ ...updates, updated_at: new Date().toISOString() }).eq("id", id).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const deleteProgramacao = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { error } = await (supabase as any).from("programacao").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { success: true };
-  });
-
-// ── Podcasts ──
-
-export const getPodcastsAdmin = createServerFn({ method: "GET" }).handler(async () => {
-  requireAdmin();
-  const supabase = getAdminSupabase();
-  const { data } = await (supabase as any)
-    .from("podcasts")
-    .select("*")
-    .order("display_order")
-    .order("created_at", { ascending: false });
-  return data || [];
-});
-
-export const createPodcast = createServerFn({ method: "POST" })
-  .inputValidator((input: { title: string; description?: string; youtube_url: string; thumbnail_url?: string; display_order?: number }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { data: result, error } = await (supabase as any).from("podcasts").insert({ ...data, is_active: true }).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const updatePodcast = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string; title?: string; description?: string; youtube_url?: string; thumbnail_url?: string; display_order?: number; is_active?: boolean }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { id, ...updates } = data;
-    const { data: result, error } = await (supabase as any).from("podcasts").update({ ...updates, updated_at: new Date().toISOString() }).eq("id", id).select().single();
-    if (error) throw new Error(error.message);
-    return result;
-  });
-
-export const deletePodcast = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { error } = await (supabase as any).from("podcasts").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { success: true };
-  });
-
-// ── Admin User Management ──
-
-export const createAdminUser = createServerFn({ method: "POST" })
-  .inputValidator((input: { username: string; password: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { error } = await supabase.rpc("admin_create_user", {
-      p_username: data.username,
-      p_password: data.password,
-    });
-    if (error) throw new Error(error.message);
-    return { success: true };
-  });
-
-// ── Promotion Entries ──
-
-export const getPromotionEntries = createServerFn({ method: "POST" })
-  .inputValidator((input: { promotion_id?: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    let q = (supabase as any).from("promotion_entries").select("*, promotions(title)").order("created_at", { ascending: false });
-    if (data.promotion_id) q = q.eq("promotion_id", data.promotion_id);
-    const { data: rows, error } = await q;
-    if (error) throw new Error(error.message);
-    return rows || [];
-  });
-
-export const deletePromotionEntry = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const { error } = await (supabase as any).from("promotion_entries").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { success: true };
-  });
-
-// ── Upload media ──
-
-export { getUploadUrl } from "./admin-api.functions";
+// Todas as funções admin agora vêm do arquivo functions (que usa o guard de token correto)
+export {
+  getPromotions,
+  createPromotion,
+  updatePromotion,
+  deletePromotion,
+  getNews,
+  createNews,
+  updateNews,
+  deleteNews,
+  getProgramacaoAdmin,
+  createProgramacao,
+  updateProgramacao,
+  deleteProgramacao,
+  getPodcastsAdmin,
+  createPodcast,
+  updatePodcast,
+  deletePodcast,
+  createAdminUser,
+  getPromotionEntries,
+  deletePromotionEntry,
+  getUploadUrl,
+} from "./admin-api.functions";
 
 // ── Auto News ──
 export { triggerAutoNewsManual } from "./admin-api.functions";
