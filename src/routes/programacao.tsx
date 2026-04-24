@@ -33,12 +33,19 @@ function ProgramacaoPage() {
   const items = (Route.useLoaderData() as ProgramacaoItem[]).filter(
     (p) => p.program_name !== "__probe__"
   );
-  const today = new Date().getDay();
-  const [day, setDay] = useState<number>(today);
-  const [now, setNow] = useState(() => new Date().toTimeString().slice(0, 5));
+  // Inicia com valores estáveis no SSR para evitar mismatch de hidratação;
+  // os valores reais (dia/hora atuais) são definidos apenas no cliente.
+  const [day, setDay] = useState<number>(0);
+  const [now, setNow] = useState<string>("");
+  const [today, setToday] = useState<number>(0);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setDay(new Date().getDay());
+    const initialDay = new Date().getDay();
+    setMounted(true);
+    setToday(initialDay);
+    setDay(initialDay);
+    setNow(new Date().toTimeString().slice(0, 5));
     const t = setInterval(() => setNow(new Date().toTimeString().slice(0, 5)), 30_000);
     return () => clearInterval(t);
   }, []);
@@ -99,11 +106,11 @@ function ProgramacaoPage() {
           <div className="mt-8 flex flex-wrap gap-2 md:gap-3">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs">
               <span className="text-white/50">Hoje</span>
-              <span className="font-bold capitalize">{DAYS[today].label}</span>
+              <span className="font-bold capitalize">{mounted ? DAYS[today].label : "—"}</span>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs">
               <span className="text-white/50">Agora</span>
-              <span className="font-mono font-bold tabular-nums">{now}</span>
+              <span className="font-mono font-bold tabular-nums">{mounted ? now : "--:--"}</span>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs">
               <span className="text-white/50">Programas</span>
