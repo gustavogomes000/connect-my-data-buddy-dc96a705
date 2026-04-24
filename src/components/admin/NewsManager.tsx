@@ -144,9 +144,9 @@ export function NewsManager() {
 
       <div className="admin-form-card" style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <strong>Auto-alimentação (G1 + UOL)</strong>
+          <strong>Auto-alimentação (Câmara, Senado, Gov.br, Agência Brasil)</strong>
           <p style={{ margin: "4px 0 0", fontSize: 13, opacity: 0.75 }}>
-            Quando ligado, o cron busca e publica notícias novas automaticamente.
+            Quando ligado, o cron busca e publica notícias dos portais oficiais automaticamente.
           </p>
           {autoMsg && <p style={{ margin: "6px 0 0", fontSize: 13 }}>{autoMsg}</p>}
         </div>

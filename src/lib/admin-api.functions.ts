@@ -68,7 +68,7 @@ export const deletePromotion = createAdminServerFn("POST")
 
 export const getNews = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data } = await supabase
+  const { data } = await (supabase as any)
     .from("news")
     .select("*")
     .order("is_pinned", { ascending: false })
@@ -113,7 +113,7 @@ export const updateNews = createAdminServerFn("POST")
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
     const { id, ...updates } = data;
-    const { data: result, error } = await supabase
+    const { data: result, error } = await (supabase as any)
       .from("news")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
@@ -134,7 +134,7 @@ export const deleteNews = createAdminServerFn("POST")
 
 export const getProgramacaoAdmin = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data } = await supabase
+  const { data } = await (supabase as any)
     .from("programacao")
     .select("*")
     .order("day_of_week")
@@ -155,7 +155,7 @@ export const createProgramacao = createAdminServerFn("POST")
   )
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
-    const { data: result, error } = await supabase
+    const { data: result, error } = await (supabase as any)
       .from("programacao")
       .insert({ ...data, is_active: true })
       .select()
@@ -180,7 +180,7 @@ export const updateProgramacao = createAdminServerFn("POST")
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
     const { id, ...updates } = data;
-    const { data: result, error } = await supabase
+    const { data: result, error } = await (supabase as any)
       .from("programacao")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
@@ -194,14 +194,14 @@ export const deleteProgramacao = createAdminServerFn("POST")
   .inputValidator((input: { id: string }) => input)
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
-    const { error } = await supabase.from("programacao").delete().eq("id", data.id);
+    const { error } = await (supabase as any).from("programacao").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { success: true };
   });
 
 export const getPodcastsAdmin = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data } = await supabase
+  const { data } = await (supabase as any)
     .from("podcasts")
     .select("*")
     .order("display_order")
@@ -221,7 +221,7 @@ export const createPodcast = createAdminServerFn("POST")
   )
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
-    const { data: result, error } = await supabase
+    const { data: result, error } = await (supabase as any)
       .from("podcasts")
       .insert({ ...data, is_active: true })
       .select()
@@ -245,7 +245,7 @@ export const updatePodcast = createAdminServerFn("POST")
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
     const { id, ...updates } = data;
-    const { data: result, error } = await supabase
+    const { data: result, error } = await (supabase as any)
       .from("podcasts")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
@@ -259,7 +259,7 @@ export const deletePodcast = createAdminServerFn("POST")
   .inputValidator((input: { id: string }) => input)
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
-    const { error } = await supabase.from("podcasts").delete().eq("id", data.id);
+    const { error } = await (supabase as any).from("podcasts").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { success: true };
   });
@@ -294,7 +294,7 @@ export const getPromotionEntries = createAdminServerFn("POST")
   .inputValidator((input: { promotion_id?: string }) => input)
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
-    let q = supabase
+    let q = (supabase as any)
       .from("promotion_entries")
       .select("*, promotions(title)")
       .order("created_at", { ascending: false });
@@ -308,7 +308,7 @@ export const deletePromotionEntry = createAdminServerFn("POST")
   .inputValidator((input: { id: string }) => input)
   .handler(async ({ data }) => {
       const supabase = await getAdminSupabase();
-    const { error } = await supabase.from("promotion_entries").delete().eq("id", data.id);
+    const { error } = await (supabase as any).from("promotion_entries").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { success: true };
   });
@@ -340,7 +340,7 @@ export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async (
 
 export const getSiteSettings = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data, error } = await supabase.from("site_settings").select("*");
+  const { data, error } = await (supabase as any).from("site_settings").select("*");
   if (error) throw new Error(error.message);
 
   const settings: Record<string, any> = {};
@@ -361,7 +361,7 @@ export const updateSiteSettings = createAdminServerFn("POST")
 
     const stringValue = typeof data.value === "object" ? JSON.stringify(data.value) : String(data.value);
 
-    const { error } = await supabase.from("site_settings").upsert(
+    const { error } = await (supabase as any).from("site_settings").upsert(
       {
         setting_key: data.key,
         setting_value: stringValue,

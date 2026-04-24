@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { adminLogin, ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN } from "@/lib/admin-auth";
+import { adminLogin, ADMIN_SESSION_KEY } from "@/lib/admin-auth";
 import topLogo from "@/assets/top100-logo.png";
 
 const REMEMBER_KEY = "admin_remember";
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function AdminLoginPage() {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -49,8 +50,10 @@ function AdminLoginPage() {
       const result = await adminLogin({ data: { username: u, password: p } });
       if (result.success) {
         try {
-          sessionStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
-          localStorage.setItem(ADMIN_SESSION_KEY, ADMIN_SESSION_TOKEN);
+          if (result.token) {
+            sessionStorage.setItem(ADMIN_SESSION_KEY, result.token);
+            localStorage.setItem(ADMIN_SESSION_KEY, result.token);
+          }
           if (remember) {
             localStorage.setItem(REMEMBER_KEY, JSON.stringify({ username: u, password: p }));
           } else {
@@ -58,7 +61,8 @@ function AdminLoginPage() {
           }
         } catch {}
 
-        window.location.replace("/admin");
+        // Mantém overlay de carregamento ativo durante a navegação
+        await navigate({ to: "/admin", replace: true });
         return;
       } else {
         setError(result.error || "Não foi possível entrar.");
@@ -72,6 +76,37 @@ function AdminLoginPage() {
 
   return (
     <div className="admin-login-page">
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(8, 10, 18, 0.78)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            gap: "1rem",
+          }}
+        >
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              border: "4px solid rgba(255,255,255,0.15)",
+              borderTopColor: "#fff",
+              borderRadius: "50%",
+              animation: "admin-spin 0.9s linear infinite",
+            }}
+          />
+          <p style={{ color: "#fff", fontWeight: 500, letterSpacing: 0.3 }}>
+            Entrando no painel…
+          </p>
+          <style>{`@keyframes admin-spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
       <div className="admin-login-card">
         <div className="admin-login-header">
           <img src={topLogo} alt="TOP100 FM" className="admin-login-logo-img" />

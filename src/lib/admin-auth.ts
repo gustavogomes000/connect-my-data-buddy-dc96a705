@@ -1,77 +1,83 @@
 import { createServerFn } from "@tanstack/react-start";
-import { setCookie, deleteCookie, getCookie } from "@tanstack/react-start/server";
-import { createClient } from "@supabase/supabase-js";
+import { setCookie, deleteCookie, getCookie, getRequestHeader, useSession } from "@tanstack/react-start/server";
+import { adminClientTokenMiddleware, getAdminSecret, getAdminSessionConfig } from "@/lib/admin-serverfn";
+import { getAdminSupabase, verifyAdminPassword } from "@/lib/admin-supabase";
+import { createAdminToken, verifyAdminToken } from "@/lib/admin-token";
 
 const ADMIN_COOKIE = "admin_session";
-const SESSION_DURATION = 60 * 60 * 24; // 24h
+const ADMIN_PRESENCE_COOKIE = "admin_present";
+const SESSION_DURATION = 60 * 60 * 24;
 const SESSION_TOKEN_VALUE = "authenticated";
+const IS_SECURE_COOKIE = process.env.NODE_ENV === "production";
 export const ADMIN_SESSION_KEY = ADMIN_COOKIE;
+export const ADMIN_PRESENCE_KEY = ADMIN_PRESENCE_COOKIE;
 export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
-
-const SUPABASE_URL =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_URL || process.env?.SUPABASE_URL
-    : undefined) || import.meta.env.VITE_MY_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY =
-  (typeof process !== "undefined"
-    ? process.env?.MY_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env?.MY_SUPABASE_PUBLISHABLE_KEY ||
-      process.env?.SUPABASE_PUBLISHABLE_KEY
-    : undefined) ||
-  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-// Cliente único reutilizado entre invocações
-const adminAuthClient =
-  SUPABASE_URL && SUPABASE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-    : null;
 
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((input: { username: string; password: string }) => input)
   .handler(async ({ data }) => {
-    if (!adminAuthClient) {
-      return { success: false, error: "Configuração do servidor incompleta" };
+    const username = data.username.trim();
+    const password = data.password;
+
+    if (!username || !password) {
+      return { success: false, error: "Preencha usuário e senha." };
     }
 
-    const { data: users, error } = await adminAuthClient
+    const supabase = await getAdminSupabase();
+    const { data: user, error } = await supabase
       .from("admin_users")
-      .select("*")
-      .eq("username", data.username)
-      .limit(1);
+      .select("id, username, password_hash")
+      .ilike("username", username)
+      .limit(1)
+      .maybeSingle();
 
-    if (error || !users || users.length === 0) {
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const isValid = user ? await verifyAdminPassword(password, user.password_hash) : false;
+    if (!user || !isValid) {
       return { success: false, error: "Credenciais inválidas" };
     }
 
-    const user = users[0];
-    const bcrypt = await import("bcryptjs");
-    const isValid = await bcrypt.compare(data.password, user.password_hash);
+    const session = await useSession<{ authenticated: boolean; username?: string }>(await getAdminSessionConfig());
+    await session.update({ authenticated: true, username: user.username });
+    const secret = (await getAdminSessionConfig()).password;
+    const token = await createAdminToken(
+      {
+        username: user.username,
+        expiresAt: Date.now() + SESSION_DURATION * 1000,
+      },
+      secret,
+    );
 
-    if (!isValid) {
-      return { success: false, error: "Credenciais inválidas" };
-    }
-
-    setCookie(ADMIN_COOKIE, "authenticated", {
-      httpOnly: true,
-      secure: true,
+    setCookie(ADMIN_PRESENCE_COOKIE, "1", {
+      httpOnly: false,
+      secure: IS_SECURE_COOKIE,
       sameSite: "lax",
       maxAge: SESSION_DURATION,
       path: "/",
     });
 
-    return { success: true, token: SESSION_TOKEN_VALUE };
+    return { success: true, token };
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
+  const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+  await session.clear();
   deleteCookie(ADMIN_COOKIE);
+  deleteCookie(ADMIN_PRESENCE_COOKIE);
   return { success: true };
 });
 
-export const checkAdminSession = createServerFn({ method: "GET" }).handler(async () => {
-  const cookie = getCookie(ADMIN_COOKIE);
-  return { authenticated: cookie === "authenticated" };
-});
+export const checkAdminSession = createServerFn({ method: "GET" })
+  .middleware([adminClientTokenMiddleware])
+  .handler(async () => {
+    const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+    const cookie = getCookie(ADMIN_PRESENCE_COOKIE);
+    const secret = await getAdminSecret();
+    const headerToken = getRequestHeader("x-admin-token");
+    const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
+
+    return { authenticated: session.data.authenticated === true || cookie === "1" || hasValidHeader };
+  });

@@ -18,10 +18,20 @@ const queryClient = new QueryClient();
 // Rota protegida – valida a sessão no servidor antes de renderizar.
 export const Route = createFileRoute("/admin/")({
   beforeLoad: async () => {
+    const hasLocalSession =
+      typeof document !== "undefined" &&
+      (document.cookie.split("; ").some((c) => c.startsWith("admin_present=")) ||
+        (typeof localStorage !== "undefined" && !!localStorage.getItem("admin_session")));
+
+    if (!hasLocalSession) {
+      throw redirect({ to: "/admin/login", replace: true });
+    }
+
     const session = await checkAdminSession();
     if (!session?.authenticated) {
       throw redirect({ to: "/admin/login", replace: true });
     }
+
     return {};
   },
   head: () => ({

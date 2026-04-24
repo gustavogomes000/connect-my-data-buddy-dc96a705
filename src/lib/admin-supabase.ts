@@ -12,14 +12,7 @@ export async function getAdminSupabase() {
       const key = await resolveRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY");
 
       if (!url || !key) {
-        // Reset so next call retries (env might load later)
-        adminClientPromise = null;
-        throw new Error(
-          `Configuração do servidor incompleta: ` +
-          `SUPABASE_URL=${url ? "✓" : "✗"}, ` +
-          `SUPABASE_SERVICE_ROLE_KEY=${key ? "✓" : "✗"}. ` +
-          `Verifique se VITE_SUPABASE_URL e VITE_SUPABASE_SERVICE_ROLE_KEY estão definidos no .env`
-        );
+        throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
       }
 
       return createClient<Database>(url, key, {
