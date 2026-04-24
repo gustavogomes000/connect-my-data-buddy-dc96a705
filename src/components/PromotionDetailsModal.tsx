@@ -19,7 +19,7 @@ export function PromotionDetailsModal({
   onClose: () => void;
 }) {
   const [step, setStep] = useState<"details" | "form" | "success">("details");
-  const [countdown, setCountdown] = useState(12);
+  const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
     if (step !== "success") return;
@@ -92,15 +92,16 @@ export function PromotionDetailsModal({
           {step === "success" ? (
             <div className="text-center py-4">
               <div className="text-6xl mb-3 animate-bounce">🎊</div>
-              <h2 className="text-2xl font-black text-[#0c2651] mb-2">Inscrição confirmada!</h2>
+              <h2 className="text-2xl font-black text-[#0c2651] mb-2">Cadastro feito com sucesso!</h2>
               <p className="text-muted-foreground mb-5">
-                Boa sorte! Siga a TOP100 FM no Instagram para acompanhar o sorteio.
+                Agora siga o Instagram oficial <strong>@top100fmoficial</strong> para concorrer e
+                acompanhar o sorteio.
               </p>
               <a
                 href={INSTAGRAM_URL}
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#c8102e] to-[#ff5470] px-6 py-3 text-white font-black shadow-lg hover:-translate-y-0.5 transition"
               >
-                📸 Ir para o Instagram agora
+                📸 Seguir no Instagram
               </a>
               <p className="mt-3 text-xs text-muted-foreground">
                 Redirecionando em {countdown}s…
