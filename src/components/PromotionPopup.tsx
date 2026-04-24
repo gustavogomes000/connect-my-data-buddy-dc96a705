@@ -58,14 +58,25 @@ export function PromotionPopup() {
   return (
     <div className="popup-overlay" onClick={handleClose}>
       <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-        <button className="popup-close" onClick={handleClose}>✕</button>
-        {promo.image_url && <img src={promo.image_url} alt={promo.title} className="popup-img" />}
+        <button className="popup-close" onClick={handleClose} aria-label="Fechar">✕</button>
+        <div className="popup-shine" aria-hidden="true" />
+        {promo.image_url && (
+          <div className="popup-img-wrap">
+            <img src={promo.image_url} alt={promo.title} className="popup-img" />
+            <span className="popup-badge">🎁 Promoção Top 100 FM</span>
+          </div>
+        )}
         <div className="popup-body">
+          {!promo.image_url && <span className="popup-badge popup-badge-inline">🎁 Promoção Top 100 FM</span>}
           <h2>{promo.title}</h2>
           {promo.description && <p>{promo.description}</p>}
           {success ? (
-            <div style={{ color: "#16a34a", fontWeight: 700, marginTop: 10 }}>
-              ✅ Inscrição confirmada! Boa sorte!
+            <div className="popup-success">
+              <span className="popup-success-icon">✓</span>
+              <div>
+                <strong>Inscrição confirmada!</strong>
+                <span>Boa sorte 🍀</span>
+              </div>
             </div>
           ) : (
             <div className="popup-actions">
@@ -73,11 +84,12 @@ export function PromotionPopup() {
                 onClick={() => setParticipating(true)}
                 className="popup-btn-primary"
               >
-                🎁 Participar agora
+                Participar agora
+                <span className="popup-btn-arrow">→</span>
               </button>
               {promo.link && (
                 <a href={promo.link} target="_blank" rel="noopener noreferrer" className="popup-btn-secondary">
-                  Saiba mais →
+                  Saiba mais
                 </a>
               )}
             </div>
