@@ -372,7 +372,8 @@ function IndexPage() {
         }
         const list = (Array.isArray(map.sponsors) ? map.sponsors : []) as Sponsor[];
         const filtered = list
-          .filter((s) => s.is_active !== false && s.logo_url)
+          .filter((s) => s.is_active !== false && (s.logo_url || SPONSOR_LOGO_FALLBACKS[s.id]))
+          .map(normalizeSponsorLogo)
           .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
         setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
         setLiveActive(!!map.live_active);
