@@ -7,6 +7,7 @@ import { PromotionDetailsModal } from "@/components/PromotionDetailsModal";
 import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { safeImageUrl } from "@/lib/utils";
 import mascoteTop from "@/assets/mascote-top.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
@@ -638,8 +639,10 @@ function IndexPage() {
                 <div className="aspect-[16/10] bg-muted overflow-hidden">
                   {featured.image_url ? (
                     <img
-                      src={featured.image_url}
+                      src={safeImageUrl(featured.image_url)}
                       alt={featured.title}
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
                       className="w-full h-full object-cover transition group-hover:scale-105"
                     />
                   ) : (
@@ -677,7 +680,7 @@ function IndexPage() {
                   >
                     {n.image_url ? (
                       <div className="w-32 sm:w-40 flex-shrink-0 bg-muted">
-                        <img src={n.image_url} alt={n.title} className="w-full h-full object-cover" />
+                        <img src={safeImageUrl(n.image_url)} alt={n.title} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     ) : (
                       <div className="w-32 sm:w-40 flex-shrink-0 bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
@@ -708,7 +711,7 @@ function IndexPage() {
                 >
                   <div className="aspect-video bg-muted overflow-hidden">
                     {n.image_url ? (
-                      <img src={n.image_url} alt={n.title} className="w-full h-full object-cover transition group-hover:scale-105" />
+                      <img src={safeImageUrl(n.image_url)} alt={n.title} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover transition group-hover:scale-105" />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
                     )}
@@ -757,7 +760,7 @@ function IndexPage() {
               </button>
               <div className="overflow-y-auto flex-1">
                 {openNews.image_url && (
-                  <img src={openNews.image_url} alt={openNews.title} className="w-full max-h-80 object-cover" />
+                  <img src={safeImageUrl(openNews.image_url)} alt={openNews.title} referrerPolicy="no-referrer" className="w-full max-h-80 object-cover" />
                 )}
                 <div className="p-6 sm:p-8">
                   <div className="text-xs uppercase tracking-wider font-bold text-[#c8102e] mb-2">
