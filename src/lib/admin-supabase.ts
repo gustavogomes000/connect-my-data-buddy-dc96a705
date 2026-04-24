@@ -8,8 +8,14 @@ let adminClientPromise: Promise<SupabaseClient<Database>> | null = null;
 export async function getAdminSupabase() {
   if (!adminClientPromise) {
     adminClientPromise = (async () => {
-      const url = await resolveRuntimeEnv("MY_SUPABASE_URL", "SUPABASE_URL");
-      const key = await resolveRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY");
+      const url =
+        (await resolveRuntimeEnv("MY_SUPABASE_URL", "SUPABASE_URL")) ||
+        (import.meta as any)?.env?.VITE_SUPABASE_URL ||
+        (import.meta as any)?.env?.VITE_MY_SUPABASE_URL;
+      const key =
+        (await resolveRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY")) ||
+        (import.meta as any)?.env?.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+        (import.meta as any)?.env?.VITE_MY_SUPABASE_SERVICE_ROLE_KEY;
 
       if (!url || !key) {
         throw new Error("Configuração do servidor incompleta: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY");
