@@ -82,6 +82,16 @@ export function PromotionsManager() {
     load();
   };
 
+  const setAsPopup = async (p: Promotion) => {
+    // Marca esta como popup e desmarca todas as outras
+    const others = promos.filter((x) => x.id !== p.id && x.show_as_popup);
+    await Promise.all(
+      others.map((o) => updatePromotion({ data: { id: o.id, show_as_popup: false } })),
+    );
+    await updatePromotion({ data: { id: p.id, show_as_popup: !p.show_as_popup } });
+    load();
+  };
+
   return (
     <section className="admin-section">
       <header className="admin-section-header">
@@ -196,11 +206,18 @@ export function PromotionsManager() {
                 <span className={`admin-tag ${p.is_active ? "tag-success" : "tag-muted"}`}>
                   {p.is_active ? "Ativa" : "Inativa"}
                 </span>
-                {p.show_as_popup && <span className="admin-tag">Popup</span>}
+                {p.show_as_popup && <span className="admin-tag tag-success">⭐ Popup ativo</span>}
                 <span className="admin-tag">{p.popup_duration_seconds}s</span>
               </div>
             </div>
             <div className="admin-list-actions">
+              <button
+                onClick={() => setAsPopup(p)}
+                title={p.show_as_popup ? "Remover do popup" : "Definir como popup do site"}
+                style={{ color: p.show_as_popup ? "#f59e0b" : undefined }}
+              >
+                {p.show_as_popup ? "★" : "☆"}
+              </button>
               <button onClick={() => toggle(p)} title={p.is_active ? "Desativar" : "Ativar"}>
                 <PowerIcon />
               </button>
