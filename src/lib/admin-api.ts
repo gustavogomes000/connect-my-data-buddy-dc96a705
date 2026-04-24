@@ -251,18 +251,7 @@ export const deletePromotionEntry = createServerFn({ method: "POST" })
 
 // ── Upload media ──
 
-export const getUploadUrl = createServerFn({ method: "POST" })
-  .inputValidator((input: { filename: string; contentType: string }) => input)
-  .handler(async ({ data }) => {
-    requireAdmin();
-    const supabase = getAdminSupabase();
-    const safeName = data.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `uploads/${Date.now()}-${safeName}`;
-    const { data: result, error } = await supabase.storage.from("media").createSignedUploadUrl(path);
-    if (error) throw new Error(error.message);
-    const publicUrl = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
-    return { signedUrl: result.signedUrl, token: result.token, path, publicUrl };
-  });
+export { getUploadUrl } from "./admin-api.functions";
 
 // ── Auto News ──
 export { triggerAutoNewsManual } from "./admin-api.functions";
