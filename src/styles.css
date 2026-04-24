@@ -760,6 +760,18 @@
     50% { transform: translateX(250%) rotate(20deg); opacity: 1; }
   }
 
+  @media (max-width: 480px) {
+    .popup-overlay { padding: 12px; }
+    .popup-card { border-radius: 20px; }
+    .popup-img { max-height: 240px; }
+    .popup-body { padding: 20px 20px 24px; }
+    .popup-body h2 { font-size: 22px; }
+    .popup-body p { font-size: 14px; margin-bottom: 18px; }
+    .popup-btn-primary { padding: 14px 20px; font-size: 14px; }
+    .popup-close { top: 10px; right: 10px; width: 32px; height: 32px; font-size: 14px; }
+    .popup-badge { top: 12px; left: 12px; padding: 5px 10px; font-size: 10px; }
+  }
+
   /* ── Public Pages ── */
   .public-page {
     max-width: 1140px;
