@@ -11,6 +11,8 @@ import mascoteTop from "@/assets/mascote-top.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
+import axisDigitalLogo from "@/assets/axis-digital.png";
+import draFernandaSarelliLogo from "@/assets/dra-fernanda-sarelli.png";
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null;
