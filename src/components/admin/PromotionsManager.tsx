@@ -82,6 +82,16 @@ export function PromotionsManager() {
     load();
   };
 
+  const setAsPopup = async (p: Promotion) => {
+    // Marca esta como popup e desmarca todas as outras
+    const others = promos.filter((x) => x.id !== p.id && x.show_as_popup);
+    await Promise.all(
+      others.map((o) => updatePromotion({ data: { id: o.id, show_as_popup: false } })),
+    );
+    await updatePromotion({ data: { id: p.id, show_as_popup: !p.show_as_popup } });
+    load();
+  };
+
   return (
     <section className="admin-section">
       <header className="admin-section-header">
