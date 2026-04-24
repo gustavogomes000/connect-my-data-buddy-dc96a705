@@ -970,7 +970,9 @@ function IndexPage() {
 
               <div className="mt-8 text-center">
                 <a
-                  href="mailto:contato@top100fm.com.br?subject=Quero%20ser%20patrocinador"
+                  href="https://wa.me/5562818808950?text=Quero%20ser%20patrocinador%20da%20TOP100%20FM"
+                  target="_blank"
+                  rel="noopener"
                   className="inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] hover:bg-[#c8102e] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
                 >
                   Quero anunciar na TOP100 FM
