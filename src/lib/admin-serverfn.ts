@@ -55,13 +55,20 @@ export const adminClientTokenMiddleware = createMiddleware({ type: "function" })
 });
 
 const requireAdminMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
-  const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+  let sessionAuthenticated = false;
+
+  try {
+    const session = await useSession<{ authenticated?: boolean }>(await getAdminSessionConfig());
+    sessionAuthenticated = session.data.authenticated === true;
+  } catch {
+    sessionAuthenticated = false;
+  }
+
   const secret = await getAdminSecret();
   const headerToken = getRequestHeader(ADMIN_HEADER);
-
   const hasValidHeader = secret ? await verifyAdminToken(headerToken, secret) : false;
 
-  if (session.data.authenticated !== true && !hasValidHeader) {
+  if (!sessionAuthenticated && !hasValidHeader) {
     throw new Error("Não autorizado");
   }
 
