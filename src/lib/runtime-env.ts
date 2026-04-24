@@ -21,7 +21,22 @@ function readRuntimeEnvValue(key: RuntimeEnvKey): string | undefined {
   };
 
   const fromGlobal = g[key] ?? g.env?.[key] ?? g.__env__?.[key] ?? g.process?.env?.[key];
-  return typeof fromGlobal === "string" && fromGlobal.length > 0 ? fromGlobal : undefined;
+  if (typeof fromGlobal === "string" && fromGlobal.length > 0) return fromGlobal;
+
+  // Fallback para import.meta.env (Vite injeta no bundle SSR)
+  try {
+    const meta = (import.meta as any)?.env as Record<string, unknown> | undefined;
+    if (meta) {
+      const direct = meta[key];
+      if (typeof direct === "string" && direct.length > 0) return direct;
+      const prefixed = meta[`VITE_${key}`];
+      if (typeof prefixed === "string" && prefixed.length > 0) return prefixed;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return undefined;
 }
 
 export async function getRuntimeEnv(key: RuntimeEnvKey): Promise<string | undefined> {
