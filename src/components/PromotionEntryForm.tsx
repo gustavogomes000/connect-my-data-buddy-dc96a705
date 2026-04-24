@@ -19,6 +19,10 @@ export function PromotionEntryForm({ promotionId, onClose, onSuccess }: { promot
     e.preventDefault();
     setErr("");
 
+    if (!form.birth_date) {
+      setErr("Informe sua data de nascimento.");
+      return;
+    }
     if (!acceptedLgpd) {
       setErr("Você precisa aceitar o termo de tratamento de dados (LGPD) para continuar.");
       return;
@@ -179,7 +183,19 @@ export function PromotionEntryForm({ promotionId, onClose, onSuccess }: { promot
           <div className="promo-form-body">
             <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <input required placeholder="Nome completo *" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} className="entry-input" />
-              <input required type="date" value={form.birth_date} onChange={(e) => setForm({ ...form, birth_date: e.target.value })} className="entry-input" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <label style={{ fontSize: 12, color: "#4b5563", fontWeight: 600, paddingLeft: 2 }}>
+                  Data de nascimento <span style={{ color: "#c8102e" }}>*</span>
+                </label>
+                <input
+                  required
+                  type="date"
+                  value={form.birth_date}
+                  max={new Date().toISOString().slice(0, 10)}
+                  onChange={(e) => setForm({ ...form, birth_date: e.target.value })}
+                  className="entry-input"
+                />
+              </div>
               <input required placeholder="WhatsApp * (com DDD)" value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: maskPhone(e.target.value) })} className="entry-input" />
               <input required placeholder="CPF *" value={form.cpf} onChange={(e) => setForm({ ...form, cpf: maskCpf(e.target.value) })} className="entry-input" />
               <input required placeholder="@usuário do Instagram *" value={form.instagram} onChange={(e) => setForm({ ...form, instagram: e.target.value })} className="entry-input" />
