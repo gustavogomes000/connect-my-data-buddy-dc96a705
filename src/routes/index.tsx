@@ -297,6 +297,7 @@ function IndexPage() {
   const [podcastModalOpen, setPodcastModalOpen] = useState(false);
   const [modalPlayingPodcast, setModalPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
+  const [openNews, setOpenNews] = useState<NewsItem | null>(null);
   const [liveActive, setLiveActive] = useState(false);
   const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
   const [liveTitle, setLiveTitle] = useState<string>("");
@@ -369,6 +370,19 @@ function IndexPage() {
       setLoading(false);
     });
   }, [today]);
+
+  // ESC fecha modal de notícia + trava scroll
+  useEffect(() => {
+    if (!openNews) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenNews(null);
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [openNews]);
 
   const liveYoutubeId = liveActive ? getYoutubeId(liveYoutubeUrl) : null;
   const isLive = liveActive && !!liveYoutubeId;
@@ -599,9 +613,10 @@ function IndexPage() {
           ) : (
             <div className="grid gap-6 lg:grid-cols-3">
               {/* DESTAQUE GRANDE */}
-              <Link
-                to="/noticias"
-                className="lg:col-span-2 group relative rounded-xl overflow-hidden bg-card border shadow-sm hover:shadow-xl transition"
+              <button
+                type="button"
+                onClick={() => setOpenNews(featured)}
+                className="lg:col-span-2 group relative rounded-xl overflow-hidden bg-card border shadow-sm hover:shadow-xl transition text-left"
               >
                 <div className="aspect-[16/10] bg-muted overflow-hidden">
                   {featured.image_url ? (
@@ -632,15 +647,16 @@ function IndexPage() {
                     {fmtDate(featured.updated_at || featured.created_at)}
                   </p>
                 </div>
-              </Link>
+              </button>
 
               {/* 2 SECUNDÁRIAS */}
               <div className="grid gap-6 grid-cols-1">
                 {secondary.map((n) => (
-                  <Link
+                  <button
                     key={n.id}
-                    to="/noticias"
-                    className="group rounded-xl border bg-card overflow-hidden hover:shadow-lg transition flex"
+                    type="button"
+                    onClick={() => setOpenNews(n)}
+                    className="group rounded-xl border bg-card overflow-hidden hover:shadow-lg transition flex text-left"
                   >
                     {n.image_url ? (
                       <div className="w-32 sm:w-40 flex-shrink-0 bg-muted">
@@ -657,7 +673,7 @@ function IndexPage() {
                         {n.title}
                       </h4>
                     </div>
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
@@ -667,10 +683,11 @@ function IndexPage() {
           {rest.length > 0 && (
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {rest.map((n) => (
-                <Link
+                <button
                   key={n.id}
-                  to="/noticias"
-                  className="group rounded-xl border bg-card overflow-hidden hover:shadow-lg transition"
+                  type="button"
+                  onClick={() => setOpenNews(n)}
+                  className="group rounded-xl border bg-card overflow-hidden hover:shadow-lg transition text-left"
                 >
                   <div className="aspect-video bg-muted overflow-hidden">
                     {n.image_url ? (
@@ -685,12 +702,79 @@ function IndexPage() {
                     </p>
                     <h4 className="font-bold text-sm text-[#0c2651] line-clamp-2">{n.title}</h4>
                   </div>
-                </Link>
+                </button>
               ))}
+            </div>
+          )}
+
+          {/* BOTÃO VER MAIS NOTÍCIAS */}
+          {news.length > 0 && (
+            <div className="mt-10 flex justify-center">
+              <Link
+                to="/noticias"
+                className="inline-flex items-center gap-2 rounded-full bg-[#c8102e] text-white px-7 py-3 text-sm font-bold shadow-md hover:bg-[#a30d24] hover:shadow-lg transition"
+              >
+                Ver mais notícias
+                <span className="transition group-hover:translate-x-0.5">→</span>
+              </Link>
             </div>
           )}
         </section>
 
+        {/* MODAL DE LEITURA DE NOTÍCIA */}
+        {openNews && (
+          <div
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start sm:items-center justify-center p-4 overflow-y-auto"
+            onClick={() => setOpenNews(null)}
+          >
+            <div
+              className="relative bg-background rounded-2xl max-w-3xl w-full my-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setOpenNews(null)}
+                aria-label="Fechar"
+                className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80"
+              >
+                ✕
+              </button>
+              <div className="overflow-y-auto flex-1">
+                {openNews.image_url && (
+                  <img src={openNews.image_url} alt={openNews.title} className="w-full max-h-80 object-cover" />
+                )}
+                <div className="p-6 sm:p-8">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[#c8102e] mb-2">
+                    {fmtDate(openNews.updated_at || openNews.created_at)}
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-[#0c2651] mb-4">{openNews.title}</h2>
+                  {openNews.summary && (
+                    <p className="text-base font-medium text-foreground/90 mb-4">{openNews.summary}</p>
+                  )}
+                  {openNews.content && (
+                    <div className="text-base text-foreground/80 whitespace-pre-line leading-relaxed">
+                      {openNews.content}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="border-t bg-background p-4 flex justify-between gap-3 shrink-0 flex-wrap">
+                <button
+                  onClick={() => setOpenNews(null)}
+                  className="px-6 py-2.5 rounded-full bg-[#0c2651] text-white font-semibold hover:bg-[#0c2651]/90 transition inline-flex items-center gap-2"
+                >
+                  ← Voltar
+                </button>
+                <Link
+                  to="/noticias"
+                  onClick={() => setOpenNews(null)}
+                  className="px-6 py-2.5 rounded-full bg-[#c8102e] text-white font-semibold hover:bg-[#a30d24] transition inline-flex items-center gap-2"
+                >
+                  Ver mais notícias →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* PROGRAMAÇÃO DO DIA */}
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0c2651] via-[#0c2651] to-[#1a3a7a] text-white py-14">
