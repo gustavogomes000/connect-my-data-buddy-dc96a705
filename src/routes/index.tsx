@@ -404,8 +404,8 @@ function IndexPage() {
   return (
     <div style={{ width: "100%", margin: 0 }}>
       <SiteHeader />
-      <PromotionPopup />
-      <AudioActivationOverlay />
+      {/* <PromotionPopup /> */}
+      {/* <AudioActivationOverlay /> */}
 
       <main className="bg-background">
         {/* HERO DE PROMOÇÕES */}
