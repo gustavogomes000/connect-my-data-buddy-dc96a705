@@ -1,3 +1,5 @@
+import { env as workerEnv } from "cloudflare:workers";
+
 type RuntimeEnvKey =
   | "SUPABASE_URL"
   | "SUPABASE_SERVICE_ROLE_KEY"
@@ -19,14 +21,8 @@ async function readRuntimeEnvValue(key: RuntimeEnvKey): Promise<string | undefin
     if (fromProcess) return fromProcess;
   }
 
-  try {
-    const workerModuleName = "cloudflare:workers";
-    const workerModule = (await import(/* @vite-ignore */ workerModuleName)) as { env?: Record<string, unknown> };
-    const fromWorker = readFromRecord(workerModule.env, key);
-    if (fromWorker) return fromWorker;
-  } catch {
-    /* ignore */
-  }
+  const fromWorker = readFromRecord(workerEnv, key);
+  if (fromWorker) return fromWorker;
 
   const g = globalThis as Record<string, unknown> & {
     env?: Record<string, unknown>;
