@@ -466,10 +466,6 @@ function IndexPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.15, duration: 0.5 }}
                 >
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffd84d]" />
-                  </span>
                   Concorra agora
                 </motion.span>
 
