@@ -562,11 +562,11 @@ function IndexPage() {
             <div className="flex items-center gap-3">
               <span className="h-8 w-1.5 rounded-full bg-[#ffc107]" />
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffc107]">
+                <p className="text-[11px] font-bold text-[#ffc107]">
                   Notícias
                 </p>
                 <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none">
-                  Fique por dentro
+                  Últimas Notícias
                 </h2>
               </div>
             </div>
