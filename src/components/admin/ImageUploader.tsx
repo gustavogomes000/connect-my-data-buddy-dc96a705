@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { uploadImage } from "@/lib/admin-api.functions";
 import { ImageIcon } from "./icons";
 
 const MAX_DIM = 2400;
 const TARGET_QUALITY = 0.85;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_MY_SUPABASE_URL;
+const SUPABASE_STORAGE_KEY =
+  import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+  import.meta.env.VITE_MY_SUPABASE_SERVICE_ROLE_KEY ||
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_MY_SUPABASE_PUBLISHABLE_KEY;
 
 async function compressImage(file: File): Promise<Blob> {
   // SVG ou GIF: não comprime (mantém como está)
@@ -38,13 +43,31 @@ async function compressImage(file: File): Promise<Blob> {
   return blob || file;
 }
 
-async function blobToDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error("Falha ao preparar imagem"));
-    reader.readAsDataURL(blob);
+async function uploadToSupabaseStorage(file: Blob, filename: string, contentType: string) {
+  if (!SUPABASE_URL || !SUPABASE_STORAGE_KEY) {
+    throw new Error("Supabase não configurado para upload.");
+  }
+
+  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `uploads/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+  const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/media/${encodedPath}`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_STORAGE_KEY,
+      authorization: `Bearer ${SUPABASE_STORAGE_KEY}`,
+      "content-type": contentType,
+      "x-upsert": "true",
+    },
+    body: file,
   });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || `Falha no Supabase Storage (${response.status})`);
+  }
+
+  return `${SUPABASE_URL}/storage/v1/object/public/media/${encodedPath}`;
 }
 
 export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => void }) {
@@ -65,13 +88,7 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
         compressed.type === "image/jpeg" && !/\.jpe?g$/i.test(file.name)
           ? file.name.replace(/\.[^.]+$/, "") + ".jpg"
           : file.name;
-      const { publicUrl } = await uploadImage({
-        data: {
-          filename: finalName,
-          contentType: compressed.type || file.type,
-          base64: await blobToDataUrl(compressed),
-        },
-      });
+      const publicUrl = await uploadToSupabaseStorage(compressed, finalName, compressed.type || file.type);
       onUploaded(publicUrl);
     } catch (err) {
       console.error("Upload error:", err);
