@@ -315,9 +315,6 @@ function IndexPage() {
   const [modalPlayingPodcast, setModalPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
   const [openNews, setOpenNews] = useState<NewsItem | null>(null);
-  const [liveActive, setLiveActive] = useState(false);
-  const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
-  const [liveTitle, setLiveTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
