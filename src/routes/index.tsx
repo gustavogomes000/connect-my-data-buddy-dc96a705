@@ -536,7 +536,7 @@ function IndexPage() {
                 </div>
               </motion.div>
               
-              {/* Mascote à direita no desktop — full bleed */}
+              {/* Hero Image / Monitor — full bleed */}
               <motion.div 
                 className="hidden lg:block lg:col-span-6 relative"
                 initial={{ opacity: 0, x: 30 }}
@@ -550,8 +550,8 @@ function IndexPage() {
                     transition={{ duration: 5, repeat: Infinity }}
                   />
                   <img
-                    src={mascoteTop}
-                    alt="Patrícia TOP100 FM"
+                    src={heroModel}
+                    alt="TOP100 FM"
                     className="relative z-10 w-full h-full object-contain object-left drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] anim-float"
                   />
                 </div>
