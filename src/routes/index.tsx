@@ -15,13 +15,6 @@ import illustGift from "@/assets/illust-promo-gift.png";
 import axisDigitalLogo from "@/assets/axis-digital.png";
 import draFernandaSarelliLogo from "@/assets/dra-fernanda-sarelli.png";
 
-function getYoutubeId(url: string): string | null {
-  if (!url) return null;
-  const m = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-  );
-  return m ? m[1] : null;
-}
 
 type PodcastItem = {
   id: string;
