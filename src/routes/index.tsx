@@ -196,7 +196,7 @@ const MOCK_SPONSORS: Sponsor[] = [
     name: "Supermercado Boa Compra",
     logo_url: svgLogo(
       `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 100'>
-        <rect width='240' height='100' rx='14' fill='#c8102e'/>
+        <rect width='240' height='100' rx='14' fill='#0c2651'/>
         <g transform='translate(18,28)'>
           <path d='M6 8h32l-3 22a4 4 0 0 1-4 3H13a4 4 0 0 1-4-3L6 8z' fill='none' stroke='#fff' stroke-width='3' stroke-linejoin='round'/>
           <circle cx='15' cy='42' r='3.5' fill='#fff'/>
@@ -413,7 +413,7 @@ function IndexPage() {
           
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#c8102e]/35 blur-[110px]"
+            className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#0c2651]/35 blur-[110px]"
             animate={{ scale: [1, 1.12, 1], opacity: [0.45, 0.7, 0.45] }}
             transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -500,7 +500,7 @@ function IndexPage() {
                       >
                         ♫
                       </motion.span>
-                      <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
+                      <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#0c2651] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
                         ) : (
@@ -608,7 +608,7 @@ function IndexPage() {
                       className="w-full h-full object-cover transition group-hover:scale-105"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#c8102e] to-[#0c2651] flex items-center justify-center">
+                    <div className="w-full h-full bg-gradient-to-br from-[#0c2651] to-[#0c2651] flex items-center justify-center">
                       <span className="text-white text-7xl">📻</span>
                     </div>
                   )}
@@ -645,7 +645,7 @@ function IndexPage() {
                         <img src={safeImageUrl(n.image_url)} alt={n.title} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     ) : (
-                      <div className="w-32 sm:w-40 flex-shrink-0 bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
+                      <div className="w-32 sm:w-40 flex-shrink-0 bg-gradient-to-br from-[#0c2651] to-[#0c2651]" />
                     )}
                     <div className="p-4 flex-1">
                       <p className="text-[11px] uppercase tracking-wider font-bold text-[#0c2651] mb-1">
@@ -675,11 +675,11 @@ function IndexPage() {
                     {n.image_url ? (
                       <img src={safeImageUrl(n.image_url)} alt={n.title} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover transition group-hover:scale-105" />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
+                      <div className="w-full h-full bg-gradient-to-br from-[#0c2651] to-[#0c2651]" />
                     )}
                   </div>
                   <div className="p-3">
-                    <p className="text-[11px] uppercase font-bold text-[#c8102e] mb-1">
+                    <p className="text-[11px] uppercase font-bold text-[#0c2651] mb-1">
                       {fmtDate(n.updated_at || n.created_at)}
                     </p>
                     <h4 className="font-bold text-sm text-[#0c2651] line-clamp-2">{n.title}</h4>
@@ -694,7 +694,7 @@ function IndexPage() {
             <div className="mt-10 flex justify-center">
               <Link
                 to="/noticias"
-                className="inline-flex items-center gap-2 rounded-full bg-[#c8102e] text-white px-7 py-3 text-sm font-bold shadow-md hover:bg-[#a30d24] hover:shadow-lg transition"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0c2651] text-white px-7 py-3 text-sm font-bold shadow-md hover:bg-[#a30d24] hover:shadow-lg transition"
               >
                 Ver mais notícias
                 <span className="transition group-hover:translate-x-0.5">→</span>
@@ -725,7 +725,7 @@ function IndexPage() {
                   <img src={safeImageUrl(openNews.image_url)} alt={openNews.title} referrerPolicy="no-referrer" className="w-full max-h-80 object-cover" />
                 )}
                 <div className="p-6 sm:p-8">
-                  <div className="text-xs uppercase tracking-wider font-bold text-[#c8102e] mb-2">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[#0c2651] mb-2">
                     {fmtDate(openNews.updated_at || openNews.created_at)}
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-black text-[#0c2651] mb-4">{openNews.title}</h2>
@@ -772,9 +772,9 @@ function IndexPage() {
           <div className="relative mx-auto max-w-7xl px-4">
             <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
-                <span className="h-8 w-1.5 rounded-full bg-[#c8102e]" />
+                <span className="h-8 w-1.5 rounded-full bg-[#0c2651]" />
                 <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c8102e]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0c2651]">
                     Hoje · {DAYS[today]}
                   </p>
                   <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-none text-white">
@@ -804,7 +804,7 @@ function IndexPage() {
                       key={p.id}
                       className={`rounded-xl p-4 border transition ${
                         isLive
-                          ? "bg-[#c8102e] border-[#c8102e] shadow-lg shadow-red-900/50"
+                          ? "bg-[#0c2651] border-[#0c2651] shadow-lg shadow-red-900/50"
                           : "bg-white/5 border-white/10 hover:bg-white/10"
                       }`}
                     >
@@ -813,7 +813,7 @@ function IndexPage() {
                           {fmtTime(p.start_time)} – {fmtTime(p.end_time)}
                         </span>
                         {isLive && (
-                          <span className="text-[10px] uppercase font-black bg-white text-[#c8102e] px-1.5 py-0.5 rounded animate-pulse">
+                          <span className="text-[10px] uppercase font-black bg-white text-[#0c2651] px-1.5 py-0.5 rounded animate-pulse">
                             No ar
                           </span>
                         )}
@@ -887,9 +887,9 @@ function IndexPage() {
             <div className="mx-auto max-w-7xl px-4">
               <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
                 <div className="flex items-center gap-3">
-                  <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
+                  <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#0c2651] to-[#0c2651]" />
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0c2651]">
                       Quem apoia
                     </p>
                     <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none mt-0.5">
@@ -914,7 +914,7 @@ function IndexPage() {
                       {...wrapperProps}
                       className={`group relative rounded-2xl border border-gray-200 bg-white ${
                         s.link
-                          ? "hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1"
+                          ? "hover:border-[#0c2651]/40 hover:shadow-lg hover:-translate-y-1"
                           : ""
                       } transition-all duration-300 flex flex-col items-center justify-center text-center p-3 sm:p-5 gap-2 sm:gap-3 min-h-[150px] sm:min-h-[200px]`}
                     >
@@ -925,7 +925,7 @@ function IndexPage() {
                           className="max-h-20 sm:max-h-28 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
-                      <div className="text-[11px] sm:text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
+                      <div className="text-[11px] sm:text-sm font-bold text-[#0c2651] group-hover:text-[#0c2651] transition tracking-tight leading-tight line-clamp-2">
                         {s.name}
                       </div>
                     </Wrapper>
@@ -938,7 +938,7 @@ function IndexPage() {
                   href="https://wa.me/5562818808950?text=Quero%20ser%20patrocinador%20da%20TOP100%20FM"
                   target="_blank"
                   rel="noopener"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] hover:bg-[#c8102e] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#0c2651]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#0c2651] hover:bg-[#0c2651] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
                 >
                   Quero anunciar na TOP100 FM
                   <span>→</span>
