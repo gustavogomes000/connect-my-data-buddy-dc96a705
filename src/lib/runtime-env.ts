@@ -19,6 +19,14 @@ async function readRuntimeEnvValue(key: RuntimeEnvKey): Promise<string | undefin
     if (fromProcess) return fromProcess;
   }
 
+  try {
+    const workerModule = await import("cloudflare:workers");
+    const fromWorker = readFromRecord((workerModule as { env?: Record<string, unknown> }).env, key);
+    if (fromWorker) return fromWorker;
+  } catch {
+    /* ignore */
+  }
+
   const g = globalThis as Record<string, unknown> & {
     env?: Record<string, unknown>;
     process?: { env?: Record<string, unknown> };
