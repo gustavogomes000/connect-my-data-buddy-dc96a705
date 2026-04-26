@@ -345,7 +345,7 @@ function IndexPage() {
       (supabase as any)
         .from("site_settings")
         .select("setting_key,setting_value")
-        .in("setting_key", ["sponsors", "live_active", "live_youtube_url", "live_title"]),
+        .in("setting_key", ["sponsors"]),
       (supabase as any)
         .from("podcasts")
         .select("id,title,description,youtube_url,thumbnail_url")
