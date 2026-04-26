@@ -60,6 +60,7 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
       const { path, token, publicUrl } = await getUploadUrl({
         data: { filename: finalName, contentType: compressed.type || file.type },
       });
+      console.info("Upload assinado gerado:", { path, hasToken: Boolean(token), publicUrl });
       const { error } = await supabase.storage
         .from("media")
         .uploadToSignedUrl(path, token, compressed, {
@@ -70,7 +71,8 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
       onUploaded(publicUrl);
     } catch (err) {
       console.error("Upload error:", err);
-      alert("Erro ao enviar imagem. Tente novamente.");
+      const message = err instanceof Error ? err.message : "Erro desconhecido";
+      alert(`Erro ao enviar imagem: ${message}`);
     } finally {
       setUploading(false);
       // permite re-selecionar a mesma imagem
