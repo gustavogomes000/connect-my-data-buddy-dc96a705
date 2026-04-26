@@ -68,19 +68,19 @@ export function SiteHeader() {
         {/* Centered nav (desktop) */}
         <nav className="header-nav-desktop" aria-label="Principal">
           <Link to="/" className="header-nav-link" activeProps={{ className: "header-nav-link active" }} activeOptions={{ exact: true }}>
-            <motion.span whileHover={{ y: -2 }}>HOME</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Home</motion.span>
           </Link>
           <Link to="/noticias" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>NOTÍCIAS</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Notícias</motion.span>
           </Link>
           <Link to="/programacao" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>PROGRAMAÇÃO</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Programação</motion.span>
           </Link>
           <Link to="/promocoes" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>PROMOÇÃO</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Promoções</motion.span>
           </Link>
           <Link to="/contato" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>CONTATO</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Contato</motion.span>
           </Link>
         </nav>
 
@@ -136,7 +136,7 @@ export function SiteHeader() {
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
             />
-            <span className="header-live-label">AO VIVO</span>
+            <span className="header-live-label">Ao Vivo</span>
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ export function SiteHeader() {
         <Link to="/" className="header-pill" activeProps={{ className: "header-pill active" }} activeOptions={{ exact: true }}>Home</Link>
         <Link to="/noticias" className="header-pill" activeProps={{ className: "header-pill active" }}>Notícias</Link>
         <Link to="/programacao" className="header-pill" activeProps={{ className: "header-pill active" }}>Programação</Link>
-        <Link to="/promocoes" className="header-pill" activeProps={{ className: "header-pill active" }}>Promoção</Link>
+        <Link to="/promocoes" className="header-pill" activeProps={{ className: "header-pill active" }}>Promoções</Link>
         <Link to="/contato" className="header-pill" activeProps={{ className: "header-pill active" }}>Contato</Link>
       </nav>
     </motion.header>
