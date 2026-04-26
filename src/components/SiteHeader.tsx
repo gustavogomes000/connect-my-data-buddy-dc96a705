@@ -130,14 +130,6 @@ export function SiteHeader() {
             className="header-vol"
             aria-label="Volume"
           />
-          <div className="header-live">
-            <motion.span 
-              className="header-live-dot" 
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            />
-            <span className="header-live-label">AO VIVO</span>
-          </div>
         </div>
       </div>
 
