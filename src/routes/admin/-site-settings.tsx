@@ -100,14 +100,6 @@ export function SiteSettingsPage() {
           />
         </label>
         <label>
-          URL do iframe da home
-          <input
-            type="url"
-            value={form.home_iframe_url ?? ""}
-            onChange={(e) => handleChange("home_iframe_url", e.target.value)}
-          />
-        </label>
-        <label>
           Texto “Tocando agora”
           <input
             type="text"
