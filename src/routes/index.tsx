@@ -433,18 +433,7 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia — sempre visível no desktop */}
-          <img
-            src={mascoteTop}
-            alt=""
-            aria-hidden
-            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
-            style={{
-              maskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
-            }}
-          />
-
+          {/* Patrícia — visível no desktop à direita */}
           <div className="relative mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-8 lg:pt-16 lg:pb-20">
             {/* Mobile/tablet: bloco da Patrícia (sempre visível) */}
             <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
@@ -464,12 +453,12 @@ function IndexPage() {
               </div>
             </div>
 
-            <div className="grid items-start gap-6 lg:grid-cols-12">
-              {/* Coluna única — promoções à esquerda com CTA */}
+            <div className="grid items-center gap-6 lg:grid-cols-12">
+              {/* Promoções à esquerda */}
               <motion.div
-                className="relative z-10 lg:col-span-6 lg:col-start-1"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
+                className="relative z-10 lg:col-span-6"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               >
                 <motion.span
@@ -553,7 +542,27 @@ function IndexPage() {
                 ))}
                 </div>
               </motion.div>
-
+              
+              {/* Mascote à direita no desktop */}
+              <motion.div 
+                className="hidden lg:flex lg:col-span-6 justify-center items-center"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.85, delay: 0.2 }}
+              >
+                <div className="relative">
+                  <motion.div
+                    className="absolute -inset-4 bg-[#ffd84d]/20 rounded-full blur-3xl"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                    transition={{ duration: 5, repeat: Infinity }}
+                  />
+                  <img
+                    src={mascoteTop}
+                    alt="Patrícia TOP100 FM"
+                    className="relative z-10 w-full max-w-[440px] h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] anim-float"
+                  />
+                </div>
+              </motion.div>
             </div>
           </div>
 
