@@ -560,13 +560,13 @@ function IndexPage() {
         <section className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 sm:pt-8 pb-10 sm:pb-12">
           <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
-              <span className="h-8 w-1.5 rounded-full bg-[#0c2651]" />
+              <span className="h-8 w-1.5 rounded-full bg-[#ffc107]" />
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0c2651]">
-                  Últimas
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ffc107]">
+                  Notícias
                 </p>
                 <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none">
-                  Notícias
+                  Fique por dentro
                 </h2>
               </div>
             </div>
