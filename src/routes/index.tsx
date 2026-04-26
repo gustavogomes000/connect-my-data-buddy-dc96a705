@@ -749,7 +749,7 @@ function IndexPage() {
                 <Link
                   to="/noticias"
                   onClick={() => setOpenNews(null)}
-                  className="px-6 py-2.5 rounded-full bg-[#c8102e] text-white font-semibold hover:bg-[#a30d24] transition inline-flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-full bg-[#0c2651] text-white font-semibold hover:bg-[#0c2651]/90 transition inline-flex items-center gap-2"
                 >
                   Ver mais notícias →
                 </Link>
