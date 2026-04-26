@@ -31,8 +31,9 @@ async function readRuntimeEnvValue(key: RuntimeEnvKey): Promise<string | undefin
 
   if (typeof window === "undefined") {
     try {
-      const workers = await import("cloudflare:workers");
-      const fromWorkerEnv = readFromRecord((workers as any).env, key);
+      const importWorkerEnv = new Function("return import('cloudflare:workers')") as () => Promise<{ env?: Record<string, unknown> }>;
+      const workers = await importWorkerEnv();
+      const fromWorkerEnv = readFromRecord(workers.env, key);
       if (fromWorkerEnv) return fromWorkerEnv;
     } catch {
       /* ignore */
