@@ -374,9 +374,6 @@ function IndexPage() {
           .map(normalizeSponsorLogo)
           .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
         setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
-        setLiveActive(!!map.live_active);
-        setLiveYoutubeUrl(typeof map.live_youtube_url === "string" ? map.live_youtube_url : "");
-        setLiveTitle(typeof map.live_title === "string" ? map.live_title : "");
       } catch {
         setSponsors(MOCK_SPONSORS);
       }
