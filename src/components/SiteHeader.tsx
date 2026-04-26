@@ -136,7 +136,7 @@ export function SiteHeader() {
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
             />
-            <span className="header-live-label">AO VIVO</span>
+            <span className="header-live-label">Ao Vivo</span>
           </div>
         </div>
       </div>
