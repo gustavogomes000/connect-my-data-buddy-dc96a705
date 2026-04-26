@@ -68,19 +68,19 @@ export function SiteHeader() {
         {/* Centered nav (desktop) */}
         <nav className="header-nav-desktop" aria-label="Principal">
           <Link to="/" className="header-nav-link" activeProps={{ className: "header-nav-link active" }} activeOptions={{ exact: true }}>
-            <motion.span whileHover={{ y: -2 }}>HOME</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Home</motion.span>
           </Link>
           <Link to="/noticias" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>NOTÍCIAS</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Notícias</motion.span>
           </Link>
           <Link to="/programacao" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>PROGRAMAÇÃO</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Programação</motion.span>
           </Link>
           <Link to="/promocoes" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>PROMOÇÃO</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Promoções</motion.span>
           </Link>
           <Link to="/contato" className="header-nav-link" activeProps={{ className: "header-nav-link active" }}>
-            <motion.span whileHover={{ y: -2 }}>CONTATO</motion.span>
+            <motion.span whileHover={{ y: -2 }}>Contato</motion.span>
           </Link>
         </nav>
 
