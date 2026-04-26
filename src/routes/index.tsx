@@ -8,7 +8,7 @@ import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { safeImageUrl } from "@/lib/utils";
-import mascoteTop from "@/assets/mascote-top.png";
+import heroModel from "@/assets/modelo-top-original.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
@@ -438,8 +438,8 @@ function IndexPage() {
             {/* Mobile/tablet: bloco da Patrícia (sempre visível) */}
             <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
               <img
-                src={mascoteTop}
-                alt="Patrícia nas promoções da TOP100 FM"
+                src={heroModel}
+                alt="TOP100 FM"
                 className="h-[200px] w-full object-cover object-center sm:h-[300px]"
               />
               <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent" />
@@ -536,7 +536,7 @@ function IndexPage() {
                 </div>
               </motion.div>
               
-              {/* Mascote à direita no desktop — full bleed */}
+              {/* Hero Image / Monitor — full bleed */}
               <motion.div 
                 className="hidden lg:block lg:col-span-6 relative"
                 initial={{ opacity: 0, x: 30 }}
@@ -550,8 +550,8 @@ function IndexPage() {
                     transition={{ duration: 5, repeat: Infinity }}
                   />
                   <img
-                    src={mascoteTop}
-                    alt="Patrícia TOP100 FM"
+                    src={heroModel}
+                    alt="TOP100 FM"
                     className="relative z-10 w-full h-full object-contain object-left drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] anim-float"
                   />
                 </div>
@@ -564,34 +564,6 @@ function IndexPage() {
           </svg>
         </section>
 
-        {/* TV AO VIVO — só aparece quando admin define URL no painel; inicia mutado */}
-        {isLive && (
-          <section className="bg-background">
-            <div className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-2">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <div
-                  className="relative w-full overflow-hidden rounded-xl bg-black"
-                  style={{ aspectRatio: "16 / 9" }}
-                >
-                  <iframe
-                    src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&playsinline=1&rel=0`}
-                    title={liveTitle || "Transmissão ao vivo TOP100 FM"}
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 h-full w-full"
-                  />
-                </div>
-                {liveTitle && (
-                  <p className="mt-2 text-sm font-bold text-[#0c2651]">{liveTitle}</p>
-                )}
-              </motion.div>
-            </div>
-          </section>
-        )}
 
         {/* HERO + NOTÍCIAS DESTAQUE */}
         <section className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 sm:pt-8 pb-10 sm:pb-12">
