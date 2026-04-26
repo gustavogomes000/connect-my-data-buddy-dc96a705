@@ -39,6 +39,35 @@ async function compressImage(file: File): Promise<Blob> {
   return blob || file;
 }
 
+async function uploadWithSignedUrl(args: {
+  signedUrl?: string;
+  path: string;
+  token: string;
+  file: Blob;
+  contentType: string;
+}) {
+  if (args.signedUrl) {
+    const response = await fetch(args.signedUrl, {
+      method: "PUT",
+      headers: {
+        "content-type": args.contentType,
+        "x-upsert": "true",
+      },
+      body: args.file,
+    });
+
+    if (response.ok) return;
+    throw new Error((await response.text()) || `Falha no upload (${response.status})`);
+  }
+
+  const { error } = await supabase.storage.from("media").uploadToSignedUrl(args.path, args.token, args.file, {
+    contentType: args.contentType,
+    upsert: true,
+  });
+
+  if (error) throw error;
+}
+
 export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => void }) {
   const [uploading, setUploading] = useState(false);
 
@@ -57,17 +86,17 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
         compressed.type === "image/jpeg" && !/\.jpe?g$/i.test(file.name)
           ? file.name.replace(/\.[^.]+$/, "") + ".jpg"
           : file.name;
-      const { path, token, publicUrl } = await getUploadUrl({
+      const { path, token, publicUrl, signedUrl } = await getUploadUrl({
         data: { filename: finalName, contentType: compressed.type || file.type },
       });
       console.info("Upload assinado gerado:", { path, hasToken: Boolean(token), publicUrl });
-      const { error } = await supabase.storage
-        .from("media")
-        .uploadToSignedUrl(path, token, compressed, {
-          contentType: compressed.type || file.type,
-          upsert: true,
-        });
-      if (error) throw error;
+      await uploadWithSignedUrl({
+        signedUrl,
+        path,
+        token,
+        file: compressed,
+        contentType: compressed.type || file.type,
+      });
       onUploaded(publicUrl);
     } catch (err) {
       console.error("Upload error:", err);
