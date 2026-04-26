@@ -216,7 +216,6 @@
     font-size: clamp(11px, 0.85vw, 13px);
     font-weight: 800;
     letter-spacing: 0.5px;
-    text-transform: uppercase;
     padding: 8px 4px;
     position: relative;
     white-space: nowrap;
