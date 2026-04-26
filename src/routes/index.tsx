@@ -419,7 +419,7 @@ function IndexPage() {
         {/* HERO DE PROMOÇÕES */}
         <section className="relative overflow-hidden bg-[#0a1f4a]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#1a3a8c_0%,#0a1f4a_48%,#06122d_100%)]" />
-          <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "44px 44px" }} />
+          
           <motion.div
             aria-hidden
             className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#c8102e]/35 blur-[110px]"
