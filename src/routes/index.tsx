@@ -396,9 +396,7 @@ function IndexPage() {
     };
   }, [openNews]);
 
-  const liveYoutubeId = liveActive ? getYoutubeId(liveYoutubeUrl) : null;
-  const isLive = liveActive && !!liveYoutubeId;
-
+  // Notícias logic
   const featured = news[0];
   const secondary = news.slice(1, 3);
   const rest = news.slice(3, 7);
