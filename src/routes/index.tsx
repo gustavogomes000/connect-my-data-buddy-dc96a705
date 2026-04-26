@@ -438,8 +438,8 @@ function IndexPage() {
             {/* Mobile/tablet: bloco da Patrícia (sempre visível) */}
             <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
               <img
-                src={mascoteTop}
-                alt="Patrícia nas promoções da TOP100 FM"
+                src={heroModel}
+                alt="TOP100 FM"
                 className="h-[200px] w-full object-cover object-center sm:h-[300px]"
               />
               <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent" />
