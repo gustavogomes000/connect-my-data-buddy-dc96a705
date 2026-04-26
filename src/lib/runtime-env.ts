@@ -1,5 +1,3 @@
-import { env as workerEnv } from "cloudflare:workers";
-
 type RuntimeEnvKey =
   | "SUPABASE_URL"
   | "SUPABASE_SERVICE_ROLE_KEY"
@@ -20,9 +18,6 @@ async function readRuntimeEnvValue(key: RuntimeEnvKey): Promise<string | undefin
     const fromProcess = readFromRecord(process.env, key);
     if (fromProcess) return fromProcess;
   }
-
-  const fromWorker = readFromRecord(workerEnv, key);
-  if (fromWorker) return fromWorker;
 
   const g = globalThis as Record<string, unknown> & {
     env?: Record<string, unknown>;
