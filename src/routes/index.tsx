@@ -572,7 +572,7 @@ function IndexPage() {
             </div>
             <Link
               to="/noticias"
-              className="group inline-flex items-center gap-1.5 rounded-full border border-[#c8102e]/20 bg-white px-4 py-2 text-sm font-bold text-[#c8102e] shadow-sm transition hover:bg-[#c8102e] hover:text-white hover:shadow-md"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-[#0c2651]/20 bg-white px-4 py-2 text-sm font-bold text-[#0c2651] shadow-sm transition hover:bg-[#0c2651] hover:text-white hover:shadow-md"
             >
               Ver todas
               <span className="transition group-hover:translate-x-0.5">→</span>
