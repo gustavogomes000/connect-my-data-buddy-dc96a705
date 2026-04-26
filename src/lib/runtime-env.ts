@@ -29,17 +29,6 @@ async function readRuntimeEnvValue(key: RuntimeEnvKey): Promise<string | undefin
     readFromRecord(g, key) || readFromRecord(g.env, key) || readFromRecord(g.__env__, key) || readFromRecord(g.process?.env, key);
   if (fromGlobal) return fromGlobal;
 
-  if (typeof window === "undefined") {
-    try {
-      const workerModule = "cloudflare:workers";
-      const workers = (await import(workerModule)) as { env?: Record<string, unknown> };
-      const fromWorkerEnv = readFromRecord(workers.env, key);
-      if (fromWorkerEnv) return fromWorkerEnv;
-    } catch {
-      /* ignore */
-    }
-  }
-
   try {
     const meta = (import.meta as any)?.env as Record<string, unknown> | undefined;
     const fromMeta = readFromRecord(meta, key) || readFromRecord(meta, `VITE_${key}` as RuntimeEnvKey);
