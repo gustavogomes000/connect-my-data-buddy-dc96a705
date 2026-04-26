@@ -32,7 +32,7 @@ export function NewsManager() {
 
   const load = useCallback(async () => {
     const [data, settings] = await Promise.all([getNews(), getSiteSettings()]);
-    setNews(data as NewsItem[]);
+    setNews(Array.isArray(data) ? (data as NewsItem[]) : []);
     setAutoEnabled(settings?.auto_news_enabled === true || settings?.auto_news_enabled === "true");
   }, []);
 
@@ -106,10 +106,12 @@ export function NewsManager() {
   };
 
   const PIN_LIMIT = 3;
+  const safeNews = Array.isArray(news) ? news : [];
+
   const togglePin = async (n: NewsItem) => {
     const isPinned = !!n.is_pinned;
     if (!isPinned) {
-      const pinnedCount = news.filter((x) => x.is_pinned).length;
+      const pinnedCount = safeNews.filter((x) => x.is_pinned).length;
       if (pinnedCount >= PIN_LIMIT) {
         alert(`Você já fixou ${PIN_LIMIT} notícias. Desafixe uma antes de fixar outra.`);
         return;
@@ -222,8 +224,8 @@ export function NewsManager() {
       )}
 
       <div className="admin-list">
-        {news.length === 0 && <p className="admin-empty">Nenhuma notícia cadastrada.</p>}
-        {news.map((n) => (
+        {safeNews.length === 0 && <p className="admin-empty">Nenhuma notícia cadastrada.</p>}
+        {safeNews.map((n) => (
           <article key={n.id} className={`admin-list-item ${!n.is_published ? "inactive" : ""}`}>
             {n.image_url && <img src={n.image_url} alt="" className="admin-list-thumb" />}
             <div className="admin-list-info">
