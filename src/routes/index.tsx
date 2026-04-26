@@ -462,7 +462,7 @@ function IndexPage() {
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               >
                 <motion.span
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[12px] font-black uppercase tracking-[0.3em] text-[#ffd84d] backdrop-blur-md shadow-lg"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.15, duration: 0.5 }}
@@ -474,14 +474,14 @@ function IndexPage() {
                   Concorra agora
                 </motion.span>
 
-                <h2 className="mt-3 text-lg sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
+                <h2 className="mt-4 text-3xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-tighter text-white uppercase italic">
                   Participe e{" "}
-                  <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
-                    concorra a prêmios incríveis
+                  <span className="block bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent drop-shadow-xl">
+                    concorra a prêmios!
                   </span>
                 </h2>
-                <p className="mt-1.5 text-[11px] sm:text-sm text-white/80">
-                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio 🎁
+                <p className="mt-3 max-w-md text-sm sm:text-lg font-medium text-white/90 leading-relaxed">
+                  Escolha sua promoção favorita, cadastre-se e boa sorte! 🎁
                 </p>
 
                 <div className="mt-4 flex flex-col gap-2.5">
