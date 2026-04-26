@@ -402,56 +402,128 @@ function IndexPage() {
   const rest = news.slice(3, 7);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div style={{ width: "100%", margin: 0 }}>
       <SiteHeader />
+      <PromotionPopup />
+      <AudioActivationOverlay />
 
-      <main className="flex-1">
-        {/* HERO SECTION */}
-        <section className="relative overflow-hidden bg-[#0a1f4a] min-h-[400px] flex items-center">
+      <main className="bg-background">
+        {/* HERO DE PROMOÇÕES — réplica fiel da produção */}
+        <section className="relative overflow-hidden bg-[#0a1f4a]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#1a3a8c_0%,#0a1f4a_48%,#06122d_100%)]" />
-          <div className="pointer-events-none absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "44px 44px" }} />
-          
-          <div className="relative mx-auto max-w-7xl px-4 py-12 lg:py-20 w-full grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="relative z-10 space-y-6">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#ffd84d]/30 bg-[#ffd84d]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#ffd84d]">
-                Rádio TOP100 FM
-              </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
-                A rádio que é <span className="text-[#ffd84d]">TOP</span> em todo lugar!
-              </h1>
-              <p className="text-lg text-white/80 max-w-lg">
-                Notícias, programação exclusiva e os melhores prêmios. Participe das nossas promoções e fique por dentro de tudo.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  to="/promocoes"
-                  className="px-8 py-3 rounded-full bg-[#ffd84d] text-[#0c2651] font-black text-sm uppercase tracking-wider hover:bg-white transition-all transform hover:-translate-y-1 shadow-xl"
-                >
-                  Ver Promoções
-                </Link>
-                <Link
-                  to="/programacao"
-                  className="px-8 py-3 rounded-full border border-white/20 bg-white/5 text-white font-black text-sm uppercase tracking-wider hover:bg-white/10 transition-all backdrop-blur-sm"
-                >
-                  Programação
-                </Link>
+          <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "44px 44px" }} />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#c8102e]/35 blur-[110px]"
+            animate={{ scale: [1, 1.12, 1], opacity: [0.45, 0.7, 0.45] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-28 left-0 h-[26rem] w-[26rem] rounded-full bg-[#ffd84d]/18 blur-[120px]"
+            animate={{ scale: [1.08, 1, 1.08], opacity: [0.35, 0.55, 0.35] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* Patrícia — sempre visível no desktop */}
+          <img
+            src={mascoteTop}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
+            style={{
+              maskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
+            }}
+          />
+
+          <div className="relative mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-8 lg:pt-16 lg:pb-20">
+            {/* Mobile/tablet: bloco da Patrícia */}
+            <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
+              <img
+                src={mascoteTop}
+                alt="Patrícia nas promoções da TOP100 FM"
+                className="h-[200px] w-full object-cover object-center sm:h-[300px]"
+              />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
+              <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-[#ffd84d] backdrop-blur-md">
+                Promoções
               </div>
             </div>
 
-            {/* Right Image/Graphic */}
-            <div className="relative hidden lg:block">
-              <div className="absolute -inset-4 bg-gradient-to-r from-[#ffd84d]/20 to-[#c8102e]/20 blur-3xl opacity-50 rounded-full" />
-              <img
-                src={mascoteTop}
-                alt="Rádio TOP100 FM"
-                className="relative z-10 w-full max-w-md mx-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform hover:scale-105 transition-duration-700"
-              />
+            <div className="grid items-start gap-6 lg:grid-cols-12">
+              <div className="relative z-10 lg:col-span-6">
+                <motion.span
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.15, duration: 0.5 }}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ffd84d]" />
+                  </span>
+                  Concorra agora
+                </motion.span>
+
+                <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight text-white">
+                  Participe e{" "}
+                  <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
+                    concorra a prêmios incríveis
+                  </span>
+                </h2>
+                <p className="mt-2 text-sm text-white/80">
+                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio 🎁
+                </p>
+
+                <div className="mt-5 flex flex-col gap-2.5">
+                  {promos.slice(0, 3).map((p, i) => (
+                    <motion.button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setSelectedPromo(p)}
+                      whileHover={{ y: -4, scale: 1.015 }}
+                      className="group relative flex w-full items-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-2.5 sm:p-3 text-left backdrop-blur transition hover:border-[#ffd84d]/40 hover:bg-white/[0.1] hover:shadow-[0_20px_50px_-20px_rgba(255,216,77,0.5)]"
+                    >
+                      <div className="relative h-20 w-20 sm:h-28 sm:w-28 shrink-0">
+                        <div
+                          aria-hidden
+                          className="absolute -inset-1 rounded-2xl opacity-60 blur-md transition group-hover:opacity-90"
+                          style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.3) 50%, transparent 75%)" }}
+                        />
+                        <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
+                          {p.image_url ? (
+                            <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <img src={illustGift} alt="" className="h-12 w-12 sm:h-16 sm:w-16 object-contain drop-shadow-lg" loading="lazy" width={64} height={64} />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="min-w-0 flex-1 pr-1">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#ffd84d]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#ffd84d]">
+                          Promo {i + 1}
+                        </span>
+                        <h3 className="mt-1 text-sm sm:text-base font-black leading-tight text-white line-clamp-2">
+                          {p.title}
+                        </h3>
+                        <span className="mt-1 inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#ff9a3c] transition-all group-hover:gap-2">
+                          Participar <span>→</span>
+                        </span>
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-          
-          {/* Curve Decorator */}
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-background" style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 0)" }} />
+
+          <svg className="block h-12 w-full text-background lg:h-16" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden>
+            <path fill="currentColor" d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" />
+          </svg>
         </section>
 
 
