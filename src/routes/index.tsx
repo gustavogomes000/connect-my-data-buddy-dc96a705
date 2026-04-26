@@ -648,10 +648,10 @@ function IndexPage() {
                       <div className="w-32 sm:w-40 flex-shrink-0 bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
                     )}
                     <div className="p-4 flex-1">
-                      <p className="text-[11px] uppercase tracking-wider font-bold text-[#c8102e] mb-1">
+                      <p className="text-[11px] uppercase tracking-wider font-bold text-[#0c2651] mb-1">
                         {fmtDate(n.updated_at || n.created_at)}
                       </p>
-                      <h4 className="font-bold text-[#0c2651] leading-snug line-clamp-3 group-hover:text-[#c8102e] transition">
+                      <h4 className="font-bold text-[#0c2651] leading-snug line-clamp-3 group-hover:text-[#0c2651]/80 transition">
                         {n.title}
                       </h4>
                     </div>
