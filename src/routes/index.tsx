@@ -22,6 +22,14 @@ function getYoutubeId(url: string): string | null {
   );
   return m ? m[1] : null;
 }
+type PodcastItem = {
+  id: string;
+  title: string;
+  description: string | null;
+  youtube_url: string;
+  thumbnail_url: string | null;
+};
+
 function PodcastCardDark({
   p,
   isPlaying,
