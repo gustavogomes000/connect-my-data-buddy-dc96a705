@@ -564,34 +564,6 @@ function IndexPage() {
           </svg>
         </section>
 
-        {/* TV AO VIVO — só aparece quando admin define URL no painel; inicia mutado */}
-        {isLive && (
-          <section className="bg-background">
-            <div className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-2">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <div
-                  className="relative w-full overflow-hidden rounded-xl bg-black"
-                  style={{ aspectRatio: "16 / 9" }}
-                >
-                  <iframe
-                    src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&playsinline=1&rel=0`}
-                    title={liveTitle || "Transmissão ao vivo TOP100 FM"}
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 h-full w-full"
-                  />
-                </div>
-                {liveTitle && (
-                  <p className="mt-2 text-sm font-bold text-[#0c2651]">{liveTitle}</p>
-                )}
-              </motion.div>
-            </div>
-          </section>
-        )}
 
         {/* HERO + NOTÍCIAS DESTAQUE */}
         <section className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 sm:pt-8 pb-10 sm:pb-12">
