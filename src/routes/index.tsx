@@ -614,7 +614,7 @@ function IndexPage() {
                   )}
                 </div>
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6">
-                  <span className="inline-block bg-[#c8102e] text-white text-xs font-bold uppercase px-2 py-1 rounded mb-2">
+                  <span className="inline-block bg-[#0c2651] text-white text-xs font-bold uppercase px-2 py-1 rounded mb-2">
                     Destaque
                   </span>
                   <h3 className="text-2xl md:text-3xl font-black text-white leading-tight line-clamp-3">
