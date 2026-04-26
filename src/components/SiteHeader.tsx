@@ -146,7 +146,7 @@ export function SiteHeader() {
         <Link to="/" className="header-pill" activeProps={{ className: "header-pill active" }} activeOptions={{ exact: true }}>Home</Link>
         <Link to="/noticias" className="header-pill" activeProps={{ className: "header-pill active" }}>Notícias</Link>
         <Link to="/programacao" className="header-pill" activeProps={{ className: "header-pill active" }}>Programação</Link>
-        <Link to="/promocoes" className="header-pill" activeProps={{ className: "header-pill active" }}>Promoção</Link>
+        <Link to="/promocoes" className="header-pill" activeProps={{ className: "header-pill active" }}>Promoções</Link>
         <Link to="/contato" className="header-pill" activeProps={{ className: "header-pill active" }}>Contato</Link>
       </nav>
     </motion.header>
