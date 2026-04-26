@@ -467,7 +467,7 @@ function IndexPage() {
             <div className="grid items-start gap-6 lg:grid-cols-12">
               {/* Coluna única — promoções à esquerda com CTA */}
               <motion.div
-                className="relative z-10 lg:col-span-6"
+                className="relative z-10 lg:col-span-6 lg:col-start-1"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
