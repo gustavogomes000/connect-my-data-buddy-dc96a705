@@ -474,14 +474,14 @@ function IndexPage() {
                   Concorra agora
                 </motion.span>
 
-                <h2 className="mt-4 text-3xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-tighter text-white uppercase italic">
+                <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight text-white">
                   Participe e{" "}
-                  <span className="block bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent drop-shadow-xl">
-                    concorra a prêmios!
+                  <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
+                    concorra a prêmios incríveis
                   </span>
                 </h2>
-                <p className="mt-3 max-w-md text-sm sm:text-lg font-medium text-white/90 leading-relaxed">
-                  Escolha sua promoção favorita, cadastre-se e boa sorte! 🎁
+                <p className="mt-2 max-w-md text-xs sm:text-sm text-white/80">
+                  Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio 🎁
                 </p>
 
                 <div className="mt-4 flex flex-col gap-2.5">
