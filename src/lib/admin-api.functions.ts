@@ -325,6 +325,32 @@ export const getUploadUrl = createAdminServerFn("POST")
     return { signedUrl: result.signedUrl, token: result.token, path, publicUrl };
   });
 
+export const uploadImage = createAdminServerFn("POST")
+  .inputValidator((input: { filename: string; contentType: string; base64: string }) => input)
+  .handler(async ({ data }) => {
+    const supabase = await getAdminSupabase();
+    const contentType = data.contentType || "image/jpeg";
+
+    if (!contentType.startsWith("image/")) {
+      throw new Error("Arquivo inválido: envie uma imagem.");
+    }
+
+    const safeName = data.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `uploads/${Date.now()}-${safeName}`;
+    const rawBase64 = data.base64.includes(",") ? data.base64.split(",").pop() || "" : data.base64;
+    const binary = Uint8Array.from(atob(rawBase64), (char) => char.charCodeAt(0));
+
+    const { error } = await supabase.storage.from("media").upload(path, binary, {
+      contentType,
+      upsert: true,
+    });
+
+    if (error) throw new Error(error.message);
+
+    const publicUrl = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
+    return { path, publicUrl };
+  });
+
 export const triggerAutoNewsManual = createAdminServerFn("POST").handler(async () => {
   try {
     const supabase = await getAdminSupabase();

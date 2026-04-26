@@ -20,6 +20,7 @@ export {
   getPromotionEntries,
   deletePromotionEntry,
   getUploadUrl,
+  uploadImage,
   triggerAutoNewsManual,
   getSiteSettings,
   updateSiteSettings,

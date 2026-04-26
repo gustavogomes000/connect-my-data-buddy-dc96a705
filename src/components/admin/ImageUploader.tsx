@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { getUploadUrl } from "@/lib/admin-api.functions";
+import { uploadImage } from "@/lib/admin-api.functions";
 import { ImageIcon } from "./icons";
-import { supabase } from "@/integrations/supabase/client";
 
 const MAX_DIM = 2400;
 const TARGET_QUALITY = 0.85;
@@ -39,6 +38,15 @@ async function compressImage(file: File): Promise<Blob> {
   return blob || file;
 }
 
+async function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Falha ao preparar imagem"));
+    reader.readAsDataURL(blob);
+  });
+}
+
 export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => void }) {
   const [uploading, setUploading] = useState(false);
 
@@ -57,20 +65,18 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
         compressed.type === "image/jpeg" && !/\.jpe?g$/i.test(file.name)
           ? file.name.replace(/\.[^.]+$/, "") + ".jpg"
           : file.name;
-      const { path, token, publicUrl } = await getUploadUrl({
-        data: { filename: finalName, contentType: compressed.type || file.type },
-      });
-      const { error } = await supabase.storage
-        .from("media")
-        .uploadToSignedUrl(path, token, compressed, {
+      const { publicUrl } = await uploadImage({
+        data: {
+          filename: finalName,
           contentType: compressed.type || file.type,
-          upsert: true,
-        });
-      if (error) throw error;
+          base64: await blobToDataUrl(compressed),
+        },
+      });
       onUploaded(publicUrl);
     } catch (err) {
       console.error("Upload error:", err);
-      alert("Erro ao enviar imagem. Tente novamente.");
+      const message = err instanceof Error ? err.message : "Erro desconhecido";
+      alert(`Erro ao enviar imagem: ${message}`);
     } finally {
       setUploading(false);
       // permite re-selecionar a mesma imagem
