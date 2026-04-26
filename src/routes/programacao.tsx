@@ -88,7 +88,7 @@ function ProgramacaoPage() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#c8102e]" />
             </span>
             <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-white/90">
-              Grade semanal
+              Grade semanal · ao vivo
             </span>
           </div>
 

@@ -8,7 +8,7 @@ import { AudioActivationOverlay } from "@/components/AudioActivationOverlay";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { safeImageUrl } from "@/lib/utils";
-import heroModel from "@/assets/modelo-top-original.png";
+import mascoteTop from "@/assets/mascote-top.png";
 import illustMic from "@/assets/illust-microphone.png";
 import illustDancer from "@/assets/illust-dancer.png";
 import illustGift from "@/assets/illust-promo-gift.png";
@@ -22,6 +22,7 @@ function getYoutubeId(url: string): string | null {
   );
   return m ? m[1] : null;
 }
+
 type PodcastItem = {
   id: string;
   title: string;
@@ -91,9 +92,9 @@ function PodcastCardDark({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rádio TOP100 FM" },
-      { name: "description", content: "Notícias, programação e podcasts da Rádio TOP100 FM." },
-      { property: "og:title", content: "Rádio TOP100 FM" },
+      { title: "Rádio TOP100 FM - Ao Vivo" },
+      { name: "description", content: "Notícias, programação e podcasts da Rádio TOP100 FM. Ouça ao vivo!" },
+      { property: "og:title", content: "Rádio TOP100 FM - Ao Vivo" },
       { property: "og:description", content: "Notícias, programação e podcasts da TOP100 FM." },
     ],
   }),
@@ -196,7 +197,7 @@ const MOCK_SPONSORS: Sponsor[] = [
     name: "Supermercado Boa Compra",
     logo_url: svgLogo(
       `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 100'>
-        <rect width='240' height='100' rx='14' fill='#0c2651'/>
+        <rect width='240' height='100' rx='14' fill='#c8102e'/>
         <g transform='translate(18,28)'>
           <path d='M6 8h32l-3 22a4 4 0 0 1-4 3H13a4 4 0 0 1-4-3L6 8z' fill='none' stroke='#fff' stroke-width='3' stroke-linejoin='round'/>
           <circle cx='15' cy='42' r='3.5' fill='#fff'/>
@@ -314,6 +315,9 @@ function IndexPage() {
   const [modalPlayingPodcast, setModalPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
   const [openNews, setOpenNews] = useState<NewsItem | null>(null);
+  const [liveActive, setLiveActive] = useState(false);
+  const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
+  const [liveTitle, setLiveTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
@@ -344,7 +348,7 @@ function IndexPage() {
       (supabase as any)
         .from("site_settings")
         .select("setting_key,setting_value")
-        .in("setting_key", ["sponsors"]),
+        .in("setting_key", ["sponsors", "live_active", "live_youtube_url", "live_title"]),
       (supabase as any)
         .from("podcasts")
         .select("id,title,description,youtube_url,thumbnail_url")
@@ -373,6 +377,9 @@ function IndexPage() {
           .map(normalizeSponsorLogo)
           .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
         setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
+        setLiveActive(!!map.live_active);
+        setLiveYoutubeUrl(typeof map.live_youtube_url === "string" ? map.live_youtube_url : "");
+        setLiveTitle(typeof map.live_title === "string" ? map.live_title : "");
       } catch {
         setSponsors(MOCK_SPONSORS);
       }
@@ -395,6 +402,8 @@ function IndexPage() {
     };
   }, [openNews]);
 
+  const liveYoutubeId = liveActive ? getYoutubeId(liveYoutubeUrl) : null;
+  const isLive = liveActive && !!liveYoutubeId;
 
   const featured = news[0];
   const secondary = news.slice(1, 3);
@@ -410,10 +419,10 @@ function IndexPage() {
         {/* HERO DE PROMOÇÕES */}
         <section className="relative overflow-hidden bg-[#0a1f4a]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#1a3a8c_0%,#0a1f4a_48%,#06122d_100%)]" />
-          
+          <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)", backgroundSize: "44px 44px" }} />
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#0c2651]/35 blur-[110px]"
+            className="pointer-events-none absolute -top-24 right-0 h-[24rem] w-[24rem] rounded-full bg-[#c8102e]/35 blur-[110px]"
             animate={{ scale: [1, 1.12, 1], opacity: [0.45, 0.7, 0.45] }}
             transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -424,29 +433,47 @@ function IndexPage() {
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Patrícia — visível no desktop à direita */}
+          {/* Patrícia — sempre visível no desktop */}
+          <img
+            src={mascoteTop}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-full w-1/2 select-none object-cover object-right opacity-90 lg:block"
+            style={{
+              maskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%, black 100%)",
+            }}
+          />
+
           <div className="relative mx-auto max-w-7xl px-3 sm:px-4 pt-6 pb-8 lg:pt-16 lg:pb-20">
             {/* Mobile/tablet: bloco da Patrícia (sempre visível) */}
             <div className="relative mb-5 overflow-hidden rounded-[22px] border border-white/15 bg-gradient-to-br from-[#1a3a8c]/40 to-[#0a1f4a]/60 shadow-[0_25px_60px_-20px_rgba(0,0,0,0.6)] lg:hidden">
               <img
-                src={heroModel}
-                alt="TOP100 FM"
+                src={mascoteTop}
+                alt="Patrícia nas promoções da TOP100 FM"
                 className="h-[200px] w-full object-cover object-center sm:h-[300px]"
               />
               <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a1f4a] via-[#0a1f4a]/70 to-transparent" />
+              <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-[#ffd84d] backdrop-blur-md">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd84d] opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ffd84d]" />
+                </span>
+                Ao vivo · Promoções
+              </div>
             </div>
 
-            <div className="grid items-center gap-6 lg:grid-cols-12">
-              {/* Promoções à esquerda */}
+            <div className="grid items-start gap-6 lg:grid-cols-12">
+              {/* Coluna única — promoções à esquerda com CTA */}
               <motion.div
                 className="relative z-10 lg:col-span-6"
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               >
                 <motion.span
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[12px] font-black uppercase tracking-[0.3em] text-[#ffd84d] backdrop-blur-md shadow-lg"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffd84d] backdrop-blur"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.15, duration: 0.5 }}
@@ -458,13 +485,13 @@ function IndexPage() {
                   Concorra agora
                 </motion.span>
 
-                <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight text-white">
+                <h2 className="mt-3 text-lg sm:text-2xl md:text-3xl font-black leading-tight tracking-tight text-white">
                   Participe e{" "}
                   <span className="bg-gradient-to-r from-[#ffd84d] via-[#ff9a3c] to-[#ff5470] bg-clip-text text-transparent">
                     concorra a prêmios incríveis
                   </span>
                 </h2>
-                <p className="mt-2 max-w-md text-xs sm:text-sm text-white/80">
+                <p className="mt-1.5 text-[11px] sm:text-sm text-white/80">
                   Escolha uma promoção abaixo, faça seu cadastro e dispute o prêmio 🎁
                 </p>
 
@@ -500,7 +527,7 @@ function IndexPage() {
                       >
                         ♫
                       </motion.span>
-                      <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#0c2651] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
+                      <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
                         ) : (
@@ -526,27 +553,39 @@ function IndexPage() {
                 ))}
                 </div>
               </motion.div>
-              
-              {/* Hero Image / Monitor — full bleed */}
-              <motion.div 
-                className="hidden lg:block lg:col-span-6 relative"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.85, delay: 0.2 }}
-              >
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[55vw] max-w-[900px] h-[120%] pointer-events-none">
-                  <motion.div
-                    className="absolute inset-10 bg-[#ffd84d]/15 rounded-full blur-3xl"
-                    animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
-                    transition={{ duration: 5, repeat: Infinity }}
-                  />
-                  <img
-                    src={heroModel}
-                    alt="TOP100 FM"
-                    className="relative z-10 w-full h-full object-contain object-left drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] anim-float"
-                  />
-                </div>
-              </motion.div>
+
+              {/* TV ao vivo — ao lado das promoções (desktop) e abaixo (mobile) */}
+              {isLive && (
+                <motion.div
+                  className="relative z-10 lg:col-span-6 lg:col-start-7"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#ff5470]/40 bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#ffd84d] backdrop-blur-md">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff5470] opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff5470]" />
+                    </span>
+                    TV · Ao vivo agora
+                  </div>
+                  <div
+                    className="relative w-full overflow-hidden rounded-[20px] border border-[#ffd84d]/40 bg-black shadow-[0_25px_60px_-20px_rgba(255,84,112,0.55)]"
+                    style={{ aspectRatio: "16 / 9" }}
+                  >
+                    <iframe
+                      src={`https://www.youtube.com/embed/${liveYoutubeId}?autoplay=1&mute=1&playsinline=1&rel=0`}
+                      title={liveTitle || "Transmissão ao vivo TOP100 FM"}
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                  {liveTitle && (
+                    <p className="mt-2 text-sm font-bold text-white/90">{liveTitle}</p>
+                  )}
+                </motion.div>
+              )}
             </div>
           </div>
 
@@ -555,24 +594,23 @@ function IndexPage() {
           </svg>
         </section>
 
-
         {/* HERO + NOTÍCIAS DESTAQUE */}
         <section className="mx-auto max-w-7xl px-3 sm:px-4 pt-6 sm:pt-8 pb-10 sm:pb-12">
           <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
-              <span className="h-8 w-1.5 rounded-full bg-[#0c2651]" />
+              <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0c2651]">
-                  Notícias
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c8102e]">
+                  Em alta
                 </p>
                 <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none">
-                  Em Alta
+                  Últimas Notícias
                 </h2>
               </div>
             </div>
             <Link
               to="/noticias"
-              className="group inline-flex items-center gap-1.5 rounded-full border border-[#0c2651]/20 bg-white px-4 py-2 text-sm font-bold text-[#0c2651] shadow-sm transition hover:bg-[#0c2651] hover:text-white hover:shadow-md"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-[#c8102e]/20 bg-white px-4 py-2 text-sm font-bold text-[#c8102e] shadow-sm transition hover:bg-[#c8102e] hover:text-white hover:shadow-md"
             >
               Ver todas
               <span className="transition group-hover:translate-x-0.5">→</span>
@@ -608,13 +646,13 @@ function IndexPage() {
                       className="w-full h-full object-cover transition group-hover:scale-105"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#0c2651] to-[#0c2651] flex items-center justify-center">
+                    <div className="w-full h-full bg-gradient-to-br from-[#c8102e] to-[#0c2651] flex items-center justify-center">
                       <span className="text-white text-7xl">📻</span>
                     </div>
                   )}
                 </div>
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6">
-                  <span className="inline-block bg-[#0c2651] text-white text-xs font-bold uppercase px-2 py-1 rounded mb-2">
+                  <span className="inline-block bg-[#c8102e] text-white text-xs font-bold uppercase px-2 py-1 rounded mb-2">
                     Destaque
                   </span>
                   <h3 className="text-2xl md:text-3xl font-black text-white leading-tight line-clamp-3">
@@ -645,13 +683,13 @@ function IndexPage() {
                         <img src={safeImageUrl(n.image_url)} alt={n.title} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     ) : (
-                      <div className="w-32 sm:w-40 flex-shrink-0 bg-gradient-to-br from-[#0c2651] to-[#0c2651]" />
+                      <div className="w-32 sm:w-40 flex-shrink-0 bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
                     )}
                     <div className="p-4 flex-1">
-                      <p className="text-[11px] uppercase tracking-wider font-bold text-[#0c2651] mb-1">
+                      <p className="text-[11px] uppercase tracking-wider font-bold text-[#c8102e] mb-1">
                         {fmtDate(n.updated_at || n.created_at)}
                       </p>
-                      <h4 className="font-bold text-[#0c2651] leading-snug line-clamp-3 group-hover:text-[#0c2651]/80 transition">
+                      <h4 className="font-bold text-[#0c2651] leading-snug line-clamp-3 group-hover:text-[#c8102e] transition">
                         {n.title}
                       </h4>
                     </div>
@@ -675,11 +713,11 @@ function IndexPage() {
                     {n.image_url ? (
                       <img src={safeImageUrl(n.image_url)} alt={n.title} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover transition group-hover:scale-105" />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-[#0c2651] to-[#0c2651]" />
+                      <div className="w-full h-full bg-gradient-to-br from-[#c8102e] to-[#0c2651]" />
                     )}
                   </div>
                   <div className="p-3">
-                    <p className="text-[11px] uppercase font-bold text-[#0c2651] mb-1">
+                    <p className="text-[11px] uppercase font-bold text-[#c8102e] mb-1">
                       {fmtDate(n.updated_at || n.created_at)}
                     </p>
                     <h4 className="font-bold text-sm text-[#0c2651] line-clamp-2">{n.title}</h4>
@@ -694,7 +732,7 @@ function IndexPage() {
             <div className="mt-10 flex justify-center">
               <Link
                 to="/noticias"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0c2651] text-white px-7 py-3 text-sm font-bold shadow-md hover:bg-[#a30d24] hover:shadow-lg transition"
+                className="inline-flex items-center gap-2 rounded-full bg-[#c8102e] text-white px-7 py-3 text-sm font-bold shadow-md hover:bg-[#a30d24] hover:shadow-lg transition"
               >
                 Ver mais notícias
                 <span className="transition group-hover:translate-x-0.5">→</span>
@@ -725,7 +763,7 @@ function IndexPage() {
                   <img src={safeImageUrl(openNews.image_url)} alt={openNews.title} referrerPolicy="no-referrer" className="w-full max-h-80 object-cover" />
                 )}
                 <div className="p-6 sm:p-8">
-                  <div className="text-xs uppercase tracking-wider font-bold text-[#0c2651] mb-2">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[#c8102e] mb-2">
                     {fmtDate(openNews.updated_at || openNews.created_at)}
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-black text-[#0c2651] mb-4">{openNews.title}</h2>
@@ -749,7 +787,7 @@ function IndexPage() {
                 <Link
                   to="/noticias"
                   onClick={() => setOpenNews(null)}
-                  className="px-6 py-2.5 rounded-full bg-[#0c2651] text-white font-semibold hover:bg-[#0c2651]/90 transition inline-flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-full bg-[#c8102e] text-white font-semibold hover:bg-[#a30d24] transition inline-flex items-center gap-2"
                 >
                   Ver mais notícias →
                 </Link>
@@ -772,9 +810,9 @@ function IndexPage() {
           <div className="relative mx-auto max-w-7xl px-4">
             <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
-                <span className="h-8 w-1.5 rounded-full bg-[#0c2651]" />
+                <span className="h-8 w-1.5 rounded-full bg-[#c8102e]" />
                 <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0c2651]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c8102e]">
                     Hoje · {DAYS[today]}
                   </p>
                   <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-none text-white">
@@ -804,7 +842,7 @@ function IndexPage() {
                       key={p.id}
                       className={`rounded-xl p-4 border transition ${
                         isLive
-                          ? "bg-[#0c2651] border-[#0c2651] shadow-lg shadow-red-900/50"
+                          ? "bg-[#c8102e] border-[#c8102e] shadow-lg shadow-red-900/50"
                           : "bg-white/5 border-white/10 hover:bg-white/10"
                       }`}
                     >
@@ -813,7 +851,7 @@ function IndexPage() {
                           {fmtTime(p.start_time)} – {fmtTime(p.end_time)}
                         </span>
                         {isLive && (
-                          <span className="text-[10px] uppercase font-black bg-white text-[#0c2651] px-1.5 py-0.5 rounded animate-pulse">
+                          <span className="text-[10px] uppercase font-black bg-white text-[#c8102e] px-1.5 py-0.5 rounded animate-pulse">
                             No ar
                           </span>
                         )}
@@ -887,9 +925,9 @@ function IndexPage() {
             <div className="mx-auto max-w-7xl px-4">
               <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
                 <div className="flex items-center gap-3">
-                  <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#0c2651] to-[#0c2651]" />
+                  <span className="h-8 w-1.5 rounded-full bg-gradient-to-b from-[#c8102e] to-[#0c2651]" />
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0c2651]">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#c8102e]">
                       Quem apoia
                     </p>
                     <h2 className="text-2xl md:text-3xl font-black text-[#0c2651] tracking-tight leading-none mt-0.5">
@@ -914,7 +952,7 @@ function IndexPage() {
                       {...wrapperProps}
                       className={`group relative rounded-2xl border border-gray-200 bg-white ${
                         s.link
-                          ? "hover:border-[#0c2651]/40 hover:shadow-lg hover:-translate-y-1"
+                          ? "hover:border-[#c8102e]/40 hover:shadow-lg hover:-translate-y-1"
                           : ""
                       } transition-all duration-300 flex flex-col items-center justify-center text-center p-3 sm:p-5 gap-2 sm:gap-3 min-h-[150px] sm:min-h-[200px]`}
                     >
@@ -925,7 +963,7 @@ function IndexPage() {
                           className="max-h-20 sm:max-h-28 max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
-                      <div className="text-[11px] sm:text-sm font-bold text-[#0c2651] group-hover:text-[#0c2651] transition tracking-tight leading-tight line-clamp-2">
+                      <div className="text-[11px] sm:text-sm font-bold text-[#0c2651] group-hover:text-[#c8102e] transition tracking-tight leading-tight line-clamp-2">
                         {s.name}
                       </div>
                     </Wrapper>
@@ -938,7 +976,7 @@ function IndexPage() {
                   href="https://wa.me/5562818808950?text=Quero%20ser%20patrocinador%20da%20TOP100%20FM"
                   target="_blank"
                   rel="noopener"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#0c2651]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#0c2651] hover:bg-[#0c2651] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-white px-5 py-2.5 text-sm font-bold text-[#c8102e] hover:bg-[#c8102e] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm"
                 >
                   Quero anunciar na TOP100 FM
                   <span>→</span>
