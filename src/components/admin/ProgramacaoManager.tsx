@@ -26,7 +26,7 @@ export function ProgramacaoManager() {
 
   const load = useCallback(async () => {
     const data = await getProgramacaoAdmin();
-    setItems(data as ProgItem[]);
+    setItems(Array.isArray(data) ? (data as ProgItem[]) : []);
   }, []);
 
   useEffect(() => {
@@ -79,10 +79,12 @@ export function ProgramacaoManager() {
     load();
   };
 
+  const safeItems = Array.isArray(items) ? items : [];
+
   const grouped = DAYS_LABELS.map((label, idx) => ({
     label,
     idx,
-    items: items
+    items: safeItems
       .filter((i) => i.day_of_week === idx)
       .sort((a, b) => a.start_time.localeCompare(b.start_time)),
   }));
@@ -178,7 +180,7 @@ export function ProgramacaoManager() {
       )}
 
       <div className="admin-list">
-        {items.length === 0 && (
+        {safeItems.length === 0 && (
           <p className="admin-empty">Nenhum programa cadastrado.</p>
         )}
         {grouped.map(

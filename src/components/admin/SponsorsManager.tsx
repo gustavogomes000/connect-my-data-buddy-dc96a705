@@ -47,8 +47,9 @@ export function SponsorsManager() {
   }, []);
 
   const persist = async (next: Sponsor[]) => {
-    await updateSiteSettings({ data: { key: "sponsors", value: next } });
-    setItems(next);
+    const safeNext = Array.isArray(next) ? next : [];
+    await updateSiteSettings({ data: { key: "sponsors", value: safeNext } });
+    setItems(safeNext);
   };
 
   const reset = () => {
@@ -100,6 +101,8 @@ export function SponsorsManager() {
     await persist(items.map((x) => (x.id === s.id ? { ...x, is_active: !x.is_active } : x)));
   };
 
+  const safeItems = Array.isArray(items) ? items : [];
+
   const seedMocks = async () => {
     if (
       !confirm(
@@ -117,7 +120,7 @@ export function SponsorsManager() {
       { id: uid(), name: "Construtora Horizonte", logo_url: svgLogo("HORIZONTE", "#1a3a7a"), link: "", display_order: 3, is_active: true },
       { id: uid(), name: "Farmácia Vida", logo_url: svgLogo("FARMÁCIA VIDA", "#16a34a"), link: "", display_order: 4, is_active: true },
     ];
-    await persist([...items, ...mocks]);
+    await persist([...safeItems, ...mocks]);
   };
 
   return (
@@ -208,10 +211,10 @@ export function SponsorsManager() {
       <div className="admin-list">
         {loading ? (
           <p className="admin-empty">Carregando...</p>
-        ) : items.length === 0 ? (
+        ) : safeItems.length === 0 ? (
           <p className="admin-empty">Nenhum patrocinador cadastrado.</p>
         ) : (
-          items.map((s) => (
+          safeItems.map((s) => (
             <article
               key={s.id}
               className={`admin-list-item ${!s.is_active ? "inactive" : ""}`}

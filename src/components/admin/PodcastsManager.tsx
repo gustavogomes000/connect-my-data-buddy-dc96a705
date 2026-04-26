@@ -35,7 +35,7 @@ export function PodcastsManager() {
 
   const load = useCallback(async () => {
     const data = await getPodcastsAdmin();
-    setItems(data as PodcastItemAdmin[]);
+    setItems(Array.isArray(data) ? (data as PodcastItemAdmin[]) : []);
   }, []);
 
   useEffect(() => {
@@ -90,6 +90,8 @@ export function PodcastsManager() {
     await updatePodcast({ data: { id: p.id, is_active: !p.is_active } });
     load();
   };
+
+  const safeItems = Array.isArray(items) ? items : [];
 
   return (
     <section className="admin-section">
@@ -173,8 +175,8 @@ export function PodcastsManager() {
       )}
 
       <div className="admin-list">
-        {items.length === 0 && <p className="admin-empty">Nenhum podcast cadastrado.</p>}
-        {items.map((p) => {
+        {safeItems.length === 0 && <p className="admin-empty">Nenhum podcast cadastrado.</p>}
+        {safeItems.map((p) => {
           const ytId = getYtId(p.youtube_url);
           const thumb =
             p.thumbnail_url || (ytId ? `https://i.ytimg.com/vi/${ytId}/mqdefault.jpg` : "");

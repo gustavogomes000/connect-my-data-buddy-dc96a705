@@ -28,7 +28,7 @@ export function PromotionsManager() {
 
   const load = useCallback(async () => {
     const data = await getPromotions();
-    setPromos(data as Promotion[]);
+    setPromos(Array.isArray(data) ? (data as Promotion[]) : []);
   }, []);
 
   useEffect(() => {
@@ -82,9 +82,11 @@ export function PromotionsManager() {
     load();
   };
 
+  const safePromos = Array.isArray(promos) ? promos : [];
+
   const setAsPopup = async (p: Promotion) => {
     // Marca esta como popup e desmarca todas as outras
-    const others = promos.filter((x) => x.id !== p.id && x.show_as_popup);
+    const others = safePromos.filter((x) => x.id !== p.id && x.show_as_popup);
     await Promise.all(
       others.map((o) => updatePromotion({ data: { id: o.id, show_as_popup: false } })),
     );
@@ -193,10 +195,10 @@ export function PromotionsManager() {
       )}
 
       <div className="admin-list">
-        {promos.length === 0 && (
+        {safePromos.length === 0 && (
           <p className="admin-empty">Nenhuma promoção cadastrada ainda.</p>
         )}
-        {promos.map((p) => (
+        {safePromos.map((p) => (
           <article key={p.id} className={`admin-list-item ${!p.is_active ? "inactive" : ""}`}>
             {p.image_url && <img src={p.image_url} alt="" className="admin-list-thumb" />}
             <div className="admin-list-info">

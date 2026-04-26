@@ -61,8 +61,9 @@ export function EntriesManager() {
       getPromotionEntries({ data: filter ? { promotion_id: filter } : {} }),
       getPromotions(),
     ]);
-    setRows(entries as EntryRow[]);
-    setPromos((p as { id: string; title: string }[]).map((x) => ({ id: x.id, title: x.title })));
+    setRows(Array.isArray(entries) ? (entries as EntryRow[]) : []);
+    const promoRows = Array.isArray(p) ? (p as { id: string; title: string }[]) : [];
+    setPromos(promoRows.map((x) => ({ id: x.id, title: x.title })));
   }, [filter]);
 
   useEffect(() => {
@@ -76,7 +77,9 @@ export function EntriesManager() {
   };
 
   const exportCsv = () => {
-    if (rows.length === 0) {
+    const safeRows = Array.isArray(rows) ? rows : [];
+
+    if (safeRows.length === 0) {
       alert("Nada para exportar");
       return;
     }
@@ -84,8 +87,11 @@ export function EntriesManager() {
       ? promos.find((p) => p.id === filter)?.title || "promocao"
       : "todas";
     const safe = promoTitle.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
-    downloadCsv(rows, `inscritos_${safe}_${new Date().toISOString().slice(0, 10)}.csv`);
+    downloadCsv(safeRows, `inscritos_${safe}_${new Date().toISOString().slice(0, 10)}.csv`);
   };
+
+  const safeRows = Array.isArray(rows) ? rows : [];
+  const safePromos = Array.isArray(promos) ? promos : [];
 
   return (
     <section className="admin-section">
@@ -101,17 +107,17 @@ export function EntriesManager() {
         <label>Filtrar por promoção</label>
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="">Todas</option>
-          {promos.map((p) => (
+          {safePromos.map((p) => (
             <option key={p.id} value={p.id}>
               {p.title}
             </option>
           ))}
         </select>
-        <span className="admin-counter">{rows.length} inscrição(ões)</span>
+        <span className="admin-counter">{safeRows.length} inscrição(ões)</span>
       </div>
       <div className="admin-list">
-        {rows.length === 0 && <p className="admin-empty">Nenhuma inscrição ainda.</p>}
-        {rows.map((r) => (
+        {safeRows.length === 0 && <p className="admin-empty">Nenhuma inscrição ainda.</p>}
+        {safeRows.map((r) => (
           <article key={r.id} className="admin-list-item">
             <div className="admin-list-info">
               <h4>{r.full_name}</h4>
