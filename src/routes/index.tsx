@@ -91,9 +91,9 @@ function PodcastCardDark({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rádio TOP100 FM - Ao Vivo" },
-      { name: "description", content: "Notícias, programação e podcasts da Rádio TOP100 FM. Ouça ao vivo!" },
-      { property: "og:title", content: "Rádio TOP100 FM - Ao Vivo" },
+      { title: "Rádio TOP100 FM" },
+      { name: "description", content: "Notícias, programação e podcasts da Rádio TOP100 FM." },
+      { property: "og:title", content: "Rádio TOP100 FM" },
       { property: "og:description", content: "Notícias, programação e podcasts da TOP100 FM." },
     ],
   }),
