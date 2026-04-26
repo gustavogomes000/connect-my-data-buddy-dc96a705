@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { getUploadUrl } from "@/lib/admin-api.functions";
+import { uploadImage } from "@/lib/admin-api.functions";
 import { ImageIcon } from "./icons";
-import { supabase } from "@/integrations/supabase/client";
 
 const MAX_DIM = 2400;
 const TARGET_QUALITY = 0.85;
@@ -39,33 +38,13 @@ async function compressImage(file: File): Promise<Blob> {
   return blob || file;
 }
 
-async function uploadWithSignedUrl(args: {
-  signedUrl?: string;
-  path: string;
-  token: string;
-  file: Blob;
-  contentType: string;
-}) {
-  if (args.signedUrl) {
-    const response = await fetch(args.signedUrl, {
-      method: "PUT",
-      headers: {
-        "content-type": args.contentType,
-        "x-upsert": "true",
-      },
-      body: args.file,
-    });
-
-    if (response.ok) return;
-    throw new Error((await response.text()) || `Falha no upload (${response.status})`);
-  }
-
-  const { error } = await supabase.storage.from("media").uploadToSignedUrl(args.path, args.token, args.file, {
-    contentType: args.contentType,
-    upsert: true,
+async function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Falha ao preparar imagem"));
+    reader.readAsDataURL(blob);
   });
-
-  if (error) throw error;
 }
 
 export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => void }) {
@@ -86,16 +65,12 @@ export function ImageUploader({ onUploaded }: { onUploaded: (url: string) => voi
         compressed.type === "image/jpeg" && !/\.jpe?g$/i.test(file.name)
           ? file.name.replace(/\.[^.]+$/, "") + ".jpg"
           : file.name;
-      const { path, token, publicUrl, signedUrl } = await getUploadUrl({
-        data: { filename: finalName, contentType: compressed.type || file.type },
-      });
-      console.info("Upload assinado gerado:", { path, hasToken: Boolean(token), publicUrl });
-      await uploadWithSignedUrl({
-        signedUrl,
-        path,
-        token,
-        file: compressed,
-        contentType: compressed.type || file.type,
+      const { publicUrl } = await uploadImage({
+        data: {
+          filename: finalName,
+          contentType: compressed.type || file.type,
+          base64: await blobToDataUrl(compressed),
+        },
       });
       onUploaded(publicUrl);
     } catch (err) {
