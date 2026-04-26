@@ -543,23 +543,23 @@ function IndexPage() {
                 </div>
               </motion.div>
               
-              {/* Mascote à direita no desktop */}
+              {/* Mascote à direita no desktop — full bleed */}
               <motion.div 
-                className="hidden lg:flex lg:col-span-6 justify-center items-center"
+                className="hidden lg:block lg:col-span-6 relative"
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.85, delay: 0.2 }}
               >
-                <div className="relative">
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[55vw] max-w-[900px] h-[120%] pointer-events-none">
                   <motion.div
-                    className="absolute -inset-4 bg-[#ffd84d]/20 rounded-full blur-3xl"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                    className="absolute inset-10 bg-[#ffd84d]/15 rounded-full blur-3xl"
+                    animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
                     transition={{ duration: 5, repeat: Infinity }}
                   />
                   <img
                     src={mascoteTop}
                     alt="Patrícia TOP100 FM"
-                    className="relative z-10 w-full max-w-[440px] h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] anim-float"
+                    className="relative z-10 w-full h-full object-contain object-left drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] anim-float"
                   />
                 </div>
               </motion.div>
