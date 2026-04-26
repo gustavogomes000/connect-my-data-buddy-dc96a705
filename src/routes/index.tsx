@@ -499,22 +499,6 @@ function IndexPage() {
                         className="absolute -inset-1 rounded-2xl opacity-60 blur-md transition group-hover:opacity-90"
                         style={{ background: "radial-gradient(circle, rgba(255,216,77,0.55) 0%, rgba(255,84,112,0.3) 50%, transparent 75%)" }}
                       />
-                      <motion.span
-                        aria-hidden
-                        className="absolute -top-1 -right-1 z-10 text-base sm:text-lg text-[#ffd84d] drop-shadow-[0_0_6px_rgba(255,216,77,0.9)]"
-                        animate={{ y: [0, -6, 0], rotate: [-10, 10, -10] }}
-                        transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                      >
-                        ♪
-                      </motion.span>
-                      <motion.span
-                        aria-hidden
-                        className="absolute -bottom-1 -left-1 z-10 text-sm sm:text-base text-[#ff9a3c] drop-shadow-[0_0_6px_rgba(255,154,60,0.9)]"
-                        animate={{ y: [0, -5, 0], rotate: [12, -12, 12] }}
-                        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 + i * 0.2 }}
-                      >
-                        ♫
-                      </motion.span>
                       <div className="absolute inset-0 overflow-hidden rounded-xl border-2 border-white/25 bg-gradient-to-br from-[#c8102e] via-[#a00d24] to-[#0c2651] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
