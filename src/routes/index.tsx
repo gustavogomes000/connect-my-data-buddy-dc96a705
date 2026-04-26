@@ -580,15 +580,8 @@ function IndexPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#c8102e]/30 bg-[#c8102e]/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#c8102e]">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c8102e] opacity-75" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#c8102e]" />
-                  </span>
-                  TV · Ao vivo agora
-                </div>
                 <div
-                  className="relative w-full overflow-hidden rounded-[20px] border border-[#0c2651]/15 bg-black shadow-[0_25px_60px_-20px_rgba(12,38,81,0.4)]"
+                  className="relative w-full overflow-hidden rounded-xl bg-black"
                   style={{ aspectRatio: "16 / 9" }}
                 >
                   <iframe
