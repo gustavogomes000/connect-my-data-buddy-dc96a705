@@ -514,7 +514,7 @@ function IndexPage() {
                   </motion.button>
                 ))}
                 </div>
-              </motion.div>
+              </div>
 
             </div>
           </div>
