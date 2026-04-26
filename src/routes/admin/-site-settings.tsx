@@ -170,36 +170,6 @@ export function SiteSettingsPage() {
         </label>
       </div>
 
-      {/* Transmissão ao vivo */}
-      <h3>Transmissão Ao Vivo (YouTube)</h3>
-      <div className="admin-grid">
-        <label>
-          Estamos ao vivo agora?
-          <input
-            type="checkbox"
-            checked={!!form.live_active}
-            onChange={(e) => handleChange("live_active", e.target.checked)}
-          />
-        </label>
-        <label>
-          Link do YouTube (vídeo ou live)
-          <input
-            type="url"
-            placeholder="https://www.youtube.com/watch?v=..."
-            value={form.live_youtube_url ?? ""}
-            onChange={(e) => handleChange("live_youtube_url", e.target.value)}
-          />
-        </label>
-        <label>
-          Título da transmissão
-          <input
-            type="text"
-            placeholder="Ex.: Manhã TOP — Ao vivo"
-            value={form.live_title ?? ""}
-            onChange={(e) => handleChange("live_title", e.target.value)}
-          />
-        </label>
-      </div>
 
       {/* Popup de promoção */}
       <h3>Popup de Promoção</h3>
