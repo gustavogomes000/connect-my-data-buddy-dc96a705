@@ -56,10 +56,6 @@ export function RadioPlayer() {
           className="radio-volume-slider"
         />
 
-        <div className="radio-live-badge">
-          <span className="radio-live-dot" />
-          <span className="radio-live-text">AO VIVO</span>
-        </div>
       </div>
       <audio ref={audioRef} preload="none" />
     </div>

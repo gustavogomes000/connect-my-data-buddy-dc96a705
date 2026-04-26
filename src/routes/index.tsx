@@ -22,7 +22,6 @@ function getYoutubeId(url: string): string | null {
   );
   return m ? m[1] : null;
 }
-
 type PodcastItem = {
   id: string;
   title: string;
@@ -92,9 +91,9 @@ function PodcastCardDark({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rádio TOP100 FM - Ao Vivo" },
-      { name: "description", content: "Notícias, programação e podcasts da Rádio TOP100 FM. Ouça ao vivo!" },
-      { property: "og:title", content: "Rádio TOP100 FM - Ao Vivo" },
+      { title: "Rádio TOP100 FM" },
+      { name: "description", content: "Notícias, programação e podcasts da Rádio TOP100 FM." },
+      { property: "og:title", content: "Rádio TOP100 FM" },
       { property: "og:description", content: "Notícias, programação e podcasts da TOP100 FM." },
     ],
   }),
@@ -315,9 +314,6 @@ function IndexPage() {
   const [modalPlayingPodcast, setModalPlayingPodcast] = useState<string | null>(null);
   const [selectedPromo, setSelectedPromo] = useState<PromoItem | null>(null);
   const [openNews, setOpenNews] = useState<NewsItem | null>(null);
-  const [liveActive, setLiveActive] = useState(false);
-  const [liveYoutubeUrl, setLiveYoutubeUrl] = useState<string>("");
-  const [liveTitle, setLiveTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const today = new Date().getDay();
   const nowHHMM = new Date().toTimeString().slice(0, 5);
@@ -348,7 +344,7 @@ function IndexPage() {
       (supabase as any)
         .from("site_settings")
         .select("setting_key,setting_value")
-        .in("setting_key", ["sponsors", "live_active", "live_youtube_url", "live_title"]),
+        .in("setting_key", ["sponsors"]),
       (supabase as any)
         .from("podcasts")
         .select("id,title,description,youtube_url,thumbnail_url")
@@ -377,9 +373,6 @@ function IndexPage() {
           .map(normalizeSponsorLogo)
           .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
         setSponsors(filtered.length > 0 ? filtered : MOCK_SPONSORS);
-        setLiveActive(!!map.live_active);
-        setLiveYoutubeUrl(typeof map.live_youtube_url === "string" ? map.live_youtube_url : "");
-        setLiveTitle(typeof map.live_title === "string" ? map.live_title : "");
       } catch {
         setSponsors(MOCK_SPONSORS);
       }
@@ -402,8 +395,6 @@ function IndexPage() {
     };
   }, [openNews]);
 
-  const liveYoutubeId = liveActive ? getYoutubeId(liveYoutubeUrl) : null;
-  const isLive = liveActive && !!liveYoutubeId;
 
   const featured = news[0];
   const secondary = news.slice(1, 3);
