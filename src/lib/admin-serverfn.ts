@@ -8,15 +8,18 @@ const ADMIN_HEADER = "x-admin-token";
 const SESSION_DURATION = 60 * 60 * 24;
 
 export async function getAdminSecret() {
-  return (
+  const raw =
     (await getRuntimeEnv("MY_ADMIN_SESSION_SECRET")) ||
     (await getRuntimeEnv("ADMIN_SESSION_SECRET")) ||
     (await getRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY")) ||
     (await getRuntimeEnv("SUPABASE_SERVICE_ROLE_KEY")) ||
     (import.meta as any)?.env?.VITE_ADMIN_SESSION_SECRET ||
-    (import.meta as any)?.env?.VITE_SUPABASE_SERVICE_ROLE_KEY
-  );
+    (import.meta as any)?.env?.VITE_SUPABASE_SERVICE_ROLE_KEY;
+  if (!raw) return undefined;
+  // useSession exige >=32 chars; faz padding determinístico se for curto
+  return raw.length >= 32 ? raw : (raw + "x".repeat(32)).slice(0, 32);
 }
+
 
 export async function getAdminSessionConfig() {
   const isSecure = process.env.NODE_ENV === "production";
