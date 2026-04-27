@@ -113,7 +113,7 @@ function AdminLoginPage() {
           <h1>Entrar no Painel</h1>
           <p>Rádio TOP100 FM · Administração</p>
         </div>
-        <form onSubmit={handleSubmit} className="admin-login-form" noValidate>
+        <form onSubmit={handleSubmit} className="admin-login-form" method="post" action="/admin/login" noValidate>
           {error && <div className="admin-error">{error}</div>}
           <div className="admin-field">
             <label htmlFor="username">Usuário</label>
