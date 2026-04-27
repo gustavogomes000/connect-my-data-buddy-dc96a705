@@ -589,10 +589,11 @@
 
   .popup-img {
     width: 100%;
-    max-height: 280px;
-    object-fit: cover;
+    max-height: 240px;
+    object-fit: contain;
     object-position: center;
     display: block;
+    background: #0c2651;
   }
 
   .popup-img-wrap::after {
@@ -630,27 +631,26 @@
     text-align: left;
     position: relative;
     z-index: 4;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   .popup-body h2 {
     margin: 0 0 12px;
-    font-size: 24px;
-    font-weight: 900;
+    font-size: 22px;
+    font-weight: 800;
     color: #0c2651;
-    letter-spacing: -0.4px;
-    line-height: 1.2;
-    background: linear-gradient(135deg, #0c2651 0%, #1a4ba8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   .popup-body p {
     margin: 0 0 18px;
-    color: #4a5568;
-    line-height: 1.6;
-    font-size: 14.5px;
+    color: #374151;
+    line-height: 1.55;
+    font-size: 14px;
     white-space: pre-line;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   .popup-actions {
@@ -745,15 +745,15 @@
 
   /* Tablet/menor */
   @media (max-width: 640px) {
-    .popup-overlay { padding: 10px; align-items: flex-start; padding-top: 20px; }
+    .popup-overlay { padding: 10px; align-items: flex-start; padding-top: 16px; }
     .popup-card { border-radius: 18px; max-height: calc(100dvh - 20px); }
     .popup-card::before { border-radius: 18px; }
-    .popup-img { max-height: 200px; }
-    .popup-body { padding: 18px 18px 22px; }
-    .popup-body h2 { font-size: 20px; }
-    .popup-body p { font-size: 13.5px; margin-bottom: 16px; }
-    .popup-btn-primary { padding: 13px 18px; font-size: 13.5px; letter-spacing: 0.5px; }
-    .popup-close { top: 8px; right: 8px; width: 32px; height: 32px; font-size: 13px; }
+    .popup-img { max-height: 180px; object-fit: contain; }
+    .popup-body { padding: 16px 16px 20px; }
+    .popup-body h2 { font-size: 17px; line-height: 1.25; margin-bottom: 8px; }
+    .popup-body p { font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
+    .popup-btn-primary { padding: 12px 16px; font-size: 13px; letter-spacing: 0.4px; }
+    .popup-close { top: 8px; right: 8px; width: 30px; height: 30px; font-size: 12px; }
     .popup-badge { top: 10px; left: 10px; padding: 4px 9px; font-size: 9.5px; letter-spacing: 0.5px; }
     .promo-form-card { max-width: 100% !important; }
     .promo-form-header { padding: 20px 18px 16px !important; }
