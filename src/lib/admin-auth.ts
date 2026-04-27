@@ -16,6 +16,7 @@ export const ADMIN_SESSION_TOKEN = SESSION_TOKEN_VALUE;
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((input: { username: string; password: string }) => input)
   .handler(async ({ data }) => {
+    try {
     const username = data.username.trim();
     const password = data.password;
 
@@ -23,6 +24,7 @@ export const adminLogin = createServerFn({ method: "POST" })
       return { success: false, error: "Preencha usuário e senha." };
     }
 
+    console.log("[adminLogin] start, getting supabase");
     const supabase = await getAdminSupabase();
     const { data: user, error } = await supabase
       .from("admin_users")
