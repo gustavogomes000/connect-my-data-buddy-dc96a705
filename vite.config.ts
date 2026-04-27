@@ -25,5 +25,5 @@ export default defineConfig(({ mode }) => {
     }
   }
 
-  return { vite: { define } };
+  return { define };
 });
