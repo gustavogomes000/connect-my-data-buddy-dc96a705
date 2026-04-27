@@ -510,7 +510,7 @@
   .popup-card {
     background: #ffffff;
     border-radius: 22px;
-    max-width: 480px;
+    max-width: 460px;
     width: 100%;
     max-height: calc(100dvh - 32px);
     overflow-y: auto;
@@ -525,7 +525,9 @@
     animation: popIn 500ms cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
+  .popup-card * { font-family: inherit; }
 
   .popup-card::before {
     content: "";
@@ -745,14 +747,14 @@
 
   /* Tablet/menor */
   @media (max-width: 640px) {
-    .popup-overlay { padding: 10px; align-items: flex-start; padding-top: 16px; }
-    .popup-card { border-radius: 18px; max-height: calc(100dvh - 20px); }
-    .popup-card::before { border-radius: 18px; }
-    .popup-img { max-height: 180px; object-fit: contain; }
-    .popup-body { padding: 16px 16px 20px; }
-    .popup-body h2 { font-size: 17px; line-height: 1.25; margin-bottom: 8px; }
-    .popup-body p { font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
-    .popup-btn-primary { padding: 12px 16px; font-size: 13px; letter-spacing: 0.4px; }
+    .popup-overlay { padding: 8px; align-items: flex-start; padding-top: 12px; }
+    .popup-card { border-radius: 16px; max-height: calc(100dvh - 16px); max-width: 100%; }
+    .popup-card::before { border-radius: 16px; }
+    .popup-img { max-height: 160px; object-fit: contain; }
+    .popup-body { padding: 14px 14px 18px; }
+    .popup-body h2 { font-size: 16px; line-height: 1.25; margin-bottom: 8px; letter-spacing: -0.1px; }
+    .popup-body p { font-size: 12.5px; line-height: 1.45; margin-bottom: 12px; }
+    .popup-btn-primary { padding: 11px 14px; font-size: 12.5px; letter-spacing: 0.4px; }
     .popup-close { top: 8px; right: 8px; width: 30px; height: 30px; font-size: 12px; }
     .popup-badge { top: 10px; left: 10px; padding: 4px 9px; font-size: 9.5px; letter-spacing: 0.5px; }
     .promo-form-card { max-width: 100% !important; }
