@@ -9,16 +9,21 @@ import { loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  for (const key of [
+  const serverKeys = [
     "MY_SUPABASE_URL",
     "MY_SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL",
     "SUPABASE_SERVICE_ROLE_KEY",
     "MY_ADMIN_SESSION_SECRET",
     "ADMIN_SESSION_SECRET",
-  ]) {
+  ];
+  const define: Record<string, string> = {};
+  for (const key of serverKeys) {
     if (env[key] && !process.env[key]) process.env[key] = env[key];
+    if (env[key]) {
+      define[`process.env.${key}`] = JSON.stringify(env[key]);
+    }
   }
 
-  return {};
+  return { define };
 });
