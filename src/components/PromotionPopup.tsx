@@ -59,7 +59,6 @@ export function PromotionPopup() {
     <div className="popup-overlay" onClick={handleClose}>
       <div className="popup-card" onClick={(e) => e.stopPropagation()}>
         <button className="popup-close" onClick={handleClose} aria-label="Fechar">✕</button>
-        <div className="popup-shine" aria-hidden="true" />
         {promo.image_url && (
           <div className="popup-img-wrap">
             <img src={promo.image_url} alt={promo.title} className="popup-img" />
@@ -70,7 +69,7 @@ export function PromotionPopup() {
           {!promo.image_url && <span className="popup-badge popup-badge-inline">🎁 Promoção Top 100 FM</span>}
           <h2>{promo.title}</h2>
           {promo.description && <p>{promo.description}</p>}
-          {success ? (
+          {success && (
             <div className="popup-success">
               <span className="popup-success-icon">✓</span>
               <div>
@@ -78,23 +77,24 @@ export function PromotionPopup() {
                 <span>Boa sorte 🍀</span>
               </div>
             </div>
-          ) : (
-            <div className="popup-actions">
-              <button
-                onClick={() => setParticipating(true)}
-                className="popup-btn-primary"
-              >
-                Participar agora
-                <span className="popup-btn-arrow">→</span>
-              </button>
-              {promo.link && (
-                <a href={promo.link} target="_blank" rel="noopener noreferrer" className="popup-btn-secondary">
-                  Saiba mais
-                </a>
-              )}
-            </div>
           )}
         </div>
+        {!success && (
+          <div className="popup-footer">
+            <button
+              onClick={() => setParticipating(true)}
+              className="popup-btn-primary"
+            >
+              Participar agora
+              <span className="popup-btn-arrow">→</span>
+            </button>
+            {promo.link && (
+              <a href={promo.link} target="_blank" rel="noopener noreferrer" className="popup-btn-secondary">
+                Saiba mais
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
