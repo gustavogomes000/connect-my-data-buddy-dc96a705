@@ -502,14 +502,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 16px;
     animation: fadeIn 350ms ease;
+    overflow-y: auto;
   }
 
   .popup-card {
     background: #ffffff;
-    border-radius: 24px;
-    max-width: 460px;
+    border-radius: 22px;
+    max-width: 480px;
     width: 100%;
     max-height: calc(100dvh - 32px);
     overflow-y: auto;
@@ -530,7 +531,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 24px;
+    border-radius: 22px;
     padding: 2px;
     background: linear-gradient(135deg, #ffd400 0%, #ff7a00 35%, #0c2651 70%, #1a4ba8 100%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -556,13 +557,13 @@
 
   .popup-close {
     position: absolute;
-    top: 14px;
-    right: 14px;
+    top: 12px;
+    right: 12px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.96);
     color: #0c2651;
     font-size: 15px;
     font-weight: 700;
@@ -571,26 +572,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
     transition: transform 200ms, background 150ms, color 150ms;
   }
   .popup-close:hover {
     transform: scale(1.12) rotate(90deg);
     background: #ffd400;
-    color: #0c2651;
   }
 
   .popup-img-wrap {
     position: relative;
     overflow: hidden;
+    background: #0c2651;
+    flex-shrink: 0;
   }
 
   .popup-img {
     width: 100%;
-    max-height: 360px;
-    object-fit: contain;
+    max-height: 280px;
+    object-fit: cover;
     object-position: center;
-    background: #0c2651;
     display: block;
   }
 
@@ -598,19 +599,19 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(255, 255, 255, 0.95) 100%);
+    background: linear-gradient(180deg, transparent 60%, rgba(255, 255, 255, 0.95) 100%);
     pointer-events: none;
   }
 
   .popup-badge {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 14px;
+    left: 14px;
     background: linear-gradient(135deg, #0c2651 0%, #1a4ba8 100%);
     color: #ffd400;
-    padding: 7px 14px;
+    padding: 6px 12px;
     border-radius: 999px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 800;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -621,22 +622,22 @@
   .popup-badge-inline {
     position: static;
     display: inline-block;
-    margin: 0 auto 16px;
+    margin: 0 auto 14px;
   }
 
   .popup-body {
-    padding: 26px 28px 30px;
-    text-align: center;
+    padding: 22px 24px 26px;
+    text-align: left;
     position: relative;
     z-index: 4;
   }
 
   .popup-body h2 {
     margin: 0 0 12px;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 900;
     color: #0c2651;
-    letter-spacing: -0.6px;
+    letter-spacing: -0.4px;
     line-height: 1.2;
     background: linear-gradient(135deg, #0c2651 0%, #1a4ba8 100%);
     -webkit-background-clip: text;
@@ -645,17 +646,18 @@
   }
 
   .popup-body p {
-    margin: 0 0 22px;
-    color: #5a6577;
+    margin: 0 0 18px;
+    color: #4a5568;
     line-height: 1.6;
-    font-size: 15px;
+    font-size: 14.5px;
+    white-space: pre-line;
   }
 
   .popup-actions {
     display: flex;
     gap: 8px;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
   }
 
   .popup-btn-primary {
@@ -666,13 +668,13 @@
     width: 100%;
     background: linear-gradient(135deg, #ffd400 0%, #ffb800 50%, #ff9500 100%);
     color: #0c2651;
-    padding: 16px 24px;
-    border-radius: 14px;
+    padding: 14px 22px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 800;
-    font-size: 15px;
+    font-size: 14.5px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     border: none;
     cursor: pointer;
     box-shadow: 0 8px 24px rgba(255, 180, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.5);
@@ -684,51 +686,40 @@
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(255, 180, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.6);
   }
-  .popup-btn-primary:active {
-    transform: translateY(1px);
-  }
+  .popup-btn-primary:active { transform: translateY(1px); }
 
-  .popup-btn-arrow {
-    display: inline-block;
-    transition: transform 200ms ease;
-    font-weight: 900;
-  }
-  .popup-btn-primary:hover .popup-btn-arrow {
-    transform: translateX(4px);
-  }
+  .popup-btn-arrow { transition: transform 200ms ease; font-weight: 900; }
+  .popup-btn-primary:hover .popup-btn-arrow { transform: translateX(4px); }
 
   .popup-btn-secondary {
     display: inline-block;
+    text-align: center;
     color: #0c2651;
     font-weight: 600;
     font-size: 13px;
     text-decoration: none;
-    padding: 10px 8px 4px;
-    opacity: 0.7;
+    padding: 8px 8px 2px;
+    opacity: 0.75;
     transition: opacity 150ms, color 150ms;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  .popup-btn-secondary:hover {
-    opacity: 1;
-    color: #1a4ba8;
-    text-decoration: underline;
-  }
+  .popup-btn-secondary:hover { opacity: 1; color: #1a4ba8; text-decoration: underline; }
 
   .popup-success {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 18px 20px;
+    padding: 16px 18px;
     background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-    border-radius: 14px;
+    border-radius: 12px;
     text-align: left;
     box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.2);
     animation: popIn 400ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .popup-success-icon {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: #16a34a;
     color: #fff;
@@ -740,19 +731,11 @@
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
   }
-  .popup-success strong {
-    display: block;
-    color: #064e3b;
-    font-size: 15px;
-    margin-bottom: 2px;
-  }
-  .popup-success span:not(.popup-success-icon) {
-    color: #047857;
-    font-size: 13px;
-  }
+  .popup-success strong { display: block; color: #064e3b; font-size: 15px; margin-bottom: 2px; }
+  .popup-success span:not(.popup-success-icon) { color: #047857; font-size: 13px; }
 
   @keyframes popIn {
-    0% { opacity: 0; transform: scale(0.85) translateY(20px); }
+    0% { opacity: 0; transform: scale(0.9) translateY(16px); }
     100% { opacity: 1; transform: scale(1) translateY(0); }
   }
   @keyframes shine {
@@ -760,16 +743,36 @@
     50% { transform: translateX(250%) rotate(20deg); opacity: 1; }
   }
 
-  @media (max-width: 480px) {
-    .popup-overlay { padding: 12px; }
-    .popup-card { border-radius: 20px; }
-    .popup-img { max-height: 240px; }
-    .popup-body { padding: 20px 20px 24px; }
-    .popup-body h2 { font-size: 22px; }
-    .popup-body p { font-size: 14px; margin-bottom: 18px; }
-    .popup-btn-primary { padding: 14px 20px; font-size: 14px; }
-    .popup-close { top: 10px; right: 10px; width: 32px; height: 32px; font-size: 14px; }
-    .popup-badge { top: 12px; left: 12px; padding: 5px 10px; font-size: 10px; }
+  /* Tablet/menor */
+  @media (max-width: 640px) {
+    .popup-overlay { padding: 10px; align-items: flex-start; padding-top: 20px; }
+    .popup-card { border-radius: 18px; max-height: calc(100dvh - 20px); }
+    .popup-card::before { border-radius: 18px; }
+    .popup-img { max-height: 200px; }
+    .popup-body { padding: 18px 18px 22px; }
+    .popup-body h2 { font-size: 20px; }
+    .popup-body p { font-size: 13.5px; margin-bottom: 16px; }
+    .popup-btn-primary { padding: 13px 18px; font-size: 13.5px; letter-spacing: 0.5px; }
+    .popup-close { top: 8px; right: 8px; width: 32px; height: 32px; font-size: 13px; }
+    .popup-badge { top: 10px; left: 10px; padding: 4px 9px; font-size: 9.5px; letter-spacing: 0.5px; }
+    .promo-form-card { max-width: 100% !important; }
+    .promo-form-header { padding: 20px 18px 16px !important; }
+    .promo-form-logo { height: 56px !important; }
+    .promo-form-header h2 { font-size: 17px !important; }
+    .promo-form-header p { font-size: 11.5px !important; }
+    .promo-form-body { padding: 16px 18px 20px !important; }
+  }
+
+  /* Landscape mobile / telas baixas */
+  @media (max-height: 560px) and (orientation: landscape) {
+    .popup-overlay { padding: 8px; align-items: flex-start; }
+    .popup-card { max-height: calc(100dvh - 16px); border-radius: 14px; }
+    .popup-card::before { border-radius: 14px; }
+    .popup-img { max-height: 130px; }
+    .popup-body { padding: 14px 18px 18px; }
+    .popup-body h2 { font-size: 18px; margin-bottom: 8px; }
+    .popup-body p { font-size: 13px; margin-bottom: 12px; }
+    .popup-btn-primary { padding: 11px 18px; font-size: 13px; }
   }
 
   /* ── Public Pages ── */
