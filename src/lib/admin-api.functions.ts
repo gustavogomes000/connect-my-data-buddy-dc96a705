@@ -3,8 +3,13 @@ import { getAdminSupabase, hashAdminPassword } from "@/lib/admin-supabase";
 
 export const getPromotions = createAdminServerFn("GET").handler(async () => {
   const supabase = await getAdminSupabase();
-  const { data } = await supabase.from("promotions").select("*").order("display_order");
-  return data || [];
+  const { data, error } = await supabase
+    .from("promotions")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return Array.isArray(data) ? data : [];
 });
 
 export const createPromotion = createAdminServerFn("POST")
