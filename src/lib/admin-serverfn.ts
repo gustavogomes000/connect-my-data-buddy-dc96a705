@@ -13,8 +13,8 @@ export async function getAdminSecret() {
     (await getRuntimeEnv("ADMIN_SESSION_SECRET")) ||
     (await getRuntimeEnv("MY_SUPABASE_SERVICE_ROLE_KEY")) ||
     (await getRuntimeEnv("SUPABASE_SERVICE_ROLE_KEY")) ||
-    (import.meta as any)?.env?.VITE_ADMIN_SESSION_SECRET ||
-    (import.meta as any)?.env?.VITE_SUPABASE_SERVICE_ROLE_KEY;
+    import.meta.env.VITE_ADMIN_SESSION_SECRET ||
+    import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
   if (!raw) return undefined;
   // useSession exige >=32 chars; faz padding determinístico se for curto
   return raw.length >= 32 ? raw : (raw + "x".repeat(32)).slice(0, 32);
