@@ -71,6 +71,10 @@ export const adminLogin = createServerFn({ method: "POST" })
     });
 
     return { success: true, token };
+    } catch (e: any) {
+      console.error("[adminLogin] FAILED:", e?.message, e?.stack);
+      return { success: false, error: `Erro: ${e?.message || "desconhecido"}` };
+    }
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
