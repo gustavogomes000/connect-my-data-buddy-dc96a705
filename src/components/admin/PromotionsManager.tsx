@@ -151,27 +151,17 @@ export function PromotionsManager() {
               placeholder="ou cole uma URL de imagem"
             />
           </div>
-          <div className="admin-row">
-            <div className="admin-field">
-              <label>Duração do popup (s)</label>
-              <input
-                type="number"
-                value={form.popup_duration_seconds}
-                onChange={(e) =>
-                  setForm({ ...form, popup_duration_seconds: Number(e.target.value) })
-                }
-                min={3}
-                max={120}
-              />
-            </div>
-            <div className="admin-field">
-              <label>Ordem</label>
-              <input
-                type="number"
-                value={form.display_order}
-                onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })}
-              />
-            </div>
+          <div className="admin-field">
+            <label>Duração do popup (s)</label>
+            <input
+              type="number"
+              value={form.popup_duration_seconds}
+              onChange={(e) =>
+                setForm({ ...form, popup_duration_seconds: Number(e.target.value) })
+              }
+              min={3}
+              max={120}
+            />
           </div>
           <div className="admin-field admin-checkbox">
             <label>
