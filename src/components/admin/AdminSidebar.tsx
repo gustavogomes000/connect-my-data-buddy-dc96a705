@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ComponentType } from "react";
+import topLogo from "@/assets/top100-logo.png";
 import {
   CalendarIcon,
   ExternalLinkIcon,
@@ -43,7 +44,7 @@ export function AdminSidebar({
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-header">
-        <div className="admin-sidebar-logo">100</div>
+        <img src={topLogo} alt="TOP100 FM" className="admin-sidebar-logo-img" />
         <div>
           <h2>TOP100 FM</h2>
           <span>Painel administrativo</span>

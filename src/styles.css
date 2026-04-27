@@ -1100,13 +1100,12 @@
   border-bottom: 1px solid var(--ad-border);
   display: flex; align-items: center; gap: 12px;
 }
-.admin-sidebar-logo {
-  width: 40px; height: 40px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--ad-brand), #1e4ba8);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--ad-gold); font-weight: 800; font-size: 18px;
-  flex-shrink: 0; letter-spacing: -.5px;
-  box-shadow: 0 4px 10px rgba(12,38,81,.2);
+.admin-sidebar-logo,
+.admin-sidebar-logo-img {
+  width: 44px; height: 44px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 10px;
 }
 .admin-sidebar-header h2 {
   margin: 0; font-size: 14px; font-weight: 700;
